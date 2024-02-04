@@ -133,5 +133,8 @@ fi
 
 echo "${https_url}/tags"
 
+echo "To publish on crates.io, run:"
+echo "cargo publish"
+echo
 echo "To publish on PyPI, run:"
 echo "cd pypi && maturin publish --frozen"

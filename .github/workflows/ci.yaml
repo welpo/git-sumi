@@ -37,8 +37,10 @@ jobs:
         run: |
           git config --global user.email "test@example.com"
           git config --global user.name "Test"
-      - name: Setup cargo-tarpaulin
-        uses: taiki-e/install-action@cargo-tarpaulin
+      - name: Install cargo-tarpaulin
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-tarpaulin
       - name: Run tests
         run: |
           cargo test

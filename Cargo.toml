@@ -7,7 +7,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 homepage = "https://sumi.rs"
 readme = "README.md"
-keywords = ["git, commit, lint, linter, conventional"]
+keywords = ["git", "commit", "lint", "conventional-commits", "cli"]
 categories = ["command-line-utilities", "development-tools"]
 repository = "https://github.com/welpo/git-sumi"
 

@@ -2,7 +2,7 @@
     <a href="https://sumi.rs">
         <img src="https://raw.githubusercontent.com/welpo/git-sumi/main/website/static/img/logo.png" width="300" alt="git-sumi logo: a lantern held on a bamboo stick over the sea">
     </a>
-    <br>
+    <br><br>
     <a href="CONTRIBUTING.md#pull-requests">
         <img src="https://img.shields.io/badge/PRs-welcome-0?style=flat-square&labelColor=202b2d&color=b05275" alt="PRs welcome"></a>
     <a href="https://crates.io/crates/git-sumi">

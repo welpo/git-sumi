@@ -97,7 +97,7 @@ Use `--config 'none'` to use the default configuration.
 
 ### Format
 
-- **Description**: Specifies the output format for displaying the parsed commit message. Options are "table", "json", and "toml".
+- **Description**: Specifies the output format for displaying the parsed commit message.
 
     Enabling this option automatically sets `display = true`.
 
@@ -107,9 +107,9 @@ Use `--config 'none'` to use the default configuration.
 
 - **Environment variable**: `GIT_SUMI_FORMAT`
 
-- **Type of value**: String (options: "table", "json", "toml")
+- **Type of value**: String (options: "cli", "table", "json", "toml")
 
-- **Default value**: "table"
+- **Default value**: "cli"
 
 - **Example usage**: Set `format = "json"` in `sumi.toml` for JSON formatted output, or use `git sumi --format json`.
 
@@ -133,7 +133,26 @@ Co-authored-by: John Doe <johndoe@example.com>
 
 </TabItem>
 
-<TabItem value="table" label="Table">
+<TabItem value="table" label="(Markdown) table">
+
+```txt
+| Key                  | Value                                                                |
+|----------------------|----------------------------------------------------------------------|
+| Gitmoji              | 🐛                                                                   |
+| Commit type          | fix                                                                  |
+| Scope                | auth                                                                 |
+| Description          | resolve token refresh issue                                          |
+| Body                 | Fixes bug introduced in ce6df36 where the authentication token would |
+|                      | not refresh properly during a session, causing unexpected logouts.   |
+| Footers              | Co-authored-by:John Doe <johndoe@example.com>                        |
+| Is breaking          | true                                                                 |
+| Breaking description | resolve token refresh issue                                          |
+| References           | ce6df36                                                              |
+```
+
+</TabItem>
+
+<TabItem value="cli" label="cli">
 
 ```txt
 ┌──────────────────────┬──────────────────────────────────────────────────────────────────────┐

@@ -46,7 +46,7 @@ pub struct Opt {
     pub display: bool,
 
     /// Specify the output format for displaying the parsed commit message.
-    /// Options: "table", "json", "toml". Default: "table"
+    /// Options: "cli", "table", "json", "toml". Default: "cli"
     #[arg(short = 'f', long, env = "GIT_SUMI_FORMAT")]
     pub format: Option<ParsedCommitDisplayFormat>,
 

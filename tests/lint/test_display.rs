@@ -17,18 +17,21 @@ fn assert_table_output(cmd: &mut Command) {
         .stdout(contains("Footers              │ BREAKING CHANGE:breaking description, Footer1:value1, Footer2:value2"))
         .stdout(contains("Is breaking          │ true"))
         .stdout(contains("Breaking description │ breaking description"))
-        .stdout(contains("References           │ #123, ce6df36"));
+        .stdout(contains("References           │ #123, ce6df36"))
+        // No headers.
+        .stdout(contains("Key").not())
+        .stdout(contains("Value").not());
 }
 
 #[test]
-fn success_display_format_table() {
+fn success_display_format_cli() {
     let mut cmd = run_isolated_git_sumi("");
-    cmd.arg("-dCG").arg("-f").arg("table").arg(COMMIT_MESSAGE);
+    cmd.arg("-dCG").arg("-f").arg("cli").arg(COMMIT_MESSAGE);
     assert_table_output(&mut cmd);
 }
 
 #[test]
-fn success_display_format_table_as_default() {
+fn success_display_format_cli_as_default() {
     let mut cmd = run_isolated_git_sumi("");
     cmd.arg("-dCG").arg(COMMIT_MESSAGE);
     assert_table_output(&mut cmd);
@@ -123,4 +126,25 @@ fn success_does_not_contain_header() {
         .assert()
         .success()
         .stdout(contains("header = ").not());
+}
+
+#[test]
+fn success_display_format_markdown() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-dCG").arg("-f").arg("table").arg(COMMIT_MESSAGE);
+    cmd.assert()
+        .success()
+        .stdout(contains("| Key"))
+        .stdout(contains("| Value"))
+        .stdout(contains("| Gitmoji              | 🐛"))
+        .stdout(contains("|----------------------|----------------------------------------------------------------------|"))
+        .stdout(contains("| Scope                | Scope"))
+        .stdout(contains("| Description          | short description"))
+        .stdout(contains("| Body                 | Longer body description "))
+        .stdout(contains(
+            "| Footers              | BREAKING CHANGE:breaking description, Footer1:value1, Footer2:value2 |",
+        ))
+        .stdout(contains("| Is breaking          | true "))
+        .stdout(contains("| Breaking description | breaking description "))
+        .stdout(contains("| References           | #123, ce6df36 "));
 }

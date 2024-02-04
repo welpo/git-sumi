@@ -1,16 +1,24 @@
 use super::errors::SumiError;
 use crate::config::ParsedCommitDisplayFormat;
 use crate::parser::ParsedCommit;
-use prettytable::{format, Cell, Row, Table};
 use serde_json::Value;
+use tabled::{
+    settings::{object::Rows, Disable, Style},
+    Table, Tabled,
+};
 
 pub fn display_parsed_commit(
     commit: &ParsedCommit,
     format: &ParsedCommitDisplayFormat,
 ) -> Result<(), SumiError> {
     match format {
+        ParsedCommitDisplayFormat::Cli => {
+            display_parsed_commit_as_table(commit, ParsedCommitDisplayFormat::Cli)?
+        }
         ParsedCommitDisplayFormat::Json => display_parsed_commit_as_json(commit)?,
-        ParsedCommitDisplayFormat::Table => display_parsed_commit_as_table(commit)?,
+        ParsedCommitDisplayFormat::Table => {
+            display_parsed_commit_as_table(commit, ParsedCommitDisplayFormat::Table)?
+        }
         ParsedCommitDisplayFormat::Toml => display_parsed_commit_as_toml(commit)?,
     }
     Ok(())
@@ -38,46 +46,62 @@ fn display_parsed_commit_as_json(commit: &ParsedCommit) -> Result<(), SumiError>
     Ok(())
 }
 
-fn display_parsed_commit_as_table(commit: &ParsedCommit) -> Result<(), SumiError> {
-    let mut table = Table::new();
-    add_row_for_vector(&mut table, "Gitmoji", &commit.gitmoji);
-    add_row_for_string(&mut table, "Commit type", &commit.commit_type);
-    add_row_for_string(&mut table, "Scope", &commit.scope);
-    add_row_for_string(&mut table, "Description", &Some(commit.description.clone()));
-    add_row_for_string(&mut table, "Body", &commit.body);
-    add_row_for_vector(&mut table, "Footers", &commit.footers);
-    add_row_for_bool(&mut table, "Is breaking", &commit.is_breaking);
-    add_row_for_string(
-        &mut table,
-        "Breaking description",
-        &commit.breaking_description,
-    );
-    add_row_for_vector(&mut table, "References", &commit.references);
-    table.set_format(*format::consts::FORMAT_BOX_CHARS);
-    table.printstd();
-    Ok(())
+#[derive(Tabled)]
+#[tabled(rename_all = "PascalCase")]
+struct CommitRow {
+    key: &'static str,
+    value: String,
 }
 
-fn add_row_for_string(table: &mut Table, label: &str, value: &Option<String>) {
-    if let Some(v) = value {
-        table.add_row(Row::new(vec![Cell::new(label), Cell::new(v)]));
-    }
-}
+fn display_parsed_commit_as_table(
+    commit: &ParsedCommit,
+    format: ParsedCommitDisplayFormat,
+) -> Result<(), SumiError> {
+    let mut rows = Vec::new();
+    let fields = [
+        ("Gitmoji", commit.gitmoji.as_ref().map(|g| g.join(", "))),
+        ("Commit type", commit.commit_type.clone()),
+        ("Scope", commit.scope.clone()),
+        // "Description" is the only field that is guaranteed to be present.
+        ("Description", Some(commit.description.clone())),
+        ("Body", commit.body.clone()),
+        ("Footers", commit.footers.as_ref().map(|f| f.join(", "))),
+        (
+            "Is breaking",
+            Some(format!("{}", commit.is_breaking.unwrap_or(false))),
+        ),
+        ("Breaking description", commit.breaking_description.clone()),
+        (
+            "References",
+            commit.references.as_ref().map(|r| r.join(", ")),
+        ),
+    ];
 
-fn add_row_for_bool(table: &mut Table, label: &str, value: &Option<bool>) {
-    if let Some(v) = value {
-        let display_value = if *v { "true" } else { "false" };
-        table.add_row(Row::new(vec![Cell::new(label), Cell::new(display_value)]));
-    }
-}
-
-fn add_row_for_vector(table: &mut Table, label: &str, vec: &Option<Vec<String>>) {
-    if let Some(v) = vec {
-        if !v.is_empty() {
-            let joined = v.join(", ");
-            table.add_row(Row::new(vec![Cell::new(label), Cell::new(&joined)]));
+    for (key, value) in fields.iter() {
+        if let Some(val) = value {
+            rows.push(CommitRow {
+                key,
+                value: val.clone(),
+            });
         }
     }
+
+    let mut table = Table::new(rows);
+    match format {
+        ParsedCommitDisplayFormat::Cli => {
+            // Cute table for terminal; no header.
+            table.with(Style::modern());
+            table.with(Disable::row(Rows::first()));
+        }
+        ParsedCommitDisplayFormat::Table => {
+            // Markdown table with header.
+            table.with(Style::markdown());
+        }
+        _ => {}
+    }
+
+    println!("{}", table);
+    Ok(())
 }
 
 fn display_parsed_commit_as_toml(commit: &ParsedCommit) -> Result<(), SumiError> {

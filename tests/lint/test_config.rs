@@ -318,8 +318,8 @@ quiet = false
 # Shows the parsed commit message post-linting. See 'format' for options.
 display = false
 
-# Output format for the parsed commit message. Options: "json", "table", "toml".
-format = "table"
+# Output format for the parsed commit message. Options: "cli", "json", "table", "toml".
+format = "cli"
 
 # Process each non-empty line in the commit message as an individual commit.
 split_lines = false

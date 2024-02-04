@@ -42,8 +42,9 @@ pub trait Configurable {
 #[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr, Default)]
 #[serde(rename_all = "lowercase")]
 pub enum ParsedCommitDisplayFormat {
-    Json,
     #[default]
+    Cli,
+    Json,
     Table,
     Toml,
 }
@@ -296,7 +297,7 @@ impl Config {
         let config_comments = HashMap::from([
             ("quiet", "Suppress progress messages."),
             ("display", "Shows the parsed commit message post-linting. See 'format' for options."),
-            ("format", "Output format for the parsed commit message. Options: \"json\", \"table\", \"toml\"."),
+            ("format", "Output format for the parsed commit message. Options: \"cli\", \"json\", \"table\", \"toml\"."),
             ("split_lines", "Process each non-empty line in the commit message as an individual commit."),
             ("gitmoji", "Rule: include one valid Gitmoji: https://gitmoji.dev/"),
             ("conventional", "Rule: follow Conventional Commits format: https://www.conventionalcommits.org/"),

@@ -42,7 +42,7 @@ jobs:
           cargo test
       - name: Get test coverage
         run: |
-          cargo tarpaulin --out xml
+          cargo tarpaulin --engine llvm --out xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         with:

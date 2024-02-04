@@ -1,0 +1,25 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureImg {
+  height: 13rem;
+}
+
+.text {
+  font-size: 1.5em;
+  line-height: 0.2;
+  font-family: "Glittery Snowfall";
+}
+
+.accentText {
+  color: var(--accent-color) !important;
+}
+
+@font-face {
+  src: url("/static/fonts/glittery_snowfall.woff2") format("woff2");
+  font-family: "Glittery Snowfall";
+}

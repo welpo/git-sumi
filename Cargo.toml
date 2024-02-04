@@ -1,0 +1,42 @@
+[package]
+name = "git-sumi"
+version = "0.0.1"
+authors = ["Óscar Fernández <osc@osc.garden>"]
+description = "Non-opinionated commit message linter"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+homepage = "https://sumi.rs"
+readme = "README.md"
+keywords = ["git, commit, lint, linter, conventional"]
+categories = ["command-line-utilities", "development-tools"]
+repository = "https://github.com/welpo/git-sumi"
+
+[dependencies]
+clap = { version = "4", features = ["derive", "env"] }
+clap_complete = "4"
+dirs = "5"
+env_logger = "0.10"
+git-conventional = "0.12"
+lazy_static = "1.4"
+log = "0.4"
+prettytable-rs = "0.10"
+regex = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+strum = "0.25"
+strum_macros = "0.25"
+thiserror = "1.0"
+toml = "0.8"
+
+[dev-dependencies]
+assert_cmd = "1.0"
+predicates = "1.0"
+rand = "0.8"
+tempfile = "3.2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = "s"
+panic = "abort"   # Let it crash and force ourselves to write safe Rust.
+strip = true

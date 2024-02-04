@@ -1,0 +1,30 @@
+[build-system]
+requires = ["maturin>=1.4.0"]
+build-backend = "maturin"
+
+[project]
+name = "git-sumi"
+description = "Non-opinionated Rust-powered commit message linter"
+requires-python = ">=3.7"
+keywords = ["git", "commit", "lint", "linter", "rust", "conventional commits"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Topic :: Software Development",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.urls]
+Homepage = "https://sumi.rs"
+Documentation = "https://sumi.rs/docs/"
+Repository = "https://github.com/welpo/git-sumi"
+Changelog = "https://github.com/welpo/git-sumi/blob/main/CHANGELOG.md"
+
+[tool.maturin]
+sdist-include = ["LICENSE-MIT", "LICENSE-APACHE", "README.md"]
+bindings = "bin"
+manifest-path = "../Cargo.toml"

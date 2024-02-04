@@ -1,0 +1,41 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  position: relative;
+  padding: 4rem 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@font-face {
+  src: url("/static/fonts/glittery_snowfall.woff2") format("woff2");
+  font-family: "Glittery Snowfall";
+}
+
+.text {
+  font-size: 1.5em;
+  font-family: "Glittery Snowfall";
+}
+
+.accentText {
+  color: var(--accent-color) !important;
+}
+
+.accentTextContrast {
+  color: var(--accent-color-contrast) !important;
+}

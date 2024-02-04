@@ -15,9 +15,29 @@ fn setup_git_repo() -> TempDir {
     let tmp_dir = TempDir::new().expect("Failed to create a temporary directory");
     let repo_dir = tmp_dir.path();
 
+    // Initialize a git repository.
     Command::new("git")
         .args(["init"])
-        .current_dir(repo_dir)
+        .current_dir(&repo_dir)
+        .assert()
+        .success();
+
+    // Disable GPG signing (otherwise it can prompt for a passphrase during tests).
+    Command::new("git")
+        .args(["config", "commit.gpgsign", "false"])
+        .current_dir(&repo_dir)
+        .assert()
+        .success();
+
+    // Set the user name and email.
+    Command::new("git")
+        .args(["config", "user.name", "Test User"])
+        .current_dir(&repo_dir)
+        .assert()
+        .success();
+    Command::new("git")
+        .args(["config", "user.email", "test@example.com"])
+        .current_dir(&repo_dir)
         .assert()
         .success();
 

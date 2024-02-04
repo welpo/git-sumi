@@ -10,6 +10,8 @@
     <a href="https://codecov.io/gh/welpo/git-sumi">
         <img src="https://img.shields.io/codecov/c/gh/welpo/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Codecov"></a>
     <br>
+    <a href="https://github.com/welpo/git-sumi/actions/workflows/ci.yaml">
+        <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/ci.yaml?style=flat-square&labelColor=202b2d&color=b05275" alt="CI"></a>
     <a href="https://sumi.rs/docs">
         <img src="https://img.shields.io/website?url=https%3A%2F%2Fsumi.rs&style=flat-square&label=docs&labelColor=202b2d&color=b05275" alt="Documentation"></a>
     <a href="#-license">

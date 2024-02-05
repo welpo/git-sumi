@@ -24,7 +24,8 @@ fi
 
 echo "Preparing ${VERSION_TAG}…"
 comment="# managed by release script"
-sed -E -i'' -e "s/^version = .* $comment$/version = \"${VERSION_TAG#v}\"  $comment/" Cargo.toml
+sed -E -e "s/^version = .* $comment$/version = \"${VERSION_TAG#v}\"  $comment/" Cargo.toml > Cargo.toml.tmp && mv Cargo.toml.tmp Cargo.toml
+cargo check
 
 # Update CHANGELOG.
 git cliff --tag "$VERSION_TAG" -o CHANGELOG.md

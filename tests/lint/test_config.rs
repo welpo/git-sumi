@@ -3,6 +3,7 @@ extern crate tempfile;
 use super::contains;
 use super::run_isolated_git_sumi;
 use super::Command;
+use predicates::prelude::*;
 use std::fs;
 use tempfile::tempdir;
 
@@ -157,6 +158,32 @@ fn error_fail_override_config_file_gitmoji() {
         .assert()
         .failure()
         .stderr(contains("Header must contain exactly 1 emoji, found 2"));
+}
+
+#[test]
+fn success_override_quiet_with_env_var() {
+    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    cmd.env("GIT_SUMI_QUIET", "false") // Should override config.
+        .arg("--config")
+        .arg("tests/resources/good_config_ciqf.toml") // Sets quiet = true.
+        .arg("Commit message")
+        .assert()
+        .success()
+        .stdout(contains("Input"))
+        .stdout(contains("passed"));
+}
+
+#[test]
+fn success_override_gitmoji_with_env_var() {
+    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    cmd.env("GIT_SUMI_GITMOJI", "false") // Override gitmoji = true in config.
+        .arg("--config")
+        .arg("tests/resources/good_config_gitmoji.toml")
+        .arg("-d") // Needs a rule/display/commit.
+        .arg("refactor(HTML): remove unused code")
+        .assert()
+        .success()
+        .stderr(contains("Header must contain exactly 1 emoji").not());
 }
 
 #[test]

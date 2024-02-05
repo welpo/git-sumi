@@ -143,8 +143,8 @@ pub fn count_active_rules(config: &Config) -> usize {
 /// - For lists, updates the `Config` field only if the list is not empty.
 macro_rules! update_field {
     ($config_field:expr, $self_field:expr) => {
-        if $self_field {
-            $config_field = true;
+        if let Some(val) = $self_field {
+            $config_field = val;
         }
     };
     ($config_field:expr, $self_field:expr, option) => {

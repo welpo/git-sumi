@@ -55,8 +55,6 @@ Read the [rules documentation](/docs/rules) for more information.
         Disallow leading/trailing whitespace and consecutive spaces [env: GIT_SUMI_WHITESPACE=]
 -E, --description-case <CASE>
         Commit description must start with the selected case. Options: "lower", "upper", "any". Default: "any" [env: GIT_SUMI_DESCRIPTION_CASE=]
--D, --capitalize-description
-        Capitalize the first letter of commit descriptions [env: GIT_SUMI_CAPITALIZE_DESCRIPTION=]
 -P, --no-period
         Do not end commit header with a period [env: GIT_SUMI_NO_PERIOD=]
 -H, --max-header-length <MAX_HEADER_LENGTH>

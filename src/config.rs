@@ -307,7 +307,6 @@ impl Config {
             ("imperative", "Rule: use the imperative mood in the description (e.g. \"Fix bug\" instead of \"Fixed bug\")."),
             ("whitespace", "Rule: disallow leading/trailing whitespace and consecutive spaces."),
             ("description_case", "Rule: commit description must start with the specified case. Options: \"any\", \"lower\", \"upper\"."),
-            ("capitalize_description", "Rule: capitalize the first letter of commit descriptions."),
             ("no_period", "Rule: do not end commit header with a period."),
             ("max_header_length", "Rule: limit the header to the specified length. A value of 0 disables this rule."),
             ("max_body_length", "Rule: wrap the body at the specified length. A value of 0 disables this rule."),

@@ -14,8 +14,8 @@ To follow his advice, you can use the following configuration:
 # Process each non-empty line in the commit message as an individual commit.
 split_lines = false
 
-# Rule: capitalize the first letter of commit descriptions.
-capitalize_description = true
+# Rule: commit description must start with the specified case. Options: "any", "lower", "upper".
+description_case = "upper"
 
 # Rule: use the imperative mood in the description (e.g. "Fix bug" instead of "Fixed bug").
 imperative = true

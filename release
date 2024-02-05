@@ -3,6 +3,12 @@
 # Inspired by https://github.com/orhun/git-cliff/blob/main/release.sh
 set -eu
 
+# Check for a clean working directory.
+if [ -n "$(git status --porcelain)" ]; then
+    echo "Your working directory is dirty. Commit or stash your changes before running this script."
+    exit 1
+fi
+
 # Check if a version tag is provided.
 if [ "$#" -eq 1 ]; then
     VERSION_TAG=$1

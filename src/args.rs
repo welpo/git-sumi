@@ -34,16 +34,34 @@ pub struct Opt {
     pub config: Option<String>,
 
     /// Suppress progress messages.
-    #[arg(short = 'q', long, env = "GIT_SUMI_QUIET")]
-    pub quiet: bool,
+    #[arg(
+        short = 'q',
+        num_args = 0,
+        default_missing_value = "true",
+        long,
+        env = "GIT_SUMI_QUIET"
+    )]
+    pub quiet: Option<bool>,
 
     /// Process each non-empty line as an individual commit.
-    #[arg(short = 's', long, env = "GIT_SUMI_SPLIT_LINES")]
-    pub split_lines: bool,
+    #[arg(
+        short = 's',
+        long,
+        env = "GIT_SUMI_SPLIT_LINES",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub split_lines: Option<bool>,
 
     /// Display the parsed commit message.
-    #[arg(short = 'd', long, env = "GIT_SUMI_DISPLAY")]
-    pub display: bool,
+    #[arg(
+        short = 'd',
+        long,
+        env = "GIT_SUMI_DISPLAY",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub display: Option<bool>,
 
     /// Specify the output format for displaying the parsed commit message.
     /// Options: "cli", "table", "json", "toml". Default: "cli"
@@ -59,23 +77,47 @@ pub struct Opt {
     pub force: bool,
 
     /// Follow Conventional Commits format.
-    #[arg(short = 'C', long, env = "GIT_SUMI_CONVENTIONAL", default_value_ifs([
-        ("types_allowed", ArgPredicate::IsPresent, Some("true")),
-        ("scopes_allowed", ArgPredicate::IsPresent, Some("true")),
-        ]), help_heading = "Rules")]
-    pub conventional: bool,
+    #[arg(short = 'C',
+        long,
+        env = "GIT_SUMI_CONVENTIONAL",
+        num_args = 0,
+        default_missing_value = "true",
+        default_value_ifs([
+            ("types_allowed", ArgPredicate::IsPresent, Some("true")),
+            ("scopes_allowed", ArgPredicate::IsPresent, Some("true")),
+            ]),
+        help_heading = "Rules")]
+    pub conventional: Option<bool>,
 
     /// Use the imperative mood in the description.
-    #[arg(short = 'I', long, env = "GIT_SUMI_IMPERATIVE", help_heading = "Rules")]
-    pub imperative: bool,
+    #[arg(
+        short = 'I',
+        long,
+        env = "GIT_SUMI_IMPERATIVE",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub imperative: Option<bool>,
 
     /// Include one valid Gitmoji.
-    #[arg(short = 'G', long, env = "GIT_SUMI_GITMOJI", help_heading = "Rules")]
-    pub gitmoji: bool,
+    #[arg(
+        short = 'G',
+        long,
+        env = "GIT_SUMI_GITMOJI",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub gitmoji: Option<bool>,
 
     /// Disallow leading/trailing whitespace and consecutive spaces.
-    #[arg(short = 'W', long, env = "GIT_SUMI_WHITESPACE", help_heading = "Rules")]
-    pub whitespace: bool,
+    #[arg(
+        short = 'W',
+        long,
+        env = "GIT_SUMI_WHITESPACE",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub whitespace: Option<bool>,
 
     /// Commit description must start with the selected case.
     /// Options: "lower", "upper", "any". Default: "any".
@@ -89,8 +131,14 @@ pub struct Opt {
     pub description_case: Option<DescriptionCase>,
 
     /// Do not end commit header with a period.
-    #[arg(short = 'P', long, env = "GIT_SUMI_NO_PERIOD", help_heading = "Rules")]
-    pub no_period: bool,
+    #[arg(
+        short = 'P',
+        long,
+        env = "GIT_SUMI_NO_PERIOD",
+        num_args = 0,
+        default_missing_value = "true"
+    )]
+    pub no_period: Option<bool>,
 
     /// Limit the header to the specified length.
     #[arg(short = 'H', long, env = "GIT_SUMI_MAX_HEADER_LENGTH", value_parser = clap::value_parser!(usize), help_heading = "Rules")]

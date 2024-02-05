@@ -156,6 +156,11 @@ jobs:
           args: --release --sdist --out wheels
           sccache: "true"
           manylinux: auto
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ join(matrix.targets, '_') }}
+          path: pypi/wheels
 
   # Build and package all the platform-agnostic(ish) things
   build-global-artifacts:
@@ -277,6 +282,11 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Publish to crates.io
         run: cargo publish --allow-dirty --locked --token ${{ secrets.CRATES_IO_API_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          merge-multiple: true
+          path: pypi/wheels
       - name: Publish to PyPi
         uses: PyO3/maturin-action@v1
         env:

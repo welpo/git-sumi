@@ -4,6 +4,22 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.0.5](https://github.com/welpo/git-sumi/compare/v0.0.4..v0.0.5) - 2024-02-05
+
+### 📝 Documentation
+
+- Add Deploy badge - ([e339cdb](https://github.com/welpo/git-sumi/commit/e339cdbf6dff791b3812af5ec55841da8606a490))
+- Add GitHub Releases badge - ([2bd1d0f](https://github.com/welpo/git-sumi/commit/2bd1d0fce9632b77f48458f308e67e93357acf2f))
+- Remove references to `capitalize_description` - ([c2a3044](https://github.com/welpo/git-sumi/commit/c2a3044b985c75924b47c1cede8d76205837abbb))
+
+### 🔧 Miscellaneous tasks
+
+- *(CI)* Add labels to renovate's PRs - ([16ba844](https://github.com/welpo/git-sumi/commit/16ba8448c82710781d3fdb932f2ae208294e0405))
+- *(CI)* Use single quotes for cron schedule - ([5328eca](https://github.com/welpo/git-sumi/commit/5328eca7e3e934bb7ee98d8d34be3b4d9a427ef1))
+- *(Cargo.toml)* Exclude unnecessary directories - ([cc7d3a7](https://github.com/welpo/git-sumi/commit/cc7d3a7c798f65313c739ec4e42f267860bd8ca4))
+- *(release)* Fix cargo publish - ([65cfcc9](https://github.com/welpo/git-sumi/commit/65cfcc987205a92e8a5c5af96967a68a387bffd4))
+- *(release)* Split maturin build/publish processes - ([b798857](https://github.com/welpo/git-sumi/commit/b79885759170ccf88c6ff3d05f08fac54863369a))
+
 ## [0.0.4](https://github.com/welpo/git-sumi/compare/v0.0.3..v0.0.4) - 2024-02-05
 
 ### ✨ Features
@@ -26,6 +42,7 @@ We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.
 - *(CHANGELOG)* Update grouping - ([cc12a84](https://github.com/welpo/git-sumi/commit/cc12a840d82014a4ee8e9cca988a2358c111c139))
 - *(CI)* Exclude repo's commits from link checking - ([e7b58b3](https://github.com/welpo/git-sumi/commit/e7b58b301ec6e62b26b208e63ddba8d6ec308f49))
 - *(CI)* Rename git-sumi job - ([e9ba384](https://github.com/welpo/git-sumi/commit/e9ba384756dff8619861ca87167160a587b5b3d5))
+- *(release)* Remove `--frozen` from maturin command - ([0a08d30](https://github.com/welpo/git-sumi/commit/0a08d3048905e848b0b43dc72b765235c11f2b47))
 - *(release)* Check for clean working directory - ([ebfc43a](https://github.com/welpo/git-sumi/commit/ebfc43a72555d209e47533b0249dba44b0d01d2e))
 
 ## [0.0.3](https://github.com/welpo/git-sumi/compare/v0.0.2..v0.0.3) - 2024-02-05

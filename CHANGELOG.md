@@ -4,6 +4,13 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.0.6](https://github.com/welpo/git-sumi/compare/v0.0.5..v0.0.6) - 2024-02-05
+
+### 🔧 Miscellaneous tasks
+
+- *(Cargo.toml)* Exclude more unneeded directories - ([76b21c4](https://github.com/welpo/git-sumi/commit/76b21c44231ba3f26bac9806bc6ab589df05f71f))
+- *(release)* Upload and download PyPi wheels - ([16b9e47](https://github.com/welpo/git-sumi/commit/16b9e47817a02ccb1ec2cdbcefbd9ba04bb3984f))
+
 ## [0.0.5](https://github.com/welpo/git-sumi/compare/v0.0.4..v0.0.5) - 2024-02-05
 
 ### 📝 Documentation

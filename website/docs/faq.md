@@ -51,7 +51,7 @@ Yes. If you're using the `commit-msg` hook (`git sumi --init hook`), modify it s
 set -e  # Exit on any error.
 
 # Check if git-sumi is installed.
-if ! command -v sumi &> /dev/null
+if ! command -v git-sumi &> /dev/null
 then
     echo "git-sumi is not installed. Please install it. See https://sumi.rs for instructions."
     echo "Alternatively, edit or remove the commit-msg hook in .git/hooks/commit-msg."

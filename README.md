@@ -5,6 +5,8 @@
     <br><br>
     <a href="CONTRIBUTING.md#pull-requests">
         <img src="https://img.shields.io/badge/PRs-welcome-0?style=flat-square&labelColor=202b2d&color=b05275" alt="PRs welcome"></a>
+    <a href="https://github.com/welpo/git-sumi/releases">
+        <img src="https://img.shields.io/github/v/release/welpo/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Latest release"></a>
     <a href="https://crates.io/crates/git-sumi">
         <img src="https://img.shields.io/crates/v/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Crates.io"></a>
     <a href="https://codecov.io/gh/welpo/git-sumi">

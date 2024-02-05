@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["git", "commit", "lint", "conventional-commits", "cli"]
 categories = ["command-line-utilities", "development-tools"]
 repository = "https://github.com/welpo/git-sumi"
-exclude = ["artifacts", "website", "target", "pypi", ".github"]
+exclude = ["artifacts", "website", "target", "pypi", ".github", "tests", "release", "cliff.toml", "CHANGELOG.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "sumi.toml", ".gitignore"]
 
 [dependencies]
 clap = { version = "4", features = ["derive", "env"] }

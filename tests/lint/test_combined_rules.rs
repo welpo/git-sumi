@@ -309,3 +309,15 @@ fn success_with_lowercase_description_and_pattern() {
         .success()
         .stdout(contains("✅ All 2 checks passed"));
 }
+
+#[test]
+fn success_gitmoji_with_pattern() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("--gitmoji")
+        .arg("--header-pattern")
+        .arg("^(?:[\\p{Emoji_Presentation}\\p{Extended_Pictographic}\\u{200D}])")
+        .arg("⬆️ chore(deps): update Rust crate foo to v4.2")
+        .assert()
+        .success()
+        .stdout(contains("✅ All 2 checks passed"));
+}

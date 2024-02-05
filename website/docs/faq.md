@@ -17,7 +17,7 @@ If you are using [Conventional Commits](https://www.conventionalcommits.org/), t
 For non-conventional commits users, the commit message is divided into three parts:
 
 - **Header**: The entire first line of the commit message.
-- **Description**: Same as the header.
+- **Description**: Same as the header (sans Gitmoji, if present).
 - **Body**: Anything after the first line.
 
 ## How do I force a commit in spite of linting errors?

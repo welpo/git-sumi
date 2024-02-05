@@ -4,6 +4,12 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.0.3](https://github.com/welpo/git-sumi/compare/v0.0.2..v0.0.3) - 2024-02-05
+
+### 🐛 Bug Fixes
+
+- *(basic-parser)* Capture original header - ([ba3b413](https://github.com/welpo/git-sumi/commit/ba3b4137dce7c02988f45c45d873c4d747cd09c4))
+
 ## [0.0.2](https://github.com/welpo/git-sumi/compare/v0.0.1..v0.0.2) - 2024-02-04
 
 ### 💥 BREAKING CHANGES 💥

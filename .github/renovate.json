@@ -3,6 +3,7 @@
   "extends": ["config:recommended", ":automergeMinor", ":disableDependencyDashboard"],
   "commitMessageAction": "chore(deps): update",
   "commitMessagePrefix": "⬆️",
+  "labels": ["dependencies"],
   "packageRules": [
     {
       "updateTypes": ["pin"],

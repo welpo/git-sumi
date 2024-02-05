@@ -121,12 +121,8 @@ git show $VERSION_TAG
 echo
 
 echo "Release $VERSION_TAG is ready. Don't forget to push the changes and the tag:"
-echo "git push && git push --tags"
-echo
-echo "Once that's done, you should see your tag on GitHub:"
 
 remote_url=$(git remote get-url origin)
-
 # Check if the URL is in SSH format (git@).
 if [[ "$remote_url" == git@github.com:* ]]; then
     https_url="https://github.com/${remote_url#git@github.com:}"
@@ -135,10 +131,4 @@ else
     https_url="${remote_url%.git}"
 fi
 
-echo "${https_url}/tags"
-
-echo "To publish on crates.io, run:"
-echo "cargo publish"
-echo
-echo "To publish on PyPI, run:"
-echo "cd pypi && maturin publish --frozen"
+echo "git push && git push --tags && open ${https_url}/tags"

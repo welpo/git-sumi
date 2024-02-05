@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Write};
+#[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
@@ -216,6 +217,7 @@ fn init_commit_hook() -> Result<(), SumiError> {
     create_directory_if_not_exists(&hooks_dir)?;
     let hook_path = hooks_dir.join("commit-msg");
     write_commit_hook_if_needed(&hook_path)?;
+    #[cfg(unix)]
     set_executable_permission(&hook_path)?;
     Ok(())
 }
@@ -274,6 +276,7 @@ fn set_executable_permission(file_path: &Path) -> Result<(), SumiError> {
             details: e.to_string(),
         })?
         .permissions();
+    #[cfg(unix)]
     permissions.set_mode(0o755);
     fs::set_permissions(file_path, permissions).map_err(|e| SumiError::GeneralError {
         details: e.to_string(),

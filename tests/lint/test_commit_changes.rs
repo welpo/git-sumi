@@ -7,6 +7,7 @@ use assert_cmd::Command;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
+#[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use tempfile::TempDir;
@@ -186,6 +187,7 @@ fn setup_silent_git_fail(tmp_dir: &TempDir) -> String {
         .metadata()
         .expect("Failed to get mock git metadata")
         .permissions();
+    #[cfg(unix)]
     perms.set_mode(0o755); // Set the script as executable.
     fs::set_permissions(&git_mock_path, perms).expect("Failed to set permissions for mock git");
 

@@ -4,10 +4,27 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
-## unreleased
+## [0.0.4](https://github.com/welpo/git-sumi/compare/v0.0.3..v0.0.4) - 2024-02-05
+
+### ✨ Features
+
+- *(config)* Override config bools with env vars ([#9](https://github.com/welpo/git-sumi/issues/9)) - ([e84a27e](https://github.com/welpo/git-sumi/commit/e84a27eb892384fe7e43e41ae832901dae50ba93))
+- *(imperative)* Expand non-imperative verbs - ([22033cc](https://github.com/welpo/git-sumi/commit/22033cced1bc0eaaa85d6b7271eeada00d30f6fa))
+- *(imperative)* Expand non-imperative verbs - ([2f7dcba](https://github.com/welpo/git-sumi/commit/2f7dcba50033f17761c042d51c63fccfb0755e73))
+
+### 🐛 Bug fixes
+
+- *(init)* Only set permissions on Unix - ([feeb22a](https://github.com/welpo/git-sumi/commit/feeb22ab96652712f71c9124ca5119035b90ab65))
+
+### 📝 Documentation
+
+- *(website)* Fix git-sumi installed check - ([c4244b9](https://github.com/welpo/git-sumi/commit/c4244b9be7a2b68a4b5c3d4e8747a12e839b984e))
 
 ### 🔧 Miscellaneous tasks
 
+- *(CD)* Use cargo-dist for releases - ([8a376a4](https://github.com/welpo/git-sumi/commit/8a376a40810654a4ef86f5e14f5278b1c9830ed6))
+- *(CHANGELOG)* Update grouping - ([cc12a84](https://github.com/welpo/git-sumi/commit/cc12a840d82014a4ee8e9cca988a2358c111c139))
+- *(CI)* Exclude repo's commits from link checking - ([e7b58b3](https://github.com/welpo/git-sumi/commit/e7b58b301ec6e62b26b208e63ddba8d6ec308f49))
 - *(CI)* Rename git-sumi job - ([e9ba384](https://github.com/welpo/git-sumi/commit/e9ba384756dff8619861ca87167160a587b5b3d5))
 - *(release)* Check for clean working directory - ([ebfc43a](https://github.com/welpo/git-sumi/commit/ebfc43a72555d209e47533b0249dba44b0d01d2e))
 

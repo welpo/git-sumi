@@ -148,7 +148,7 @@ jobs:
           path: |
             ${{ steps.cargo-dist.outputs.paths }}
             ${{ env.BUILD_MANIFEST_NAME }}
-      - name: Upload to PyPi
+      - name: Build for PyPi
         uses: PyO3/maturin-action@v1
         with:
           command: build
@@ -276,7 +276,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Publish to crates.io
-        run: cargo publish --locked --token ${{ secrets.CRATES_IO_API_TOKEN }}
+        run: cargo publish --allow-dirty --locked --token ${{ secrets.CRATES_IO_API_TOKEN }}
       - name: Publish to PyPi
         uses: PyO3/maturin-action@v1
         env:

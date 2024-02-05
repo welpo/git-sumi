@@ -155,7 +155,6 @@ jobs:
         with:
           command: publish
           working-directory: pypi
-          args: --frozen
           sccache: "true"
           manylinux: auto
 

@@ -90,7 +90,7 @@ jobs:
       - name: Check the links
         uses: lycheeverse/lychee-action@v1
         with:
-          args: -v --max-concurrency 1 *.md website/docs/**/*.md
+          args: -v --max-concurrency 1 --exclude 'git-sumi/commit/' *.md website/docs/**/*.md
           fail: true
           token: ${{ secrets.GITHUB_TOKEN }}
 

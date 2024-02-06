@@ -26,7 +26,7 @@ To do this, make sure you've set up `sumi.toml` at the root of the repository.
 
 To achieve this, after setting up `sumi.toml`at the root of your repository, add the following action to your repository's `.github/workflows` directory:
 
-```yaml title=".github/workflows/git-sumi.yaml"
+```yaml title=".github/workflows/git-sumi.yml"
 name: Lint pull request title
 
 on:

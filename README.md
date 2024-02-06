@@ -12,8 +12,8 @@
     <a href="https://codecov.io/gh/welpo/git-sumi">
         <img src="https://img.shields.io/codecov/c/gh/welpo/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Codecov"></a>
     <br>
-    <a href="https://github.com/welpo/git-sumi/actions/workflows/ci.yaml">
-        <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/ci.yaml?style=flat-square&labelColor=202b2d&color=b05275" alt="CI"></a>
+    <a href="https://github.com/welpo/git-sumi/actions/workflows/ci.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/ci.yml?style=flat-square&labelColor=202b2d&color=b05275" alt="CI"></a>
     <a href="https://github.com/welpo/git-sumi/actions/workflows/release.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/release.yml?style=flat-square&labelColor=202b2d&color=b05275&label=deploy" alt="Deployment"></a>
     <a href="https://sumi.rs/docs">

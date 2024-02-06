@@ -30,6 +30,12 @@ pip install git-sumi
 ```
 
 </TabItem>
+
+<TabItem value="binaries" label="Pre-built binaries">
+Download the latest release from the [releases page](https://github.com/welpo/git-sumi/releases).
+
+</TabItem>
+
 </Tabs>
 
 2. Initialize git-**sumi** from the root of your project:
@@ -40,7 +46,7 @@ git sumi --init
 
 Edit the default configuration (`sumi.toml`) to your liking. Check out the [examples](/docs/examples) for some ideas.
 
-To use git-**sumi**, you can either use it directly from the command line or set up a Git hook.
+You can either use git-**sumi** directly from the command line or set up a Git hook.
 
 ### Git hook
 

@@ -12,15 +12,15 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
 
 ```plaintext
 -q, --quiet
-        Suppress progress messages [env: GIT_SUMI_QUIET=]
+        Suppresses progress messages [env: GIT_SUMI_QUIET=]
 -s, --split-lines
-        Process each non-empty line as an individual commit [env: GIT_SUMI_SPLIT_LINES=]
+        Processes each non-empty line as an individual commit [env: GIT_SUMI_SPLIT_LINES=]
 -d, --display
-        Display the parsed commit message [env: GIT_SUMI_DISPLAY=]
+        Displays parsed commit message [env: GIT_SUMI_DISPLAY=]
 -c, --commit
         Commit the message after successful linting
-    --force
-        Force a commit, regardless of linting errors
+--force
+        Force the commit even if linting fails
 -h, --help
         Print help
 -V, --version
@@ -31,13 +31,13 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
 
 ```plaintext
     --init [<OPTION>]
-        Initialize the default configuration ("config", default value) or commit-msg hook ("hook")
+        Initialize the default configuration ('config') or commit-msg hook ('hook'). Default: 'config'
     --generate-shell-completion <SHELL>
         Generate shell completion script for the specified shell [possible values: bash, elvish, fish, powershell, zsh]
     --config <CONFIG>
         Path to a TOML configuration file [env: GIT_SUMI_CONFIG=]
 -f, --format <FORMAT>
-        Specify the output format for displaying the parsed commit message. Options: "table", "json", "toml". Default: "table" [env: GIT_SUMI_FORMAT=]
+        Sets display format: cli, json, table, toml [env: GIT_SUMI_FORMAT=]
 ```
 
 ### Rules
@@ -45,28 +45,28 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
 Read the [rules documentation](/docs/rules) for more information.
 
 ```plaintext
--I, --imperative
-        Use the imperative mood in the description [env: GIT_SUMI_IMPERATIVE=]
--G, --gitmoji
-        Include one valid Gitmoji [env: GIT_SUMI_GITMOJI=]
 -C, --conventional
         Follow Conventional Commits format [env: GIT_SUMI_CONVENTIONAL=]
+-I, --imperative
+        Use the imperative mood in the description ('fix', not 'fixed') [env: GIT_SUMI_IMPERATIVE=]
+-G, --gitmoji
+        Include one valid Gitmoji [env: GIT_SUMI_GITMOJI=]
 -W, --whitespace
-        Disallow leading/trailing whitespace and consecutive spaces [env: GIT_SUMI_WHITESPACE=]
+        No leading, trailing, or consecutive spaces [env: GIT_SUMI_WHITESPACE=]
 -E, --description-case <CASE>
-        Commit description must start with the selected case. Options: "lower", "upper", "any". Default: "any" [env: GIT_SUMI_DESCRIPTION_CASE=]
+        Description must start with the specified case: any, lower, upper [env: GIT_SUMI_DESCRIPTION_CASE=]
 -P, --no-period
         Do not end commit header with a period [env: GIT_SUMI_NO_PERIOD=]
 -H, --max-header-length <MAX_HEADER_LENGTH>
-        Limit the header to the specified length [env: GIT_SUMI_MAX_HEADER_LENGTH=]
+        Header length limit [env: GIT_SUMI_MAX_HEADER_LENGTH=]
 -B, --max-body-length <MAX_BODY_LENGTH>
-        Wrap the body at the specified length [env: GIT_SUMI_MAX_BODY_LENGTH=]
+        Body line length limit [env: GIT_SUMI_MAX_BODY_LENGTH=]
 -S, --scopes-allowed <SCOPES>
-        Only allow the specified, comma-separated commit scopes [env: GIT_SUMI_SCOPES_ALLOWED=]
+        List of allowed commit scopes [env: GIT_SUMI_SCOPES_ALLOWED=]
 -T, --types-allowed <TYPES>
-        Only allow the specified, comma-separated commit types [env: GIT_SUMI_TYPES_ALLOWED=]
+        List of allowed commit types [env: GIT_SUMI_TYPES_ALLOWED=]
 -R, --header-pattern <PATTERN>
-        Commit header must match the specified (regex) pattern [env: GIT_SUMI_HEADER_PATTERN=]
+        Header must match regex pattern [env: GIT_SUMI_HEADER_PATTERN=]
 ```
 
 ## Overriding configuration options

@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ensure_command() {
+    if ! command -v "$1" &> /dev/null; then
+        echo "Error: Required command '$1' not found. Please install it and retry."
+        exit 1
+    fi
+}
+
+check_remote() {
+    ensure_command git
+    echo "Checking if local repository is up to date with remote..."
+
+    git fetch || { echo "Failed to fetch from remote repository"; exit 1; }
+
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse '@{u}')
+    BASE=$(git merge-base @ '@{u}')
+
+    if [ "$LOCAL" = "$REMOTE" ]; then
+        echo "Up to date with remote."
+    elif [ "$LOCAL" = "$BASE" ]; then
+        echo "Error: Local branch is behind remote. Please pull changes."
+        exit 1
+    else
+        echo "Local branch has changes not present in remote or has diverged. Proceeding with checks."
+    fi
+}
+
+run_clippy() {
+    echo "Running Clippy..."
+    ensure_command cargo
+    cargo clippy --tests -- -D warnings
+    echo "Clippy checks passed."
+}
+
+check_format() {
+    echo "Checking code format..."
+    ensure_command cargo
+    cargo fmt --all -- --check
+    echo "Code format check passed."
+}
+
+run_tests() {
+    echo "Running tests..."
+    ensure_command cargo
+    cargo test
+    echo "All tests passed."
+}
+
+start_time=$(date +%s)
+
+ensure_command cargo
+ensure_command git
+
+run_clippy
+check_format
+run_tests
+
+end_time=$(date +%s)
+
+execution_time=$((end_time - start_time))
+echo "Pre-merge checks completed in $execution_time seconds."

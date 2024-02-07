@@ -76,6 +76,8 @@ Our integration systems run automated tests to guard against mistakes. To speed 
 - Make sure all new and existing tests pass with `cargo test`.
 - If necessary, update the documentation (in `website/docs/`).
 
+You might find the [hooks in `.githooks/`](https://github.com/welpo/git-sumi/tree/main/.githooks) useful. To use them, run `git config core.hooksPath .githooks`.
+
 ### Conventional Commit Messages with Gitmoji
 
 See how a minor change to your commit message style can make you a better programmer.

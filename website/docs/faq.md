@@ -50,14 +50,6 @@ Yes. If you're using the `commit-msg` hook (`git sumi --init hook`), modify it s
 
 set -e  # Exit on any error.
 
-# Check if git-sumi is installed.
-if ! command -v git-sumi &> /dev/null
-then
-    echo "git-sumi is not installed. Please install it. See https://sumi.rs for instructions."
-    echo "Alternatively, edit or remove the commit-msg hook in .git/hooks/commit-msg."
-    exit 1
-fi
-
 # highlight-start
 # Get the current branch name.
 current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -67,6 +59,14 @@ if [ "$current_branch" != "main" ]; then
     exit 0  # Exit successfully without running git-sumi.
 fi
 # highlight-end
+
+# Check if git-sumi is installed.
+if ! command -v git-sumi &> /dev/null
+then
+    echo "git-sumi is not installed. Please install it. See https://sumi.rs for instructions."
+    echo "Alternatively, edit or remove the commit-msg hook in .git/hooks/commit-msg."
+    exit 1
+fi
 
 # Run git-sumi on the commit message if on the 'main' branch.
 git-sumi -- "$(cat $1)"  # Exit with error if linting fails.

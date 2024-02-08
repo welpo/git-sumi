@@ -4,6 +4,31 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.0.7](https://github.com/welpo/git-sumi/compare/v0.0.6..v0.0.7) - 2024-02-08
+
+### 📝 Documentation
+
+- *(faq)* Set hook to exit early outside main branch - ([92d9071](https://github.com/welpo/git-sumi/commit/92d90715e15dcf0cd9470462404c37c5414aa648))
+- *(website)* Add pre-built binaries download link - ([0d3adf6](https://github.com/welpo/git-sumi/commit/0d3adf67a3ea8d50ab6751107700bc1123b1c9e7))
+- Finish renaming yaml -> yml - ([4b09485](https://github.com/welpo/git-sumi/commit/4b0948549296fa4e822d7c1df619b0b800a4b247))
+
+### ♻️ Refactor
+
+- Unify and rephrase options descriptions ([#12](https://github.com/welpo/git-sumi/issues/12)) - ([85078f0](https://github.com/welpo/git-sumi/commit/85078f046182ba7b057ecb074956898b37f9bddd))
+- Rename 'yaml' extensions to 'yml' - ([e13808f](https://github.com/welpo/git-sumi/commit/e13808f4529edc71610712f22b1773dde0d22323))
+
+### ✅ Testing
+
+- *(config)* Cover --init overwrite prompts - ([3562f23](https://github.com/welpo/git-sumi/commit/3562f23b4307cb7f46f0c61a47d4bc8c1c88d31a))
+
+### 🔧 Miscellaneous tasks
+
+- *(CHANGELOG)* Improve emoji pattern - ([a80d2db](https://github.com/welpo/git-sumi/commit/a80d2db46b76b556232d7ddbb084487d9f693ad5))
+- *(CI)* Remove manual publish steps - ([49b016b](https://github.com/welpo/git-sumi/commit/49b016b7186c4fa1a75cf47c7d33a873a2b9ae1c))
+- *(pypi)* Match description to website's - ([931386d](https://github.com/welpo/git-sumi/commit/931386d44e5d60ba65aa24e80e883ce2e31983bb))
+- *(release)* Verify version tag format on release - ([8eca1e3](https://github.com/welpo/git-sumi/commit/8eca1e32e1e098cc9ee31554366ebc9edb1b1395))
+- Add pre-commit & commit-msg scripts - ([2f5ff91](https://github.com/welpo/git-sumi/commit/2f5ff9155cdc28c073c4336d82033381003be04f))
+
 ## [0.0.6](https://github.com/welpo/git-sumi/compare/v0.0.5..v0.0.6) - 2024-02-05
 
 ### 🔧 Miscellaneous tasks

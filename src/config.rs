@@ -1,3 +1,4 @@
+use crate::lint::constants::config_descriptions::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
@@ -298,32 +299,49 @@ impl Config {
         let toml = toml::to_string(&default_config)?;
 
         let config_comments = HashMap::from([
-            ("quiet", "Suppress progress messages."),
-            ("display", "Shows the parsed commit message post-linting. See 'format' for options."),
-            ("format", "Output format for the parsed commit message. Options: \"cli\", \"json\", \"table\", \"toml\"."),
-            ("split_lines", "Process each non-empty line in the commit message as an individual commit."),
-            ("gitmoji", "Rule: include one valid Gitmoji: https://gitmoji.dev/"),
-            ("conventional", "Rule: follow Conventional Commits format: https://www.conventionalcommits.org/"),
-            ("imperative", "Rule: use the imperative mood in the description (e.g. \"Fix bug\" instead of \"Fixed bug\")."),
-            ("whitespace", "Rule: disallow leading/trailing whitespace and consecutive spaces."),
-            ("description_case", "Rule: commit description must start with the specified case. Options: \"any\", \"lower\", \"upper\"."),
-            ("no_period", "Rule: do not end commit header with a period."),
-            ("max_header_length", "Rule: limit the header to the specified length. A value of 0 disables this rule."),
-            ("max_body_length", "Rule: wrap the body at the specified length. A value of 0 disables this rule."),
-            ("scopes_allowed", "Rule: only allow the specified commit scopes. Example: [\"docs\", \"cli\"]. An empty list allows any scope."),
-            ("types_allowed", "Rule: only allow the specified commit types. Example: [\"feat\", \"fix\"]. An empty list allows any type."),
-            ("header_pattern", "Rule: commit header must match the specified (regex) pattern. Example: '^JIRA-\\d+:'"),
+            ("quiet", format_description(&QUIET, false)),
+            ("display", format_description(&DISPLAY, false)),
+            ("format", format_description(&FORMAT, false)),
+            ("split_lines", format_description(&SPLIT_LINES, false)),
+            ("gitmoji", format_description(&GITMOJI, true)),
+            (
+                "description_case",
+                format_description(&DESCRIPTION_CASE, true),
+            ),
+            ("imperative", format_description(&IMPERATIVE, true)),
+            ("no_period", format_description(&NO_PERIOD, true)),
+            ("whitespace", format_description(&WHITESPACE, true)),
+            (
+                "max_header_length",
+                format_description(&MAX_HEADER_LENGTH, true),
+            ),
+            (
+                "max_body_length",
+                format_description(&MAX_BODY_LENGTH, true),
+            ),
+            ("conventional", format_description(&CONVENTIONAL, true)),
+            ("scopes_allowed", format_description(&SCOPES_ALLOWED, true)),
+            ("types_allowed", format_description(&TYPES_ALLOWED, true)),
+            ("header_pattern", format_description(&HEADER_PATTERN, true)),
         ]);
+
+        fn format_description(description: &RuleDescription, is_rule: bool) -> String {
+            let prefix = if is_rule { "Rule: " } else { "" };
+            let mut formatted_description = format!("\n# {}{}.\n", prefix, description.short);
+            if let Some(extra) = description.extra {
+                formatted_description += &format!("# {}.\n", extra);
+            }
+            formatted_description
+        }
 
         let mut toml_with_comments = String::new();
         for line in toml.lines() {
-            if let Some((key, _)) = line.split_once('=') {
+            if let Some((key, value)) = line.split_once('=') {
                 if let Some(comment) = config_comments.get(key.trim()) {
-                    toml_with_comments.push_str(&format!("\n# {}\n", comment));
+                    toml_with_comments.push_str(comment);
                 }
+                toml_with_comments.push_str(&format!("{}={}\n", key, value));
             }
-            toml_with_comments.push_str(line);
-            toml_with_comments.push('\n');
         }
 
         let toml_with_comments = format!(

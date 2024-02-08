@@ -1,4 +1,5 @@
 use crate::config::{DescriptionCase, InitOption, ParsedCommitDisplayFormat};
+use crate::lint::constants::config_descriptions;
 use clap::{builder::ArgPredicate, Parser};
 use clap_complete::Shell;
 
@@ -11,26 +12,27 @@ use clap_complete::Shell;
 )]
 
 pub struct Opt {
-    /// Commit message to lint. Alternatively, read from STDIN.
-    #[arg(index = 1)]
+    #[arg(index = 1, help = config_descriptions::COMMIT_MESSAGE)]
     pub commit_message: Option<String>,
 
-    /// Initialize the default configuration ("config", default value) or commit-msg hook ("hook").
     #[arg(
         long,
         value_name = "OPTION",
         num_args = 0..=1,
         required = false,
-        default_missing_value = "config"
+        default_missing_value = "config",
+        help = config_descriptions::INIT
     )]
     pub init: Option<InitOption>,
 
-    /// Generate shell completion script for the specified shell.
-    #[arg(long, value_enum, required = false, value_name = "SHELL")]
+    #[arg(long,
+        value_enum,
+        required = false,
+        value_name = "SHELL",
+        help = config_descriptions::GENERATE_SHELL_COMPLETION)]
     pub generate_shell_completion: Option<Shell>,
 
-    /// Path to a TOML configuration file.
-    #[arg(long, env = "GIT_SUMI_CONFIG")]
+    #[arg(long, env = "GIT_SUMI_CONFIG", help = config_descriptions::CONFIG)]
     pub config: Option<String>,
 
     /// Suppress progress messages.
@@ -39,7 +41,8 @@ pub struct Opt {
         num_args = 0,
         default_missing_value = "true",
         long,
-        env = "GIT_SUMI_QUIET"
+        env = "GIT_SUMI_QUIET",
+        help = config_descriptions::QUIET.short
     )]
     pub quiet: Option<bool>,
 
@@ -49,7 +52,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_SPLIT_LINES",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help = config_descriptions::SPLIT_LINES.short
     )]
     pub split_lines: Option<bool>,
 
@@ -59,21 +63,25 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_DISPLAY",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help = config_descriptions::DISPLAY.short
     )]
     pub display: Option<bool>,
 
     /// Specify the output format for displaying the parsed commit message.
     /// Options: "cli", "table", "json", "toml". Default: "cli"
-    #[arg(short = 'f', long, env = "GIT_SUMI_FORMAT")]
+    #[arg(short = 'f',
+        long,
+        env = "GIT_SUMI_FORMAT",
+        help = config_descriptions::FORMAT.short)]
     pub format: Option<ParsedCommitDisplayFormat>,
 
     /// Commit the message after successful linting.
-    #[arg(short = 'c', long)]
+    #[arg(short = 'c', long, help=config_descriptions::COMMIT)]
     pub commit: bool,
 
     /// Force a commit, regardless of linting errors.
-    #[arg(long)]
+    #[arg(long, help=config_descriptions::FORCE)]
     pub force: bool,
 
     /// Follow Conventional Commits format.
@@ -86,7 +94,8 @@ pub struct Opt {
             ("types_allowed", ArgPredicate::IsPresent, Some("true")),
             ("scopes_allowed", ArgPredicate::IsPresent, Some("true")),
             ]),
-        help_heading = "Rules")]
+        help_heading = "Rules",
+        help = config_descriptions::CONVENTIONAL.short)]
     pub conventional: Option<bool>,
 
     /// Use the imperative mood in the description.
@@ -95,7 +104,9 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_IMPERATIVE",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help_heading = "Rules",
+        help = config_descriptions::IMPERATIVE.short
     )]
     pub imperative: Option<bool>,
 
@@ -105,7 +116,9 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_GITMOJI",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help_heading = "Rules",
+        help = config_descriptions::GITMOJI.short
     )]
     pub gitmoji: Option<bool>,
 
@@ -115,7 +128,9 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_WHITESPACE",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help_heading = "Rules",
+        help = config_descriptions::WHITESPACE.short
     )]
     pub whitespace: Option<bool>,
 
@@ -126,7 +141,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_DESCRIPTION_CASE",
         value_name = "CASE",
-        help_heading = "Rules"
+        help_heading = "Rules",
+        help = config_descriptions::DESCRIPTION_CASE.short
     )]
     pub description_case: Option<DescriptionCase>,
 
@@ -136,16 +152,28 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_NO_PERIOD",
         num_args = 0,
-        default_missing_value = "true"
+        default_missing_value = "true",
+        help_heading = "Rules",
+        help = config_descriptions::NO_PERIOD.short
     )]
     pub no_period: Option<bool>,
 
     /// Limit the header to the specified length.
-    #[arg(short = 'H', long, env = "GIT_SUMI_MAX_HEADER_LENGTH", value_parser = clap::value_parser!(usize), help_heading = "Rules")]
+    #[arg(short = 'H',
+        long,
+        env = "GIT_SUMI_MAX_HEADER_LENGTH",
+        value_parser = clap::value_parser!(usize),
+        help_heading = "Rules",
+        help = config_descriptions::MAX_HEADER_LENGTH.short)]
     pub max_header_length: Option<usize>,
 
     /// Wrap the body at the specified length.
-    #[arg(short = 'B', long, env = "GIT_SUMI_MAX_BODY_LENGTH", value_parser = clap::value_parser!(usize), help_heading = "Rules")]
+    #[arg(short = 'B',
+        long,
+        env = "GIT_SUMI_MAX_BODY_LENGTH",
+        value_parser = clap::value_parser!(usize),
+        help_heading = "Rules",
+        help = config_descriptions::MAX_BODY_LENGTH.short)]
     pub max_body_length: Option<usize>,
 
     /// Only allow the specified, comma-separated commit scopes.
@@ -154,7 +182,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_SCOPES_ALLOWED",
         value_name = "SCOPES",
-        help_heading = "Rules"
+        help_heading = "Rules",
+        help = config_descriptions::SCOPES_ALLOWED.short
     )]
     pub scopes_allowed: Vec<String>,
 
@@ -164,7 +193,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_TYPES_ALLOWED",
         value_name = "TYPES",
-        help_heading = "Rules"
+        help_heading = "Rules",
+        help = config_descriptions::TYPES_ALLOWED.short
     )]
     pub types_allowed: Vec<String>,
 
@@ -174,7 +204,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_HEADER_PATTERN",
         value_name = "PATTERN",
-        help_heading = "Rules"
+        help_heading = "Rules",
+        help = config_descriptions::HEADER_PATTERN.short
     )]
     pub header_pattern: Option<String>,
 }

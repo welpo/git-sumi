@@ -3,6 +3,8 @@
         <img src="https://raw.githubusercontent.com/welpo/git-sumi/main/website/static/img/logo.png" width="300" alt="git-sumi logo: a lantern held on a bamboo stick over the sea">
     </a>
     <br><br>
+    <a href="https://github.com/welpo/git-sumi">
+        <img src="https://img.shields.io/badge/clean_commits-git--sumi-0?style=flat-square&labelColor=202b2d&color=b05275" alt="Clean commits"></a>
     <a href="CONTRIBUTING.md#pull-requests">
         <img src="https://img.shields.io/badge/PRs-welcome-0?style=flat-square&labelColor=202b2d&color=b05275" alt="PRs welcome"></a>
     <a href="https://github.com/welpo/git-sumi/releases">

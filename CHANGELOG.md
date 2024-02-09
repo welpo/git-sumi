@@ -4,6 +4,26 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.0.8](https://github.com/welpo/git-sumi/compare/v0.0.7..v0.0.8) - 2024-02-09
+
+### 💥 BREAKING CHANGES 💥
+
+- *(init)* Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) - ([1ebd6ca](https://github.com/welpo/git-sumi/commit/1ebd6ca541423a065a7015f43f35a62944fabe83))
+
+### ✨ Features
+
+- *(imperative)* Add a few non-imperative verbs - ([0f0a867](https://github.com/welpo/git-sumi/commit/0f0a86779f7557b20eee23c51725738c41059219))
+- *(init)* [**‼️BREAKING‼️**] Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) - ([1ebd6ca](https://github.com/welpo/git-sumi/commit/1ebd6ca541423a065a7015f43f35a62944fabe83))
+
+### 🐛 Bug fixes
+
+- Ignore comment lines in commit messages ([#14](https://github.com/welpo/git-sumi/issues/14)) - ([821d6c6](https://github.com/welpo/git-sumi/commit/821d6c6349b9afc67069604b4bf155392ea06f16))
+
+### 📝 Documentation
+
+- *(README)* Add git-sumi badge - ([9041419](https://github.com/welpo/git-sumi/commit/90414197c8cd77b30de0ac01965c0a30992d64a1))
+- *(README)* Update demo with new default config - ([e9ffd54](https://github.com/welpo/git-sumi/commit/e9ffd544d00ff12ac9a4682013a4b5a77a8532fb))
+
 ## [0.0.7](https://github.com/welpo/git-sumi/compare/v0.0.6..v0.0.7) - 2024-02-08
 
 ### 📝 Documentation

@@ -1,6 +1,6 @@
 [package]
 name = "git-sumi"
-version = "0.0.7"  # managed by release script
+version = "0.0.8"  # managed by release script
 authors = ["Óscar Fernández <osc@osc.garden>"]
 description = "Non-opinionated commit message linter"
 edition = "2021"

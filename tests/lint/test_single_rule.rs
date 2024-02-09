@@ -106,6 +106,16 @@ fn error_invalid_whitespace() {
 }
 
 #[test]
+fn success_ignore_comments() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-W")
+        // If the comment weren't ignored, git-sumi would complain about the adjacent spaces in the second line.
+        .arg("feat: adds feature\n\n#       modified:   src/lib.rs")
+        .assert()
+        .success();
+}
+
+#[test]
 fn success_non_letter_cant_be_capitalised() {
     let test_cases = [" space", "✅ emoji", "1 number"];
     for &test_case in test_cases.iter() {

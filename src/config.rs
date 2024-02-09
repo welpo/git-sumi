@@ -53,6 +53,7 @@ pub enum ParsedCommitDisplayFormat {
 
 #[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr, PartialEq, Default)]
 #[serde(rename_all = "lowercase")]
+#[strum(serialize_all = "lowercase")]
 pub enum DescriptionCase {
     #[default]
     Any,
@@ -98,10 +99,13 @@ impl FromStr for DescriptionCase {
 
 /// Options to initialise git-sumi config.
 #[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr)]
-#[serde(rename_all = "lowercase")]
 pub enum InitOption {
+    #[strum(serialize = "commit-msg")]
+    CommitMsg,
     Config,
-    Hook,
+    Hooks,
+    #[strum(serialize = "prepare-commit-msg")]
+    PrepareCommitMsg,
 }
 
 impl FromStr for InitOption {
@@ -123,21 +127,82 @@ impl FromStr for InitOption {
     }
 }
 
-pub fn count_active_rules(config: &Config) -> usize {
-    let mut count = 0;
-    count += config.whitespace as usize;
-    count += (config.description_case != DescriptionCase::Any) as usize;
-    count += config.no_period as usize;
-    count += config.gitmoji as usize;
-    count += config.imperative as usize;
-    count += config.conventional as usize;
-    count += (config.max_header_length > 0) as usize;
-    count += (config.max_body_length > 0) as usize;
-    count += (!config.scopes_allowed.is_empty()) as usize;
-    count += (!config.types_allowed.is_empty()) as usize;
-    count += (!config.header_pattern.is_empty()) as usize;
+type IsModifiedFn<'a> = Box<dyn Fn(&Config, &Config) -> bool + 'a>;
+type CurrentValueFn<'a> = Box<dyn Fn(&Config) -> String + 'a>;
 
-    count
+struct RuleMeta<'a> {
+    is_modified: IsModifiedFn<'a>,
+    description: &'a str,
+    current_value: CurrentValueFn<'a>,
+}
+
+fn rules_metadata<'a>() -> Vec<RuleMeta<'a>> {
+    vec![
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.conventional != d.conventional),
+            description: CONVENTIONAL.short,
+            current_value: Box::new(|c| c.conventional.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.imperative != d.imperative),
+            description: IMPERATIVE.short,
+            current_value: Box::new(|c| c.imperative.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.gitmoji != d.gitmoji),
+            description: GITMOJI.short,
+            current_value: Box::new(|c| c.gitmoji.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.whitespace != d.whitespace),
+            description: WHITESPACE.short,
+            current_value: Box::new(|c| c.whitespace.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.no_period != d.no_period),
+            description: NO_PERIOD.short,
+            current_value: Box::new(|c| c.no_period.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.description_case != d.description_case),
+            description: DESCRIPTION_CASE.short,
+            current_value: Box::new(|c| c.description_case.as_ref().to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.max_header_length != d.max_header_length),
+            description: MAX_HEADER_LENGTH.short,
+            current_value: Box::new(|c| c.max_header_length.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.max_body_length != d.max_body_length),
+            description: MAX_BODY_LENGTH.short,
+            current_value: Box::new(|c| c.max_body_length.to_string()),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.scopes_allowed != d.scopes_allowed),
+            description: SCOPES_ALLOWED.short,
+            current_value: Box::new(|c| c.scopes_allowed.join(", ")),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.types_allowed != d.types_allowed),
+            description: TYPES_ALLOWED.short,
+            current_value: Box::new(|c| c.types_allowed.join(", ")),
+        },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.header_pattern != d.header_pattern),
+            description: HEADER_PATTERN.short,
+            current_value: Box::new(|c| c.header_pattern.clone()),
+        },
+    ]
+}
+
+pub fn count_active_rules(config: &Config) -> usize {
+    let default_config = Config::default();
+    let rules_meta = rules_metadata();
+    rules_meta
+        .into_iter()
+        .filter(|rule_meta| (rule_meta.is_modified)(config, &default_config))
+        .count()
 }
 
 /// - For boolean flags, sets the `Config` field to `true` if the field is `true`.
@@ -186,8 +251,15 @@ pub fn init_config(init_option: InitOption) -> Result<(), SumiError> {
         InitOption::Config => {
             Config::init_config()?;
         }
-        InitOption::Hook => {
-            init_commit_hook()?;
+        InitOption::PrepareCommitMsg => {
+            init_prepare_commit_msg_hook()?;
+        }
+        InitOption::CommitMsg => {
+            init_commit_msg_hook()?;
+        }
+        InitOption::Hooks => {
+            init_commit_msg_hook()?;
+            init_prepare_commit_msg_hook()?;
         }
     }
     Ok(())
@@ -211,13 +283,13 @@ fi
 git-sumi -- "$(cat $1)"  # Exit with error if linting fails.
 "#;
 
-fn init_commit_hook() -> Result<(), SumiError> {
+fn init_commit_msg_hook() -> Result<(), SumiError> {
     let git_dir = Path::new(".git");
     ensure_git_repository(git_dir)?;
     let hooks_dir = git_dir.join("hooks");
     create_directory_if_not_exists(&hooks_dir)?;
     let hook_path = hooks_dir.join("commit-msg");
-    write_commit_hook_if_needed(&hook_path)?;
+    write_commit_hook_if_needed(&hook_path, COMMIT_MSG_HOOK)?;
     #[cfg(unix)]
     set_executable_permission(&hook_path)?;
     Ok(())
@@ -241,19 +313,14 @@ fn create_directory_if_not_exists(dir: &Path) -> Result<(), SumiError> {
     Ok(())
 }
 
-fn write_commit_hook_if_needed(hook_path: &Path) -> Result<(), SumiError> {
+fn write_commit_hook_if_needed(hook_path: &Path, hook_content: &str) -> Result<(), SumiError> {
     if hook_path.exists() {
-        match prompt_overwrite(hook_path.to_str().unwrap()) {
-            Err(e) => {
-                return Err(SumiError::GeneralError {
-                    details: e.to_string(),
-                })
-            }
-            Ok(true) => {}
-            Ok(false) => return Ok(()),
+        let overwrite = prompt_overwrite(hook_path.to_str().unwrap())?;
+        if !overwrite {
+            return Ok(());
         }
     }
-    fs::write(hook_path, COMMIT_MSG_HOOK).map_err(|e| SumiError::GeneralError {
+    fs::write(hook_path, hook_content).map_err(|e| SumiError::GeneralError {
         details: e.to_string(),
     })?;
     Ok(())
@@ -285,6 +352,69 @@ fn set_executable_permission(file_path: &Path) -> Result<(), SumiError> {
     Ok(())
 }
 
+const PREPARE_COMMIT_MSG_HOOK: &str = r#"#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MSG_FILE="${1}"
+COMMIT_SOURCE="${2:-}"
+
+# Do nothing if the message was created with `git commit -m`.
+if [ "${COMMIT_SOURCE}" = "message" ]; then
+    exit 0
+fi
+
+CUSTOM_MSG="$(git-sumi --prepare-commit-message)"
+
+# Prepend the rules to the commit message template.
+TEMP_FILE="$(mktemp)"
+echo "${CUSTOM_MSG}" > "${TEMP_FILE}"
+cat "${COMMIT_MSG_FILE}" >> "${TEMP_FILE}"
+mv "${TEMP_FILE}" "${COMMIT_MSG_FILE}"
+"#;
+
+fn init_prepare_commit_msg_hook() -> Result<(), SumiError> {
+    let git_dir = Path::new(".git");
+    ensure_git_repository(git_dir)?;
+    let hooks_dir = git_dir.join("hooks");
+    create_directory_if_not_exists(&hooks_dir)?;
+    let hook_path = hooks_dir.join("prepare-commit-msg");
+    write_commit_hook_if_needed(&hook_path, PREPARE_COMMIT_MSG_HOOK)?;
+    #[cfg(unix)]
+    set_executable_permission(&hook_path)?;
+    Ok(())
+}
+
+pub fn generate_commit_msg_hook_content(config: &Config) -> Result<(), SumiError> {
+    let metadata_list = rules_metadata();
+
+    let template_content = metadata_list
+        .into_iter()
+        .filter(|meta| (meta.is_modified)(config, &Config::default()))
+        .map(|meta| {
+            let description_str = meta.description;
+            let value_str = (meta.current_value)(config);
+            if value_str == "true" {
+                // We don't need to show ": true" for booleans.
+                format!("# {}.\n", description_str)
+            } else {
+                // Show description + value.
+                format!("# {}: {}\n", description_str, value_str)
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("");
+
+    let header_comment = format!(
+        "# git-sumi rules enabled:\n\
+         {}",
+        template_content
+    );
+
+    // Print to stdout.
+    println!("{}", header_comment);
+    Ok(())
+}
+
 impl Config {
     pub fn new() -> Self {
         Config::default()
@@ -298,32 +428,28 @@ impl Config {
         let default_config = Self::default();
         let toml = toml::to_string(&default_config)?;
 
-        let config_comments = HashMap::from([
-            ("quiet", format_description(&QUIET, false)),
-            ("display", format_description(&DISPLAY, false)),
-            ("format", format_description(&FORMAT, false)),
-            ("split_lines", format_description(&SPLIT_LINES, false)),
-            ("gitmoji", format_description(&GITMOJI, true)),
-            (
-                "description_case",
-                format_description(&DESCRIPTION_CASE, true),
-            ),
-            ("imperative", format_description(&IMPERATIVE, true)),
-            ("no_period", format_description(&NO_PERIOD, true)),
-            ("whitespace", format_description(&WHITESPACE, true)),
-            (
-                "max_header_length",
-                format_description(&MAX_HEADER_LENGTH, true),
-            ),
-            (
-                "max_body_length",
-                format_description(&MAX_BODY_LENGTH, true),
-            ),
-            ("conventional", format_description(&CONVENTIONAL, true)),
-            ("scopes_allowed", format_description(&SCOPES_ALLOWED, true)),
-            ("types_allowed", format_description(&TYPES_ALLOWED, true)),
-            ("header_pattern", format_description(&HEADER_PATTERN, true)),
-        ]);
+        let config_keys_and_rules = [
+            ("quiet", (&QUIET, false)),
+            ("display", (&DISPLAY, false)),
+            ("format", (&FORMAT, false)),
+            ("split_lines", (&SPLIT_LINES, false)),
+            ("gitmoji", (&GITMOJI, true)),
+            ("description_case", (&DESCRIPTION_CASE, true)),
+            ("imperative", (&IMPERATIVE, true)),
+            ("no_period", (&NO_PERIOD, true)),
+            ("whitespace", (&WHITESPACE, true)),
+            ("max_header_length", (&MAX_HEADER_LENGTH, true)),
+            ("max_body_length", (&MAX_BODY_LENGTH, true)),
+            ("conventional", (&CONVENTIONAL, true)),
+            ("scopes_allowed", (&SCOPES_ALLOWED, true)),
+            ("types_allowed", (&TYPES_ALLOWED, true)),
+            ("header_pattern", (&HEADER_PATTERN, true)),
+        ];
+
+        let config_comments: HashMap<&str, String> = config_keys_and_rules
+            .iter()
+            .map(|&(key, (rule, is_rule))| (key, format_description(rule, is_rule)))
+            .collect();
 
         fn format_description(description: &RuleDescription, is_rule: bool) -> String {
             let prefix = if is_rule { "Rule: " } else { "" };

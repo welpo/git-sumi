@@ -13,7 +13,9 @@ mod parser;
 use crate::errors::SumiError;
 use args::Opt;
 use clap::{CommandFactory, Parser};
-use config::{assemble_config, count_active_rules, init_config, Config};
+use config::{
+    assemble_config, count_active_rules, generate_commit_msg_hook_content, init_config, Config,
+};
 use env_logger::Builder;
 use lint::{run_lint, run_lint_on_each_line};
 use log::{error, info, LevelFilter};
@@ -33,10 +35,15 @@ pub fn run() -> Result<(), SumiError> {
         return Ok(());
     }
 
-    // It's Lintin' Time.
     let config = assemble_config(&args)?;
     init_logger_from_config(&config);
 
+    if args.prepare_commit_message {
+        generate_commit_msg_hook_content(&config)?;
+        return Ok(());
+    }
+
+    // It's Lintin' Time.
     if !args.commit && !config.display && count_active_rules(&config) == 0 {
         return Err(SumiError::NoRulesEnabled);
     }

@@ -1,7 +1,7 @@
 // CLI-exclusive --help descriptions.
 pub const COMMIT_MESSAGE: &str = "Commit message to lint. Alternatively, read from STDIN";
 pub const INIT: &str =
-    "Initialize the default configuration ('config') or commit-msg hook ('hook'). Default: 'config'";
+    "Initialize the default configuration ('config'), commit-msg hook ('commit-msg'), prepare-commit-msg hook ('prepare-commit-msg') or both hooks ('hooks')";
 pub const GENERATE_SHELL_COMPLETION: &str =
     "Generate shell completion script for the specified shell";
 pub const CONFIG: &str = "Path to a TOML configuration file";

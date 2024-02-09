@@ -25,11 +25,16 @@ pub struct Opt {
     )]
     pub init: Option<InitOption>,
 
+    /// Outputs enabled rules' description as bash comments for the prepare-commit-msg hook.
+    #[arg(long, num_args = 0, hide = true)]
+    pub prepare_commit_message: bool,
+
     #[arg(long,
         value_enum,
         required = false,
         value_name = "SHELL",
-        help = config_descriptions::GENERATE_SHELL_COMPLETION)]
+        help = config_descriptions::GENERATE_SHELL_COMPLETION
+    )]
     pub generate_shell_completion: Option<Shell>,
 
     #[arg(long, env = "GIT_SUMI_CONFIG", help = config_descriptions::CONFIG)]
@@ -73,7 +78,8 @@ pub struct Opt {
     #[arg(short = 'f',
         long,
         env = "GIT_SUMI_FORMAT",
-        help = config_descriptions::FORMAT.short)]
+        help = config_descriptions::FORMAT.short
+    )]
     pub format: Option<ParsedCommitDisplayFormat>,
 
     /// Commit the message after successful linting.
@@ -95,7 +101,8 @@ pub struct Opt {
             ("scopes_allowed", ArgPredicate::IsPresent, Some("true")),
             ]),
         help_heading = "Rules",
-        help = config_descriptions::CONVENTIONAL.short)]
+        help = config_descriptions::CONVENTIONAL.short
+    )]
     pub conventional: Option<bool>,
 
     /// Use the imperative mood in the description.
@@ -164,7 +171,8 @@ pub struct Opt {
         env = "GIT_SUMI_MAX_HEADER_LENGTH",
         value_parser = clap::value_parser!(usize),
         help_heading = "Rules",
-        help = config_descriptions::MAX_HEADER_LENGTH.short)]
+        help = config_descriptions::MAX_HEADER_LENGTH.short
+    )]
     pub max_header_length: Option<usize>,
 
     /// Wrap the body at the specified length.
@@ -173,7 +181,8 @@ pub struct Opt {
         env = "GIT_SUMI_MAX_BODY_LENGTH",
         value_parser = clap::value_parser!(usize),
         help_heading = "Rules",
-        help = config_descriptions::MAX_BODY_LENGTH.short)]
+        help = config_descriptions::MAX_BODY_LENGTH.short
+    )]
     pub max_body_length: Option<usize>,
 
     /// Only allow the specified, comma-separated commit scopes.

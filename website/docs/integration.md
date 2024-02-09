@@ -4,19 +4,46 @@ sidebar_position: 6
 
 # Integration
 
-## Local setup
+## Local linting with Git hooks
+
+:::tip
+To set up both Git hooks described below, run `git sumi --init hooks`.
+:::
+
+### commit-msg hook
 
 You can use git-**sumi** to lint each commit message, interrupting commits that don't meet the specified rules.
 
 Before continuing, make sure you have installed git-**sumi** and have a configuration file (`sumi.toml`) at the root of your repository. The [Getting Started](/docs) guide will help you with this.
 
-Run this command to set up a Git hook:
+Run this command to set up a commit-msg Git hook:
 
 ```bash
-git sumi --init hook
+git sumi --init commit-msg
 ```
 
 This will create a Bash [Git `commit-msg` hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_committing_workflow_hooks) in your `.git/hooks` directory. The hook will abort the commit if its message doesn't pass the rules set up in `sumi.toml`.
+
+### prepare-commit-msg hook
+
+To see the enabled rules when writing a commit message, you can use the `prepare-commit-msg` hook:
+
+```bash
+git sumi --init prepare-commit-msg
+```
+
+The Bash hook (in `.git/hooks/prepare-commit-msg`) will prepend the enabled rules to the commit message template. This way, when you run `git commit`, you'll see something like:
+
+```plaintext
+# git-sumi rules enabled:
+# Follow Conventional Commits format.
+# Use the imperative mood in the description.
+# Header length limit: 50
+# List of allowed commit types: feat, fix, docs, refactor, test, chore, misc
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+```
 
 ## Linting pull request titles
 

@@ -48,15 +48,15 @@ Edit the default configuration (`sumi.toml`) to your liking. Check out the [exam
 
 You can either use git-**sumi** directly from the command line or set up a Git hook.
 
-### Git hook
+### Git commit-msg hook
 
 Set up a hook to lint your commit messages automatically:
 
 ```bash
-git sumi --init hook
+git sumi --init commit-msg
 ```
 
-This will create a Bash [Git `commit-msg` hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_committing_workflow_hooks) in your `.git/hooks` directory. The hook will abort the commit if its message doesn't pass the rules you've set up.
+This will create a Bash [Git `commit-msg` hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks#_committing_workflow_hooks) in your `.git/hooks` directory. The hook will interrupt any commits that don't pass the rules you've set up.
 
 ### Command line
 
@@ -67,11 +67,6 @@ git sumi -c '🎨 refactor: format JS with Prettier'
 ```
 
 If your message passes all rules, it will be committed. Otherwise, you'll see what went wrong.
-
-## Further reading
-
-- [Examples](/docs/examples)
-- [Configuration](/docs/configuration)
 
 ## Contributing
 

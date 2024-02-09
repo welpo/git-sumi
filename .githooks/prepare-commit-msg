@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MSG_FILE="${1}"
+COMMIT_SOURCE="${2:-}"
+
+# Do nothing if the message was created with `git commit -m`.
+if [ "${COMMIT_SOURCE}" = "message" ]; then
+    exit 0
+fi
+
+CUSTOM_MSG="$(git-sumi --prepare-commit-message)"
+
+# Prepend the rules to the commit message template.
+TEMP_FILE="$(mktemp)"
+echo "${CUSTOM_MSG}" > "${TEMP_FILE}"
+cat "${COMMIT_MSG_FILE}" >> "${TEMP_FILE}"
+mv "${TEMP_FILE}" "${COMMIT_MSG_FILE}"

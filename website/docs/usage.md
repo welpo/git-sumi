@@ -31,7 +31,7 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
 
 ```plaintext
     --init [<OPTION>]
-        Initialize the default configuration ('config') or commit-msg hook ('hook'). Default: 'config'
+        Initialize the default configuration ('config'), commit-msg hook ('commit-msg'), prepare-commit-msg hook ('prepare-commit-msg') or both hooks ('hooks')
     --generate-shell-completion <SHELL>
         Generate shell completion script for the specified shell [possible values: bash, elvish, fish, powershell, zsh]
     --config <CONFIG>

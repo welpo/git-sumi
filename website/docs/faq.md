@@ -40,7 +40,7 @@ If this is still not enough, please [open an issue](https://github.com/welpo/git
 
 ## Can I enforce the rules **only** on the main branch?
 
-Yes. If you're using the `commit-msg` hook (`git sumi --init hook`), modify it so it only runs on the main branch:
+Yes. If you're using the `commit-msg` hook (`git sumi --init commit-msg`), modify it so it only runs on the main branch:
 
 ```bash title=".git/hooks/commit-msg"
 #!/usr/bin/env bash

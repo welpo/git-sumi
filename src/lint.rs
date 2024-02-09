@@ -23,7 +23,7 @@ pub fn run_lint_on_each_line(
     let mut errors = Vec::new();
 
     for line in non_empty_lines.clone() {
-        match run_lint(&line.to_string(), config) {
+        match run_lint(line, config) {
             Ok(parsed_commit) => parsed_commits.push(parsed_commit),
             Err(error) => {
                 error!("{}", error);
@@ -47,17 +47,27 @@ pub fn run_lint_on_each_line(
 
 /// Lints and parses the given commit message.
 /// Returns a `ParsedCommit` struct if the commit is valid, or an error message if it is not.
-pub fn run_lint(commit: &String, config: &Config) -> Result<ParsedCommit, SumiError> {
+pub fn run_lint(raw_commit: &str, config: &Config) -> Result<ParsedCommit, SumiError> {
+    let commit = preprocess_commit_message(raw_commit);
     info!("💬 Input: \"{}\"", commit);
     let mut non_fatal_errors: Vec<SumiError> = Vec::new();
-    let parsed_commit = handle_parsing(commit, config, &mut non_fatal_errors)?;
-    let errors = validate_commit(commit, &parsed_commit, config);
+    let parsed_commit = handle_parsing(&commit, config, &mut non_fatal_errors)?;
+    let errors = validate_commit(&commit, &parsed_commit, config);
     non_fatal_errors.extend(errors);
     if non_fatal_errors.is_empty() {
         handle_success(&parsed_commit, config)?;
         return Ok(parsed_commit);
     }
     handle_failure(&non_fatal_errors)
+}
+
+fn preprocess_commit_message(commit: &str) -> String {
+    // Remove comments.
+    commit
+        .lines()
+        .filter(|line| !line.trim_start().starts_with('#'))
+        .collect::<Vec<&str>>()
+        .join("\n")
 }
 
 fn validate_commit(

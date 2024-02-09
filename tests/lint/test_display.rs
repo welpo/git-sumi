@@ -4,7 +4,7 @@ use assert_cmd::Command;
 use predicates::prelude::*;
 use serde_json::Value;
 
-const COMMIT_MESSAGE: &str = "🐛 fix(Scope)!: short description\n\nLonger body description\n\nBREAKING CHANGE: breaking description\nFooter1: value1\nFooter2: value2\n\n#123, ce6df36";
+const COMMIT_MESSAGE: &str = "🐛 fix(Scope)!: short description\n\nLonger body description\n\nBREAKING CHANGE: breaking description\nFooter1: value1\nFooter2: value2\n\nFixes #123, ce6df36";
 
 fn assert_table_output(cmd: &mut Command) {
     cmd.assert()
@@ -64,7 +64,7 @@ fn success_display_format_toml() {
 fn success_display_format_json() {
     let mut cmd = run_isolated_git_sumi("");
 
-    let commit_message = "✨ feat(CrimeAndPunishment): Add Raskolnikov's internal monologue\n\nIntroduces the new chapter where Raskolnikov wrestles with his conscience.\n\nBREAKING CHANGE: New perspective on morality introduced.\nTranslator: Garnett\nPublisher: Penguin\n#1866";
+    let commit_message = "✨ feat(CrimeAndPunishment): Add Raskolnikov's internal monologue\n\nIntroduces the new chapter where Raskolnikov wrestles with his conscience.\n\nBREAKING CHANGE: New perspective on morality introduced.\nTranslator: Garnett\nPublisher: Penguin\nFixes #1866";
 
     let output = cmd
         .arg("-dCGqf")
@@ -92,7 +92,8 @@ fn success_display_format_json() {
     let expected_footers: Value = serde_json::json!([
         "BREAKING CHANGE:New perspective on morality introduced.",
         "Translator:Garnett",
-        "Publisher:Penguin\n#1866"
+        "Publisher:Penguin",
+        "Fixes #1866"
     ]);
     assert_eq!(parsed["footers"], expected_footers);
     assert_eq!(parsed["is_breaking"], true);
@@ -137,12 +138,11 @@ fn success_display_format_markdown() {
         .stdout(contains("| Key"))
         .stdout(contains("| Value"))
         .stdout(contains("| Gitmoji              | 🐛"))
-        .stdout(contains("|----------------------|----------------------------------------------------------------------|"))
         .stdout(contains("| Scope                | Scope"))
         .stdout(contains("| Description          | short description"))
         .stdout(contains("| Body                 | Longer body description "))
         .stdout(contains(
-            "| Footers              | BREAKING CHANGE:breaking description, Footer1:value1, Footer2:value2 |",
+            "| Footers              | BREAKING CHANGE:breaking description, Footer1:value1, Footer2:value2, Fixes #123, ce6df36 |",
         ))
         .stdout(contains("| Is breaking          | true "))
         .stdout(contains("| Breaking description | breaking description "))

@@ -11,12 +11,14 @@
 # Note that the Github Release will be created with a generated
 # title/body based on your changelogs.
 #
-# Modified to publish to PyPi and crates.io.
+# Modified to publish to PyPi + crates.io and update git-sumi-action.
 
 name: Release
 
 permissions:
   contents: write
+env:
+  GIT_PAGER: cat
 
 # This task will run whenever you push a git tag that looks like a version
 # like "1.0.0", "v0.1.0-prerelease.1", "my-app/0.1.0", "releases/v1.0.0", etc.
@@ -294,3 +296,50 @@ jobs:
         with:
           command: upload
           args: --skip-existing pypi/wheels/*
+
+      # Update git-sumi-action.
+      - name: Configure GPG key
+        run: |
+          echo -n ${{ secrets.GPG_PRIVATE_KEY }} | base64 --decode | gpg --import
+
+      - name: Configure Git
+        run: |
+          git config --global user.signingkey F940EDE29A60495D782E4F609D2D0547173F3EE5
+          git config --global commit.gpgsign true
+          git config --global user.name "welpo"
+          git config --global user.email "welpo@users.noreply.github.com"
+
+      - name: Clone git-sumi-action
+        uses: actions/checkout@v4
+        with:
+          repository: 'welpo/git-sumi-action'
+          fetch-depth: 0
+          token: ${{ secrets.ACTIONS_ACCESS_TOKEN }}
+          path: 'git-sumi-action'
+
+      - name: Update dōteki version in git-sumi-action
+        run: |
+          cd git-sumi-action
+          sed -i "s|git-sumi/releases/download/v[0-9.]*\/git-sumi-x86|git-sumi/releases/download/${{ github.ref_name }}/git-sumi-x86|g" action.yaml
+          git add action.yaml
+          git commit -m "⬆ feat: update git-sumi to ${{ github.ref_name }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Required for the release script.
+      - name: Install git-cliff
+        run: pip install git-cliff
+
+      - name: Run release script in git-sumi-action
+        run: |
+          cd git-sumi-action
+          bash release ${{ github.ref_name }}
+
+      - name: Push changes and tags to git-sumi-action
+        run: |
+          cd git-sumi-action
+          git push origin main
+          git push origin --tags

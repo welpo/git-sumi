@@ -11,19 +11,23 @@ Tim Pope ([@tpope](https://github.com/tpope)) is a prolific author of many popul
 To follow his advice, you can use the following configuration:
 
 ```toml
-# Process each non-empty line in the commit message as an individual commit.
+# Processes each non-empty line as an individual commit.
 split_lines = false
 
-# Rule: commit description must start with the specified case. Options: "any", "lower", "upper".
+# Rule: Description must start with the specified case.
+# Options: 'any', 'lower', 'upper'.
 description_case = "upper"
 
-# Rule: use the imperative mood in the description (e.g. "Fix bug" instead of "Fixed bug").
+# Rule: Use the imperative mood in the description.
+# Example: 'Fix bug' instead of 'Fixed bug'.
 imperative = true
 
-# Rule: limit the header to the specified length. A value of 0 disables this rule.
+# Rule: Header length limit.
+# A value of 0 disables the rule.
 max_header_length = 50
 
-# Rule: wrap the body at the specified length. A value of 0 disables this rule.
+# Rule: Body line length limit.
+# A value of 0 disables the rule.
 max_body_length = 72
 ```
 
@@ -34,12 +38,14 @@ Linus Torvalds ([@torvalds](https://github.com/torvalds)) is the principal autho
 This configuration will ensure you follow his advice:
 
 ```toml
-# Rule: use the imperative mood in the description (e.g. "Fix bug" instead of "Fixed bug").
+# Rule: Use the imperative mood in the description.
+# Example: 'Fix bug' instead of 'Fixed bug'.
 imperative = true
 
-# Rule: wrap the body at the specified length. A value of 0 disables this rule.
+# Rule: Body line length limit.
+# A value of 0 disables the rule.
 max_body_length = 74
 
-# Rule: disallow leading/trailing whitespace and consecutive spaces.
+# Rule: No leading, trailing, or consecutive spaces.
 whitespace = true
 ```

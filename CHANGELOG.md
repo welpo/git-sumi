@@ -8,145 +8,145 @@ We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.
 
 ### 💥 BREAKING CHANGES 💥
 
-- *(init)* Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) - ([1ebd6ca](https://github.com/welpo/git-sumi/commit/1ebd6ca541423a065a7015f43f35a62944fabe83))
+- *(init)* Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) by @welpo
 
 ### ✨ Features
 
-- *(imperative)* Add a few non-imperative verbs - ([0f0a867](https://github.com/welpo/git-sumi/commit/0f0a86779f7557b20eee23c51725738c41059219))
-- *(init)* [**‼️BREAKING‼️**] Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) - ([1ebd6ca](https://github.com/welpo/git-sumi/commit/1ebd6ca541423a065a7015f43f35a62944fabe83))
+- *(imperative)* Add a few non-imperative verbs ([0f0a867](https://github.com/welpo/git-sumi/commit/0f0a86779f7557b20eee23c51725738c41059219)) by @welpo
+- *(init)* [**‼️BREAKING‼️**] Add prepare-commit-msg hook ([#13](https://github.com/welpo/git-sumi/issues/13)) by @welpo
 
 ### 🐛 Bug fixes
 
-- Ignore comment lines in commit messages ([#14](https://github.com/welpo/git-sumi/issues/14)) - ([821d6c6](https://github.com/welpo/git-sumi/commit/821d6c6349b9afc67069604b4bf155392ea06f16))
+- Ignore comment lines in commit messages ([#14](https://github.com/welpo/git-sumi/issues/14)) by @welpo
 
 ### 📝 Documentation
 
-- *(README)* Add git-sumi badge - ([9041419](https://github.com/welpo/git-sumi/commit/90414197c8cd77b30de0ac01965c0a30992d64a1))
-- *(README)* Update demo with new default config - ([e9ffd54](https://github.com/welpo/git-sumi/commit/e9ffd544d00ff12ac9a4682013a4b5a77a8532fb))
+- *(README)* Add git-sumi badge ([9041419](https://github.com/welpo/git-sumi/commit/90414197c8cd77b30de0ac01965c0a30992d64a1)) by @welpo
+- *(README)* Update demo with new default config ([e9ffd54](https://github.com/welpo/git-sumi/commit/e9ffd544d00ff12ac9a4682013a4b5a77a8532fb)) by @welpo
 
 ## [0.0.7](https://github.com/welpo/git-sumi/compare/v0.0.6..v0.0.7) - 2024-02-08
 
 ### 📝 Documentation
 
-- *(faq)* Set hook to exit early outside main branch - ([92d9071](https://github.com/welpo/git-sumi/commit/92d90715e15dcf0cd9470462404c37c5414aa648))
-- *(website)* Add pre-built binaries download link - ([0d3adf6](https://github.com/welpo/git-sumi/commit/0d3adf67a3ea8d50ab6751107700bc1123b1c9e7))
-- Finish renaming yaml -> yml - ([4b09485](https://github.com/welpo/git-sumi/commit/4b0948549296fa4e822d7c1df619b0b800a4b247))
+- *(faq)* Set hook to exit early outside main branch ([92d9071](https://github.com/welpo/git-sumi/commit/92d90715e15dcf0cd9470462404c37c5414aa648)) by @welpo
+- *(website)* Add pre-built binaries download link ([0d3adf6](https://github.com/welpo/git-sumi/commit/0d3adf67a3ea8d50ab6751107700bc1123b1c9e7)) by @welpo
+- Finish renaming yaml -> yml ([4b09485](https://github.com/welpo/git-sumi/commit/4b0948549296fa4e822d7c1df619b0b800a4b247)) by @welpo
 
 ### ♻️ Refactor
 
-- Unify and rephrase options descriptions ([#12](https://github.com/welpo/git-sumi/issues/12)) - ([85078f0](https://github.com/welpo/git-sumi/commit/85078f046182ba7b057ecb074956898b37f9bddd))
-- Rename 'yaml' extensions to 'yml' - ([e13808f](https://github.com/welpo/git-sumi/commit/e13808f4529edc71610712f22b1773dde0d22323))
+- Unify and rephrase options descriptions ([#12](https://github.com/welpo/git-sumi/issues/12)) by @welpo
+- Rename 'yaml' extensions to 'yml' ([e13808f](https://github.com/welpo/git-sumi/commit/e13808f4529edc71610712f22b1773dde0d22323)) by @welpo
 
 ### ✅ Testing
 
-- *(config)* Cover --init overwrite prompts - ([3562f23](https://github.com/welpo/git-sumi/commit/3562f23b4307cb7f46f0c61a47d4bc8c1c88d31a))
+- *(config)* Cover --init overwrite prompts ([3562f23](https://github.com/welpo/git-sumi/commit/3562f23b4307cb7f46f0c61a47d4bc8c1c88d31a)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(CHANGELOG)* Improve emoji pattern - ([a80d2db](https://github.com/welpo/git-sumi/commit/a80d2db46b76b556232d7ddbb084487d9f693ad5))
-- *(CI)* Remove manual publish steps - ([49b016b](https://github.com/welpo/git-sumi/commit/49b016b7186c4fa1a75cf47c7d33a873a2b9ae1c))
-- *(pypi)* Match description to website's - ([931386d](https://github.com/welpo/git-sumi/commit/931386d44e5d60ba65aa24e80e883ce2e31983bb))
-- *(release)* Verify version tag format on release - ([8eca1e3](https://github.com/welpo/git-sumi/commit/8eca1e32e1e098cc9ee31554366ebc9edb1b1395))
-- Add pre-commit & commit-msg scripts - ([2f5ff91](https://github.com/welpo/git-sumi/commit/2f5ff9155cdc28c073c4336d82033381003be04f))
+- *(CHANGELOG)* Improve emoji pattern ([a80d2db](https://github.com/welpo/git-sumi/commit/a80d2db46b76b556232d7ddbb084487d9f693ad5)) by @welpo
+- *(CI)* Remove manual publish steps ([49b016b](https://github.com/welpo/git-sumi/commit/49b016b7186c4fa1a75cf47c7d33a873a2b9ae1c)) by @welpo
+- *(pypi)* Match description to website's ([931386d](https://github.com/welpo/git-sumi/commit/931386d44e5d60ba65aa24e80e883ce2e31983bb)) by @welpo
+- *(release)* Verify version tag format on release ([8eca1e3](https://github.com/welpo/git-sumi/commit/8eca1e32e1e098cc9ee31554366ebc9edb1b1395)) by @welpo
+- Add pre-commit & commit-msg scripts ([2f5ff91](https://github.com/welpo/git-sumi/commit/2f5ff9155cdc28c073c4336d82033381003be04f)) by @welpo
 
 ## [0.0.6](https://github.com/welpo/git-sumi/compare/v0.0.5..v0.0.6) - 2024-02-05
 
 ### 🔧 Miscellaneous tasks
 
-- *(Cargo.toml)* Exclude more unneeded directories - ([76b21c4](https://github.com/welpo/git-sumi/commit/76b21c44231ba3f26bac9806bc6ab589df05f71f))
-- *(release)* Upload and download PyPi wheels - ([16b9e47](https://github.com/welpo/git-sumi/commit/16b9e47817a02ccb1ec2cdbcefbd9ba04bb3984f))
+- *(Cargo.toml)* Exclude more unneeded directories ([76b21c4](https://github.com/welpo/git-sumi/commit/76b21c44231ba3f26bac9806bc6ab589df05f71f)) by @welpo
+- *(release)* Upload and download PyPi wheels ([16b9e47](https://github.com/welpo/git-sumi/commit/16b9e47817a02ccb1ec2cdbcefbd9ba04bb3984f)) by @welpo
 
 ## [0.0.5](https://github.com/welpo/git-sumi/compare/v0.0.4..v0.0.5) - 2024-02-05
 
 ### 📝 Documentation
 
-- Add Deploy badge - ([e339cdb](https://github.com/welpo/git-sumi/commit/e339cdbf6dff791b3812af5ec55841da8606a490))
-- Add GitHub Releases badge - ([2bd1d0f](https://github.com/welpo/git-sumi/commit/2bd1d0fce9632b77f48458f308e67e93357acf2f))
-- Remove references to `capitalize_description` - ([c2a3044](https://github.com/welpo/git-sumi/commit/c2a3044b985c75924b47c1cede8d76205837abbb))
+- Add Deploy badge ([e339cdb](https://github.com/welpo/git-sumi/commit/e339cdbf6dff791b3812af5ec55841da8606a490)) by @welpo
+- Add GitHub Releases badge ([2bd1d0f](https://github.com/welpo/git-sumi/commit/2bd1d0fce9632b77f48458f308e67e93357acf2f)) by @welpo
+- Remove references to `capitalize_description` ([c2a3044](https://github.com/welpo/git-sumi/commit/c2a3044b985c75924b47c1cede8d76205837abbb)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(CI)* Add labels to renovate's PRs - ([16ba844](https://github.com/welpo/git-sumi/commit/16ba8448c82710781d3fdb932f2ae208294e0405))
-- *(CI)* Use single quotes for cron schedule - ([5328eca](https://github.com/welpo/git-sumi/commit/5328eca7e3e934bb7ee98d8d34be3b4d9a427ef1))
-- *(Cargo.toml)* Exclude unnecessary directories - ([cc7d3a7](https://github.com/welpo/git-sumi/commit/cc7d3a7c798f65313c739ec4e42f267860bd8ca4))
-- *(release)* Fix cargo publish - ([65cfcc9](https://github.com/welpo/git-sumi/commit/65cfcc987205a92e8a5c5af96967a68a387bffd4))
-- *(release)* Split maturin build/publish processes - ([b798857](https://github.com/welpo/git-sumi/commit/b79885759170ccf88c6ff3d05f08fac54863369a))
+- *(CI)* Add labels to renovate's PRs ([16ba844](https://github.com/welpo/git-sumi/commit/16ba8448c82710781d3fdb932f2ae208294e0405)) by @welpo
+- *(CI)* Use single quotes for cron schedule ([5328eca](https://github.com/welpo/git-sumi/commit/5328eca7e3e934bb7ee98d8d34be3b4d9a427ef1)) by @welpo
+- *(Cargo.toml)* Exclude unnecessary directories ([cc7d3a7](https://github.com/welpo/git-sumi/commit/cc7d3a7c798f65313c739ec4e42f267860bd8ca4)) by @welpo
+- *(release)* Fix cargo publish ([65cfcc9](https://github.com/welpo/git-sumi/commit/65cfcc987205a92e8a5c5af96967a68a387bffd4)) by @welpo
+- *(release)* Split maturin build/publish processes ([b798857](https://github.com/welpo/git-sumi/commit/b79885759170ccf88c6ff3d05f08fac54863369a)) by @welpo
 
 ## [0.0.4](https://github.com/welpo/git-sumi/compare/v0.0.3..v0.0.4) - 2024-02-05
 
 ### ✨ Features
 
-- *(config)* Override config bools with env vars ([#9](https://github.com/welpo/git-sumi/issues/9)) - ([e84a27e](https://github.com/welpo/git-sumi/commit/e84a27eb892384fe7e43e41ae832901dae50ba93))
-- *(imperative)* Expand non-imperative verbs - ([22033cc](https://github.com/welpo/git-sumi/commit/22033cced1bc0eaaa85d6b7271eeada00d30f6fa))
-- *(imperative)* Expand non-imperative verbs - ([2f7dcba](https://github.com/welpo/git-sumi/commit/2f7dcba50033f17761c042d51c63fccfb0755e73))
+- *(config)* Override config bools with env vars ([#9](https://github.com/welpo/git-sumi/issues/9)) by @welpo
+- *(imperative)* Expand non-imperative verbs ([22033cc](https://github.com/welpo/git-sumi/commit/22033cced1bc0eaaa85d6b7271eeada00d30f6fa)) by @welpo
+- *(imperative)* Expand non-imperative verbs ([2f7dcba](https://github.com/welpo/git-sumi/commit/2f7dcba50033f17761c042d51c63fccfb0755e73)) by @welpo
 
 ### 🐛 Bug fixes
 
-- *(init)* Only set permissions on Unix - ([feeb22a](https://github.com/welpo/git-sumi/commit/feeb22ab96652712f71c9124ca5119035b90ab65))
+- *(init)* Only set permissions on Unix ([feeb22a](https://github.com/welpo/git-sumi/commit/feeb22ab96652712f71c9124ca5119035b90ab65)) by @welpo
 
 ### 📝 Documentation
 
-- *(website)* Fix git-sumi installed check - ([c4244b9](https://github.com/welpo/git-sumi/commit/c4244b9be7a2b68a4b5c3d4e8747a12e839b984e))
+- *(website)* Fix git-sumi installed check ([c4244b9](https://github.com/welpo/git-sumi/commit/c4244b9be7a2b68a4b5c3d4e8747a12e839b984e)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(CD)* Use cargo-dist for releases - ([8a376a4](https://github.com/welpo/git-sumi/commit/8a376a40810654a4ef86f5e14f5278b1c9830ed6))
-- *(CHANGELOG)* Update grouping - ([cc12a84](https://github.com/welpo/git-sumi/commit/cc12a840d82014a4ee8e9cca988a2358c111c139))
-- *(CI)* Exclude repo's commits from link checking - ([e7b58b3](https://github.com/welpo/git-sumi/commit/e7b58b301ec6e62b26b208e63ddba8d6ec308f49))
-- *(CI)* Rename git-sumi job - ([e9ba384](https://github.com/welpo/git-sumi/commit/e9ba384756dff8619861ca87167160a587b5b3d5))
-- *(release)* Remove `--frozen` from maturin command - ([0a08d30](https://github.com/welpo/git-sumi/commit/0a08d3048905e848b0b43dc72b765235c11f2b47))
-- *(release)* Check for clean working directory - ([ebfc43a](https://github.com/welpo/git-sumi/commit/ebfc43a72555d209e47533b0249dba44b0d01d2e))
+- *(CD)* Use cargo-dist for releases ([8a376a4](https://github.com/welpo/git-sumi/commit/8a376a40810654a4ef86f5e14f5278b1c9830ed6)) by @welpo
+- *(CHANGELOG)* Update grouping ([cc12a84](https://github.com/welpo/git-sumi/commit/cc12a840d82014a4ee8e9cca988a2358c111c139)) by @welpo
+- *(CI)* Exclude repo's commits from link checking ([e7b58b3](https://github.com/welpo/git-sumi/commit/e7b58b301ec6e62b26b208e63ddba8d6ec308f49)) by @welpo
+- *(CI)* Rename git-sumi job ([e9ba384](https://github.com/welpo/git-sumi/commit/e9ba384756dff8619861ca87167160a587b5b3d5)) by @welpo
+- *(release)* Remove `--frozen` from maturin command ([0a08d30](https://github.com/welpo/git-sumi/commit/0a08d3048905e848b0b43dc72b765235c11f2b47)) by @welpo
+- *(release)* Check for clean working directory ([ebfc43a](https://github.com/welpo/git-sumi/commit/ebfc43a72555d209e47533b0249dba44b0d01d2e)) by @welpo
 
 ## [0.0.3](https://github.com/welpo/git-sumi/compare/v0.0.2..v0.0.3) - 2024-02-05
 
 ### 🐛 Bug fixes
 
-- *(basic-parser)* Capture original header - ([ba3b413](https://github.com/welpo/git-sumi/commit/ba3b4137dce7c02988f45c45d873c4d747cd09c4))
+- *(basic-parser)* Capture original header ([ba3b413](https://github.com/welpo/git-sumi/commit/ba3b4137dce7c02988f45c45d873c4d747cd09c4)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(CI)* Fix links in tag description - ([8f0702d](https://github.com/welpo/git-sumi/commit/8f0702df3a49c78f481aff9953fdb7e27d39c4f6))
-- *(README)* Increase spacing below logo - ([fb91e20](https://github.com/welpo/git-sumi/commit/fb91e20acf3018ffddd23c81b10724d0e65bd8b6))
-- *(release)* Fix sed command - ([49f3f16](https://github.com/welpo/git-sumi/commit/49f3f1601cf5057ae92b03818556c6a381d74e87))
-- Fix Cargo.lock - ([cfa252d](https://github.com/welpo/git-sumi/commit/cfa252d964d5369e424e0d9ba5ffce2f47b989f8))
+- *(CI)* Fix links in tag description ([8f0702d](https://github.com/welpo/git-sumi/commit/8f0702df3a49c78f481aff9953fdb7e27d39c4f6)) by @welpo
+- *(README)* Increase spacing below logo ([fb91e20](https://github.com/welpo/git-sumi/commit/fb91e20acf3018ffddd23c81b10724d0e65bd8b6)) by @welpo
+- *(release)* Fix sed command ([49f3f16](https://github.com/welpo/git-sumi/commit/49f3f1601cf5057ae92b03818556c6a381d74e87)) by @welpo
+- Fix Cargo.lock ([cfa252d](https://github.com/welpo/git-sumi/commit/cfa252d964d5369e424e0d9ba5ffce2f47b989f8)) by @welpo
 
 ## [0.0.2](https://github.com/welpo/git-sumi/compare/v0.0.1..v0.0.2) - 2024-02-04
 
 ### 💥 BREAKING CHANGES 💥
 
-- *(display)* Add markdown table format ([#7](https://github.com/welpo/git-sumi/issues/7)) - ([2098e3b](https://github.com/welpo/git-sumi/commit/2098e3bea0c3a87a3ef477f7da68cd0cb275790c))
+- *(display)* Add markdown table format ([#7](https://github.com/welpo/git-sumi/issues/7)) by @welpo
 
 ### ✨ Features
 
-- *(display)* [**‼️BREAKING‼️**] Add markdown table format ([#7](https://github.com/welpo/git-sumi/issues/7)) - ([2098e3b](https://github.com/welpo/git-sumi/commit/2098e3bea0c3a87a3ef477f7da68cd0cb275790c))
+- *(display)* [**‼️BREAKING‼️**] Add markdown table format ([#7](https://github.com/welpo/git-sumi/issues/7)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(release)* Auto-update version in Cargo.toml - ([312e12c](https://github.com/welpo/git-sumi/commit/312e12c69810ad49542d265dc982adaf487b209b))
+- *(release)* Auto-update version in Cargo.toml ([312e12c](https://github.com/welpo/git-sumi/commit/312e12c69810ad49542d265dc982adaf487b209b)) by @welpo
 
 ## 0.0.1 - 2024-02-04
 
 ### ✨ Features
 
-- Initial commit - ([368b7e7](https://github.com/welpo/git-sumi/commit/368b7e72628a26e818d4a20d324d0d6715c7f7e9))
+- Initial commit ([368b7e7](https://github.com/welpo/git-sumi/commit/368b7e72628a26e818d4a20d324d0d6715c7f7e9)) by @welpo
 
 ### 📝 Documentation
 
-- *(README)* Add CI badge - ([8f1a909](https://github.com/welpo/git-sumi/commit/8f1a909477222d1bdb51c25624327d269977706f))
+- *(README)* Add CI badge ([8f1a909](https://github.com/welpo/git-sumi/commit/8f1a909477222d1bdb51c25624327d269977706f)) by @welpo
 
 ### ✅ Testing
 
-- Fix clippy warnings - ([b21b5ca](https://github.com/welpo/git-sumi/commit/b21b5ca265e5b784e1d02e51fb20d37dd2853694))
-- Disable GPG signing - ([c736369](https://github.com/welpo/git-sumi/commit/c736369e170dd1522b63e4d4bc349b513e398c22))
+- Fix clippy warnings ([b21b5ca](https://github.com/welpo/git-sumi/commit/b21b5ca265e5b784e1d02e51fb20d37dd2853694)) by @welpo
+- Disable GPG signing ([c736369](https://github.com/welpo/git-sumi/commit/c736369e170dd1522b63e4d4bc349b513e398c22)) by @welpo
 
 ### 🔧 Miscellaneous tasks
 
-- *(CI)* Use LLVM engine for test coverage - ([79bdd87](https://github.com/welpo/git-sumi/commit/79bdd8771341a151fa3be081957b8149a5d9a661))
-- *(CI)* Remove redundant step - ([04a0e48](https://github.com/welpo/git-sumi/commit/04a0e488d518984fe17b6bb4dd932a2ea77e9a82))
-- *(CI)* Change tarpaulin install source - ([90841c9](https://github.com/welpo/git-sumi/commit/90841c933035dfb465424884a22aaac0644c5e03))
-- *(Cargo.toml)* Update keywords - ([06d9770](https://github.com/welpo/git-sumi/commit/06d9770f8a985df2f21d5c9b93f8bbbc1ee7025e))
-- *(README)* Add crates.io shield - ([08197cb](https://github.com/welpo/git-sumi/commit/08197cba0fabdb0f5c3f9c7673d6214f67e20fbc))
-- *(release)* Display command to publish on cargo - ([3f05aba](https://github.com/welpo/git-sumi/commit/3f05abadde7cd2bd6542b3ac1ca85ef60b3a7b6f))
-- *(renovate)* Move config file - ([8d7f116](https://github.com/welpo/git-sumi/commit/8d7f116cd7bb8c3c62963f8e1c9f1ef2b1061702))
+- *(CI)* Use LLVM engine for test coverage ([79bdd87](https://github.com/welpo/git-sumi/commit/79bdd8771341a151fa3be081957b8149a5d9a661)) by @welpo
+- *(CI)* Remove redundant step ([04a0e48](https://github.com/welpo/git-sumi/commit/04a0e488d518984fe17b6bb4dd932a2ea77e9a82)) by @welpo
+- *(CI)* Change tarpaulin install source ([90841c9](https://github.com/welpo/git-sumi/commit/90841c933035dfb465424884a22aaac0644c5e03)) by @welpo
+- *(Cargo.toml)* Update keywords ([06d9770](https://github.com/welpo/git-sumi/commit/06d9770f8a985df2f21d5c9b93f8bbbc1ee7025e)) by @welpo
+- *(README)* Add crates.io shield ([08197cb](https://github.com/welpo/git-sumi/commit/08197cba0fabdb0f5c3f9c7673d6214f67e20fbc)) by @welpo
+- *(release)* Display command to publish on cargo ([3f05aba](https://github.com/welpo/git-sumi/commit/3f05abadde7cd2bd6542b3ac1ca85ef60b3a7b6f)) by @welpo
+- *(renovate)* Move config file ([8d7f116](https://github.com/welpo/git-sumi/commit/8d7f116cd7bb8c3c62963f8e1c9f1ef2b1061702)) by @welpo
 
 <!-- generated by git-cliff -->

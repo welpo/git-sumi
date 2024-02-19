@@ -337,6 +337,8 @@ jobs:
         run: |
           cd git-sumi-action
           bash release ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push changes and tags to git-sumi-action
         run: |

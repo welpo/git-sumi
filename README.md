@@ -41,7 +41,7 @@ Transform your commit practices with flexible linting for consistently high-qual
 
 See how git-**sumi** can help you write better commit messages:
 
-https://github.com/welpo/git-sumi/assets/6399341/ebe7b8fb-2610-4613-973e-7941ad373a20
+https://github.com/welpo/git-sumi/assets/6399341/cf1b4f00-3f79-454f-a533-5b36812dd464
 
 ## ✨ Main features
 

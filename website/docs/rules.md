@@ -8,6 +8,12 @@ As git-**sumi** is non-opinionated, no rules are enabled by default.
 
 Choose which rules to enable based on your project's needs and the conventions you want to enforce. You can enable or disable rules using the `sumi.toml` [configuration file](/docs/configuration), [command line options or environment variables](/docs/usage#rules).
 
+:::info
+
+These rules refer to specific parts of a commit, such as 'description' or 'type'. For a clear definition of these terms, please see the [Frequently Asked Questions](/docs/faq#the-docs-talk-about-the-commit-header-description-types-what-are-those).
+
+:::
+
 :::tip
 
 In your commit messages, don't describe the code, describe the intent and the approach.

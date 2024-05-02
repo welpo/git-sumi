@@ -19,7 +19,7 @@ dirs = "5.0.1"
 env_logger = "0.11.3"
 git-conventional = "0.12"
 lazy_static = "1.4"
-log = "0.4"
+log = "0.4.21"
 prettytable-rs = "0.10"
 regex = "1.10"
 serde = { version = "1.0", features = ["derive"] }

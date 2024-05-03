@@ -13,7 +13,7 @@ repository = "https://github.com/welpo/git-sumi"
 exclude = ["artifacts", "website", "target", "pypi", ".github", "tests", "release", "cliff.toml", "CHANGELOG.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "sumi.toml", ".gitignore"]
 
 [dependencies]
-clap = { version = "4", features = ["derive", "env"] }
+clap = { version = "4.5.4", features = ["derive", "env"] }
 clap_complete = "4"
 dirs = "5.0.1"
 env_logger = "0.11.3"

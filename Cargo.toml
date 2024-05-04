@@ -17,7 +17,7 @@ clap = { version = "4.5.4", features = ["derive", "env"] }
 clap_complete = "4"
 dirs = "5.0.1"
 env_logger = "0.11.3"
-git-conventional = "0.12"
+git-conventional = "0.12.6"
 lazy_static = "1.4"
 log = "0.4.21"
 prettytable-rs = "0.10"

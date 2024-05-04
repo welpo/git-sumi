@@ -14,7 +14,7 @@ exclude = ["artifacts", "website", "target", "pypi", ".github", "tests", "releas
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive", "env"] }
-clap_complete = "4"
+clap_complete = "4.5.2"
 dirs = "5.0.1"
 env_logger = "0.11.3"
 git-conventional = "0.12"

@@ -22,7 +22,7 @@ impl CommitParser for ConventionalCommitParser {
         let footers = conventional_commit
             .footers()
             .iter()
-            .map(|footer| format!("{}{}{}", footer.token(), footer.separator(), footer.value()))
+            .map(|footer| footer.to_string())
             .collect::<Vec<String>>();
 
         let references = self.extract_references(&commit);

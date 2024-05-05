@@ -14,10 +14,10 @@ exclude = ["artifacts", "website", "target", "pypi", ".github", "tests", "releas
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive", "env"] }
-clap_complete = "4"
+clap_complete = "4.5.2"
 dirs = "5.0.1"
 env_logger = "0.11.3"
-git-conventional = "0.12"
+git-conventional = "0.12.6"
 lazy_static = "1.4"
 log = "0.4.21"
 prettytable-rs = "0.10"
@@ -28,7 +28,7 @@ strum = "0.26.2"
 strum_macros = "0.26.2"
 tabled = "0.15.0"
 thiserror = "1.0.59"
-toml = "0.8"
+toml = "0.8.12"
 
 [dev-dependencies]
 assert_cmd = "2.0.14"

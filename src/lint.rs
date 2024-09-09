@@ -10,9 +10,9 @@ use config::Config;
 use constants::gitmoji::{STRING_EMOJIS, UNICODE_EMOJIS};
 use constants::non_imperative_verbs::NON_IMPERATIVE_VERBS;
 use display::display_parsed_commit;
-use lazy_static::lazy_static;
 use log::{error, info};
 use regex::Regex;
+use std::sync::LazyLock;
 
 pub fn run_lint_on_each_line(
     commit_message: &str,
@@ -180,13 +180,13 @@ fn validate_whitespace(line: &str, config: &Config) -> Result<(), SumiError> {
     Ok(())
 }
 
-lazy_static! {
+static WHITESPACE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     // This regex has three capturing groups:
     // - ^\s+ captures leading spaces.
     // - \s+$ captures trailing spaces.
     // - \s{2,} captures adjacent spaces.
-    static ref WHITESPACE_REGEX: Regex = Regex::new(r"(^\s+|\s+$|\s{2,})").unwrap();
-}
+    Regex::new(r"(^\s+|\s+$|\s{2,})").unwrap()
+});
 
 fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Option<Vec<SumiError>> {
     let mut errors: Vec<SumiError> = Vec::new();

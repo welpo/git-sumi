@@ -1,5 +1,4 @@
 extern crate git_conventional;
-extern crate lazy_static;
 extern crate prettytable;
 extern crate serde;
 extern crate toml;

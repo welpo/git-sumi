@@ -1,14 +1,14 @@
+use std::sync::LazyLock;
+
 use assert_cmd::Command;
-use lazy_static::lazy_static;
 use predicates::str::contains;
 use tempfile::tempdir;
 
 #[cfg(test)]
 mod lint;
 
-lazy_static! {
-    static ref TEST_DIR: tempfile::TempDir = tempdir().unwrap();
-}
+static TEST_DIR: LazyLock<tempfile::TempDir> =
+    LazyLock::new(|| tempdir().expect("Failed to create temporary directory"));
 
 fn run_isolated_git_sumi(subcommand: &str) -> Command {
     let mut cmd = Command::cargo_bin("git-sumi").unwrap();

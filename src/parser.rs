@@ -4,9 +4,9 @@ pub mod parsed_commit;
 
 use crate::config::Config;
 use crate::SumiError;
-use lazy_static::lazy_static;
 use regex::Regex;
 use std::iter::Peekable;
+use std::sync::LazyLock;
 use std::vec::IntoIter;
 
 use self::basic_parser::BasicCommitParser;
@@ -69,10 +69,11 @@ trait CommitParser {
     }
 }
 
-lazy_static! {
+static REFERENCE_REGEX: LazyLock<Regex> =
     // Regex: #(issue/PR number) | 7-40 hexadecimal character SHAs.
-    static ref REFERENCE_REGEX: Regex = Regex::new(r"(#\d+|\b[0-9a-f]{7,40}\b)").expect("Failed to compile regex");
-}
+    LazyLock::new(|| {
+        Regex::new(r"(#\d+|\b[0-9a-f]{7,40}\b)").expect("Failed to compile regex")
+    });
 
 fn parse_gitmoji(commit_title: &str) -> Option<Vec<String>> {
     let emojis = extract_gitmoji(commit_title);
@@ -91,11 +92,10 @@ fn extract_gitmoji(title: &str) -> Vec<String> {
     combine_adjacent_emojis(emojis)
 }
 
-lazy_static! {
-    static ref EMOJI_REGEX: Regex =
-        Regex::new(r"(:\w+:)|[\p{Emoji_Presentation}\p{Extended_Pictographic}\u{200D}]")
-            .expect("Failed to compile regex");
-}
+static EMOJI_REGEX: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(:\w+:)|[\p{Emoji_Presentation}\p{Extended_Pictographic}\u{200D}]")
+        .expect("Failed to compile regex")
+});
 
 // If we only counted the number of emojis without this function, we would mistakenly
 // consider emojis that should be treated as a single unit (e.g., emojis combined with

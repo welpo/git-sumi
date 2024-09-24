@@ -51,8 +51,16 @@ Yes. If you're using the `commit-msg` hook (`git sumi --init commit-msg`), modif
 set -e  # Exit on any error.
 
 # highlight-start
-# Get the current branch name.
-current_branch=$(git rev-parse --abbrev-ref HEAD)
+get_current_branch() {
+    # Check if HEAD exists (i.e., if there are any commits).
+    if git rev-parse --verify HEAD >/dev/null 2>&1; then
+        git rev-parse --abbrev-ref HEAD
+    else
+        echo "main"  # Assume 'main' for initial commit.
+    fi
+}
+
+current_branch=$(get_current_branch)
 
 # Check if the current branch is 'main'.
 if [ "$current_branch" != "main" ]; then

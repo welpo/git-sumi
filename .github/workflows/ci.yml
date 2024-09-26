@@ -11,7 +11,7 @@ on:
 jobs:
   check:
     name: Check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -23,7 +23,7 @@ jobs:
 
   test:
     name: Test suite
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -55,7 +55,7 @@ jobs:
 
   clippy:
     name: Clippy
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -69,7 +69,7 @@ jobs:
 
   rustfmt:
     name: Formatting
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -83,7 +83,7 @@ jobs:
 
   lychee:
     name: Check links
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,7 +96,7 @@ jobs:
 
   audit:
     name: Audit check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4

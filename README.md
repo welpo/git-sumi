@@ -31,7 +31,7 @@
 
 <h1 align="center">git-sumi</h1>
 
-<h3 align="center">The non-opinionated Rust-based commit message linter</h4>
+<h3 align="center">The non-opinionated Rust-based commit message linter</h3>
 
 Transform your commit practices with flexible linting for consistently high-quality Git commit messages that adhere to your project's standards.
 

@@ -47,7 +47,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           name: code-coverage-report
-          file: ./cobertura.xml
+          files: ./cobertura.xml
           fail_ci_if_error: true
           verbose: true
         env:

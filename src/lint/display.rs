@@ -3,7 +3,7 @@ use crate::config::ParsedCommitDisplayFormat;
 use crate::parser::ParsedCommit;
 use serde_json::Value;
 use tabled::{
-    settings::{object::Rows, Disable, Style},
+    settings::{object::Rows, Remove, Style},
     Table, Tabled,
 };
 
@@ -91,7 +91,7 @@ fn display_parsed_commit_as_table(
         ParsedCommitDisplayFormat::Cli => {
             // Cute table for terminal; no header.
             table.with(Style::modern());
-            table.with(Disable::row(Rows::first()));
+            table.with(Remove::row(Rows::first()));
         }
         ParsedCommitDisplayFormat::Table => {
             // Markdown table with header.

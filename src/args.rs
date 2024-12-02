@@ -10,7 +10,6 @@ use clap_complete::Shell;
     about = env!("CARGO_PKG_DESCRIPTION"),
     after_help = "Visit https://sumi.rs to learn more about git-sumi",
 )]
-
 pub struct Opt {
     #[arg(index = 1, help = config_descriptions::COMMIT_MESSAGE)]
     pub commit_message: Option<String>,

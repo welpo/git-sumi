@@ -11,17 +11,19 @@
         <img src="https://img.shields.io/github/v/release/welpo/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Latest release"></a>
     <a href="https://crates.io/crates/git-sumi">
         <img src="https://img.shields.io/crates/v/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Crates.io"></a>
+    <a href="https://pypi.org/project/git-sumi">
+        <img src="https://img.shields.io/pypi/v/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="PyPI"></a>
     <a href="https://codecov.io/gh/welpo/git-sumi">
         <img src="https://img.shields.io/codecov/c/gh/welpo/git-sumi?style=flat-square&labelColor=202b2d&color=b05275" alt="Codecov"></a>
     <br>
+    <a href="#-license">
+        <img src="https://img.shields.io/badge/license-MIT%20or%20Apache%202.0-0?style=flat-square&labelColor=202b2d&color=b05275" alt="MIT or Apache 2.0 License"></a>
     <a href="https://github.com/welpo/git-sumi/actions/workflows/ci.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/ci.yml?style=flat-square&labelColor=202b2d" alt="CI"></a>
     <a href="https://github.com/welpo/git-sumi/actions/workflows/release.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/welpo/git-sumi/release.yml?style=flat-square&labelColor=202b2d&label=deploy" alt="Deployment"></a>
     <a href="https://sumi.rs/docs">
         <img src="https://img.shields.io/website?url=https%3A%2F%2Fsumi.rs&style=flat-square&label=docs&labelColor=202b2d" alt="Documentation"></a>
-    <a href="#-license">
-        <img src="https://img.shields.io/badge/license-MIT%20or%20Apache%202.0-0?style=flat-square&labelColor=202b2d&color=b05275" alt="MIT or Apache 2.0 License"></a>
     <a href="http://isitmaintained.com/project/welpo/git-sumi">
         <img src="http://isitmaintained.com/badge/resolution/welpo/git-sumi.svg" alt="Average time to resolve an issue"></a>
     <a href="http://isitmaintained.com/project/welpo/git-sumi">

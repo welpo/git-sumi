@@ -74,7 +74,7 @@ Our integration systems run automated tests to guard against mistakes. To speed 
 - Run `cargo fmt` to format your code.
 - Run `cargo clippy` to catch common mistakes and improve code.
 - Make sure all new and existing tests pass with `cargo test`.
-- If necessary, update the documentation (in `website/docs/`).
+- If necessary, update the documentation (in `website/docs/`). To run the site locally: `cd website && npm install && npx docusaurus start`.
 
 You might find the [hooks in `.githooks/`](https://github.com/welpo/git-sumi/tree/main/.githooks) useful. To use them, run `git config core.hooksPath .githooks`.
 

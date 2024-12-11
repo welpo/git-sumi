@@ -31,6 +31,13 @@ pip install git-sumi
 
 </TabItem>
 
+<TabItem value="chocolatey" label="chocolatey">
+```powershell
+choco install git-sumi
+```
+
+</TabItem>
+
 <TabItem value="binaries" label="Pre-built binaries">
 Download the latest release from the [releases page](https://github.com/welpo/git-sumi/releases).
 

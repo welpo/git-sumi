@@ -7,7 +7,7 @@ sidebar_position: 6
 ## Local linting with Git hooks
 
 :::tip
-To set up both Git hooks described below, run `git sumi --init hooks`.
+To set up both Git hooks described below, run `git sumi --init hooks`. As an alternative git-**sumi** can be integrated with the [pre-commit package manager](/docs/#using-pre-commit).
 :::
 
 ### commit-msg hook

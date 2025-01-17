@@ -5,6 +5,9 @@ pub enum SumiError {
     #[error("{details}")]
     GeneralError { details: String },
 
+    #[error("Failed to read commit message from file '{path}': {error}")]
+    CommitFileError { path: String, error: String },
+
     #[error("{lines_with_errors} out of {total_lines} {line_or_lines} failed linting. See the errors above")]
     SplitLinesErrors {
         lines_with_errors: usize,

@@ -38,6 +38,8 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
         Path to a TOML configuration file [env: GIT_SUMI_CONFIG=]
 -f, --format <FORMAT>
         Sets display format: cli, json, table, toml [env: GIT_SUMI_FORMAT=]
+    --file <FILE>
+        Read commit message from file
 ```
 
 ### Rules

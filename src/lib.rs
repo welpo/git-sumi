@@ -47,7 +47,7 @@ pub fn run() -> Result<(), SumiError> {
         return Err(SumiError::NoRulesEnabled);
     }
 
-    let commit_message = get_commit_from_arg_or_stdin(args.commit_message)?;
+    let commit_message = get_commit_from_arg_or_stdin(args.commit_message, args.commit_file)?;
 
     let lint_result = if config.split_lines {
         run_lint_on_each_line(&commit_message, &config)
@@ -85,12 +85,23 @@ fn init_logger_from_config(config: &Config) {
         .init();
 }
 
-fn get_commit_from_arg_or_stdin(commit: Option<String>) -> Result<String, SumiError> {
-    if let Some(commit) = commit {
-        Ok(commit)
-    } else {
-        get_commit_from_stdin()
+fn get_commit_from_arg_or_stdin(
+    commit: Option<String>,
+    commit_file: Option<String>,
+) -> Result<String, SumiError> {
+    match (commit, commit_file) {
+        (Some(message), _) => Ok(message),
+        (None, Some(path)) => get_commit_from_file(&path),
+        (None, None) => get_commit_from_stdin(),
     }
+}
+
+fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
+    std::fs::read_to_string(path)
+        .map(|content| content.trim().to_string())
+        .map_err(|e| SumiError::GeneralError {
+            details: format!("Could not read commit message from '{}': {}", path, e),
+        })
 }
 
 fn get_commit_from_stdin() -> Result<String, SumiError> {

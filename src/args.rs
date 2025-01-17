@@ -24,6 +24,14 @@ pub struct Opt {
     )]
     pub init: Option<InitOption>,
 
+    #[arg(
+        long = "file",
+        value_name = "FILE",
+        help = "Read commit message from file",
+        conflicts_with = "commit_message"
+    )]
+    pub commit_file: Option<String>,
+
     /// Outputs enabled rules' description as bash comments for the prepare-commit-msg hook.
     #[arg(long, num_args = 0, hide = true)]
     pub prepare_commit_message: bool,

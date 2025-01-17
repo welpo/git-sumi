@@ -3,6 +3,7 @@ mod test_commit_changes;
 mod test_config;
 mod test_conventional_commits;
 mod test_display;
+mod test_file_input;
 mod test_gitmoji;
 mod test_single_rule;
 

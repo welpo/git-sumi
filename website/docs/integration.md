@@ -4,10 +4,22 @@ sidebar_position: 6
 
 # Integration
 
+## Using pre-commit
+
+To integrate git-**sumi** with [pre-commit](https://pre-commit.com/#intro), add the following hook to your pre-commit config:
+
+```yaml
+repos:
+-   repo: https://github.com/welpo/git-sumi
+    rev: v0.0.9  # check latest version: https://github.com/welpo/git-sumi/tags
+    hooks:
+    -   id: git-sumi
+```
+
 ## Local linting with Git hooks
 
 :::tip
-To set up both Git hooks described below, run `git sumi --init hooks`. As an alternative git-**sumi** can be integrated with the [pre-commit package manager](/docs/#using-pre-commit).
+To set up both Git hooks described below, run `git sumi --init hooks`.
 :::
 
 ### commit-msg hook

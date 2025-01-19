@@ -75,17 +75,9 @@ git sumi -c '🎨 refactor: format JS with Prettier'
 
 If your message passes all rules, it will be committed. Otherwise, you'll see what went wrong.
 
-### Using pre-commit
-
-You can also integrate git-**sumi** via [pre-commit](https://pre-commit.com/#intro) by adding the following hook to your pre-commit config:
-
-```yaml
-repos:
--   repo: https://github.com/welpo/git-sumi
-    rev: v0.0.9  # check latest version: https://github.com/welpo/git-sumi/tags
-    hooks:
-    -   id: git-sumi
-```
+:::tip
+Do you use the [pre-commit](https://pre-commit.com/#intro) package manager? Check out the [integration guide](/docs/integration/#using-pre-commit) to add git-**sumi** to your pre-commit configuration.
+:::
 
 ## Contributing
 

@@ -2,14 +2,15 @@
 # Pre-release hook for the release script: https://github.com/welpo/release
 VERSION_TAG="$1"
 VERSION="${VERSION_TAG#v}"  # Remove the 'v' prefix.
+WEBSITE_DOCS_PATH='website/docs/integration.md'
 
 # Update latest version in pre-commit hook docs.
 # -i: edit file in place
 # -pe: print and execute perl command
-perl -i -pe 's/(rev: v)\K[\d.]+(?=\s+#)/'$VERSION'/g' "website/docs/index.md"
+perl -i -pe 's/(rev: v)\K[\d.]+(?=\s+#)/'$VERSION'/g' "$WEBSITE_DOCS_PATH"
 
-echo "Updated version in website/docs/index.md to:"
-grep "rev: v" "website/docs/index.md" || {
+echo "Updated version in $WEBSITE_DOCS_PATH to:"
+grep "rev: v" "$WEBSITE_DOCS_PATH" || {
     echo "Error: Version update failed"
     exit 1
 }

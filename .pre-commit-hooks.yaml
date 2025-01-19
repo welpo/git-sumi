@@ -1,6 +1,6 @@
 -   id: git-sumi
-    name: Lint commit message with git sumi
-    description: Lints each new commit with git sumi based on the configured project rules in your sumi.toml
+    name: Lint commit message with git-sumi
+    description: Lints each new commit with git-sumi based on the configured project rules in your sumi.toml
     entry: git-sumi --file
     language: rust
     pass_filenames: false

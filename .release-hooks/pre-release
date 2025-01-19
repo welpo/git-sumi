@@ -3,7 +3,7 @@
 VERSION_TAG="$1"
 VERSION="${VERSION_TAG#v}"  # Remove the 'v' prefix.
 
-# Update fallback version in code.
+# Update latest version in pre-commit hook docs.
 # -i: edit file in place
 # -pe: print and execute perl command
 perl -i -pe 's/(rev: v)\K[\d.]+(?=\s+#)/'$VERSION'/g' "website/docs/index.md"

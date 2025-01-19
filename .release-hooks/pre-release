@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Pre-release hook for the release script: https://github.com/welpo/release
+VERSION_TAG="$1"
+VERSION="${VERSION_TAG#v}"  # Remove the 'v' prefix.
+
+# Update fallback version in code.
+# -i: edit file in place
+# -pe: print and execute perl command
+perl -i -pe 's/(rev: v)\K[\d.]+(?=\s+#)/'$VERSION'/g' "website/docs/index.md"
+
+echo "Updated version in website/docs/index.md to:"
+grep "rev: v" "website/docs/index.md" || {
+    echo "Error: Version update failed"
+    exit 1
+}

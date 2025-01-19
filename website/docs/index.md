@@ -82,7 +82,7 @@ You can also integrate git-**sumi** via [pre-commit](https://pre-commit.com/#int
 ```yaml
 repos:
 -   repo: https://github.com/welpo/git-sumi
-    rev: v0.1.0  # check latest version: https://github.com/welpo/git-sumi/tags
+    rev: v0.0.9  # check latest version: https://github.com/welpo/git-sumi/tags
     hooks:
     -   id: git-sumi
 ```

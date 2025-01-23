@@ -10,10 +10,10 @@ To integrate git-**sumi** with [pre-commit](https://pre-commit.com/#intro), add 
 
 ```yaml title=".pre-commit-config.yaml" showLineNumbers
 repos:
--   repo: https://github.com/welpo/git-sumi
-  rev: v0.0.9  # check latest version: https://github.com/welpo/git-sumi/tags
-  hooks:
-  -   id: git-sumi
+  - repo: https://github.com/welpo/git-sumi
+    rev: v0.0.9  # check latest version: https://github.com/welpo/git-sumi/tags
+    hooks:
+      - id: git-sumi
 ```
 
 ## Local linting with Git hooks

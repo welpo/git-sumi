@@ -63,10 +63,15 @@ https://github.com/welpo/git-sumi/assets/6399341/cf1b4f00-3f79-454f-a533-5b36812
 Install git-sumi:
 
 ```bash
+# From cargo.
 cargo install git-sumi
-# or use pip
-pip install git-sumi  # or pipx install git-sumi
-# or use chocolatey on Windows
+
+# From pip.
+uv tool install git-sumi
+pipx install git-sumi
+pip install git-sumi
+
+# Chocolatey (Windows).
 choco install git-sumi
 ```
 
@@ -90,6 +95,7 @@ max_body_length = 74
 # Rule: No leading, trailing, or consecutive spaces.
 whitespace = true
 ```
+
 
 Set up automatic commit message validation:
 

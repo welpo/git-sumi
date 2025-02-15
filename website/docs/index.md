@@ -22,25 +22,34 @@ import TabItem from '@theme/TabItem';
 ```bash
 cargo install git-sumi
 ```
-
 </TabItem>
+
+<TabItem value="uv" label="uv">
+```bash
+uv tool install git-sumi
+```
+</TabItem>
+
+<TabItem value="pipx" label="pipx">
+```bash
+pipx install git-sumi
+```
+</TabItem>
+
 <TabItem value="pip" label="pip">
 ```bash
 pip install git-sumi
 ```
-
 </TabItem>
 
 <TabItem value="chocolatey" label="chocolatey">
 ```powershell
 choco install git-sumi
 ```
-
 </TabItem>
 
 <TabItem value="binaries" label="Pre-built binaries">
 Download the latest release from the [releases page](https://github.com/welpo/git-sumi/releases).
-
 </TabItem>
 
 </Tabs>

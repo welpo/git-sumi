@@ -397,7 +397,6 @@ pub static NON_IMPERATIVE_VERBS: LazyLock<HashSet<&'static str>> = LazyLock::new
         "structuring",
         "styled",
         "styles",
-        "styling",
         "supported",
         "supporting",
         "supports",

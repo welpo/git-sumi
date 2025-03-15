@@ -1,4 +1,4 @@
-// Latest Gitmoji version: v3.14
+// Latest Gitmoji version: v3.15
 // The unicode emojis were normalised using GNU sed:
 // sed -i 's/\xEF\xB8\x8F//g' gitmoji.rs
 
@@ -80,6 +80,7 @@ pub static UNICODE_EMOJIS: LazyLock<HashSet<&'static str>> = LazyLock::new(|| {
         "💸", // :money_with_wings:
         "🧵", // :thread:
         "🦺", // :safety_vest:
+        "✈",  // :airplane:
     ])
 });
 
@@ -158,5 +159,6 @@ pub static STRING_EMOJIS: LazyLock<HashSet<&'static str>> = LazyLock::new(|| {
         ":money_with_wings:",
         ":thread:",
         ":safety_vest:",
+        ":airplane:",
     ])
 });

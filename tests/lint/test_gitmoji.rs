@@ -61,7 +61,7 @@ fn success_no_emojis() {
 #[test]
 fn success_one_unicode_emoji() {
     for &emoji in UNICODE_EMOJIS.iter() {
-        let test_case = format!("{} fix: mend Kintsugi on Ming vase", emoji);
+        let test_case = format!("{emoji} fix: mend Kintsugi on Ming vase");
         let mut cmd = run_isolated_git_sumi("");
         cmd.arg("--gitmoji").arg(&test_case).assert().success();
     }
@@ -70,7 +70,7 @@ fn success_one_unicode_emoji() {
 #[test]
 fn success_one_string_emoji() {
     for &emoji in STRING_EMOJIS.iter() {
-        let test_case = format!("{} fix: iron out Bladee's auto-tune", emoji);
+        let test_case = format!("{emoji} fix: iron out Bladee's auto-tune");
         let mut cmd = run_isolated_git_sumi("");
         cmd.arg("-G").arg(&test_case).assert().success();
     }

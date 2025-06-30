@@ -41,7 +41,7 @@ fn display_parsed_commit_as_json(commit: &ParsedCommit) -> Result<(), SumiError>
             detail: err.to_string(),
         }
     })?;
-    println!("{}", serialized);
+    println!("{serialized}");
 
     Ok(())
 }
@@ -100,13 +100,13 @@ fn display_parsed_commit_as_table(
         _ => {}
     }
 
-    println!("{}", table);
+    println!("{table}");
     Ok(())
 }
 
 fn display_parsed_commit_as_toml(commit: &ParsedCommit) -> Result<(), SumiError> {
     let serialized = serialize_to_toml(commit)?;
-    print!("{}", serialized);
+    print!("{serialized}");
     Ok(())
 }
 

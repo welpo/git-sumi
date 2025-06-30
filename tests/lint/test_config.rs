@@ -128,8 +128,7 @@ fn error_non_existent_config_file() {
         .assert()
         .failure()
         .stderr(contains(format!(
-            "Configuration file '{}' not found",
-            random_name
+            "Configuration file '{random_name}' not found"
         )));
 }
 

@@ -23,7 +23,7 @@ pub fn handle_parsing(
             Ok(parsed) => Ok(parsed),
             Err(e) => {
                 errors.push(SumiError::FailedConventionalParse {
-                    reason: format!("{}", e),
+                    reason: format!("{e}"),
                 });
                 BasicCommitParser.parse(commit, config)
             }
@@ -117,7 +117,7 @@ fn combine_adjacent_emojis(emojis: Vec<String>) -> Vec<String> {
 }
 
 fn combine_emojis(previous_emoji: String, zwj: String, next_emoji: String) -> String {
-    format!("{}{}{}", previous_emoji, zwj, next_emoji)
+    format!("{previous_emoji}{zwj}{next_emoji}")
 }
 
 fn handle_zwj(combined_emojis: &mut Vec<String>, emojis: &mut Peekable<IntoIter<String>>) {
@@ -134,7 +134,7 @@ fn remove_gitmoji(commit: &str, gitmojis: &[String]) -> String {
     let mut commit_sans_gitmoji = String::from(commit);
     for gitmoji in gitmojis {
         let full_gitmoji = format!("{}\\u{{fe0f}}?", regex::escape(gitmoji));
-        let re = Regex::new(&format!(r"\s?{}\s?", full_gitmoji)).unwrap();
+        let re = Regex::new(&format!(r"\s?{full_gitmoji}\s?")).unwrap();
         commit_sans_gitmoji = re.replace(&commit_sans_gitmoji, "").to_string();
     }
     commit_sans_gitmoji.trim().to_string()

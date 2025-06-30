@@ -48,7 +48,7 @@ fn setup_git_repo() -> TempDir {
 fn create_and_stage_file(repo_dir: &Path, file_name: &str, content: &str) {
     let file_path = repo_dir.join(file_name);
     let mut file = File::create(file_path).expect("Failed to create a file");
-    writeln!(file, "{}", content).expect("Failed to write to a file");
+    writeln!(file, "{content}").expect("Failed to write to a file");
     drop(file);
 
     Command::new("git")

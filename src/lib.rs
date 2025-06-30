@@ -100,7 +100,7 @@ fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
     std::fs::read_to_string(path)
         .map(|content| content.trim().to_string())
         .map_err(|e| SumiError::GeneralError {
-            details: format!("Could not read commit message from '{}': {}", path, e),
+            details: format!("Could not read commit message from '{path}': {e}"),
         })
 }
 
@@ -119,8 +119,7 @@ fn handle_commit_based_on_lint(
         Ok(_) => commit_with_message(commit_message),
         Err(lint_errors) if force => {
             error!(
-                "🚨 Forced commit with lint errors: {}. Force flag is set, committing despite errors.",
-                lint_errors
+                "🚨 Forced commit with lint errors: {lint_errors}. Force flag is set, committing despite errors."
             );
             commit_with_message(commit_message)
         }
@@ -162,7 +161,7 @@ fn extract_error_message(git_output: &[u8]) -> String {
     if git_error.is_empty() {
         "Commit failed. No additional error information available.".to_string()
     } else {
-        format!("git output:\n{}", git_error)
+        format!("git output:\n{git_error}")
     }
 }
 

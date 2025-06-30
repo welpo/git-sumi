@@ -26,7 +26,7 @@ pub fn run_lint_on_each_line(
         match run_lint(line, config) {
             Ok(parsed_commit) => parsed_commits.push(parsed_commit),
             Err(error) => {
-                error!("{}", error);
+                error!("{error}");
                 errors.push(error);
             }
         }
@@ -49,7 +49,7 @@ pub fn run_lint_on_each_line(
 /// Returns a `ParsedCommit` struct if the commit is valid, or an error message if it is not.
 pub fn run_lint(raw_commit: &str, config: &Config) -> Result<ParsedCommit, SumiError> {
     let commit = preprocess_commit_message(raw_commit);
-    info!("💬 Input: \"{}\"", commit);
+    info!("💬 Input: \"{commit}\"");
     let mut non_fatal_errors: Vec<SumiError> = Vec::new();
     let parsed_commit = handle_parsing(&commit, config, &mut non_fatal_errors)?;
     let errors = validate_commit(&commit, &parsed_commit, config);
@@ -154,7 +154,7 @@ fn validate_whitespace(line: &str, config: &Config) -> Result<(), SumiError> {
         } else if end == line.len() {
             issues.push("Trailing space".to_owned());
         } else {
-            issues.push(format!("{} adjacent spaces", len));
+            issues.push(format!("{len} adjacent spaces"));
         }
 
         "🟥️".repeat(len)
@@ -164,7 +164,7 @@ fn validate_whitespace(line: &str, config: &Config) -> Result<(), SumiError> {
         let issue_count = issues.len();
         let issues_list = issues
             .iter()
-            .map(|issue| format!("  - {}: \"{}\"", issue, highlighted_line))
+            .map(|issue| format!("  - {issue}: \"{highlighted_line}\""))
             .collect::<Vec<String>>()
             .join("\n");
 
@@ -312,7 +312,7 @@ fn is_lowercase_letter(character: char) -> bool {
 
 fn capitalize_title(first_char: char, rest: &str) -> String {
     let capitalized_first_char = first_char.to_uppercase().collect::<String>();
-    format!("{}{}", capitalized_first_char, rest)
+    format!("{capitalized_first_char}{rest}")
 }
 
 fn validate_no_period(header: &str) -> Result<(), SumiError> {
@@ -405,6 +405,6 @@ fn handle_failure(errors: &[SumiError]) -> Result<ParsedCommit, SumiError> {
 
 fn display_errors(errors: &[SumiError]) {
     for err in errors.iter() {
-        eprintln!("️❗ {}", err);
+        eprintln!("️❗ {err}");
     }
 }

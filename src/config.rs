@@ -328,7 +328,7 @@ fn write_commit_hook_if_needed(hook_path: &Path, hook_content: &str) -> Result<(
 
 fn prompt_overwrite(filename: &str) -> Result<bool, SumiError> {
     let mut input = String::new();
-    print!("File '{}' already exists. Overwrite? (y/n) [n] ", filename);
+    print!("File '{filename}' already exists. Overwrite? (y/n) [n] ");
     io::stdout().flush()?;
     input.clear();
     io::stdin().read_line(&mut input)?;
@@ -395,10 +395,10 @@ pub fn generate_commit_msg_hook_content(config: &Config) -> Result<(), SumiError
             let value_str = (meta.current_value)(config);
             if value_str == "true" {
                 // We don't need to show ": true" for booleans.
-                format!("# {}.\n", description_str)
+                format!("# {description_str}.\n")
             } else {
                 // Show description + value.
-                format!("# {}: {}\n", description_str, value_str)
+                format!("# {description_str}: {value_str}\n")
             }
         })
         .collect::<Vec<String>>()
@@ -406,12 +406,11 @@ pub fn generate_commit_msg_hook_content(config: &Config) -> Result<(), SumiError
 
     let header_comment = format!(
         "# git-sumi rules enabled:\n\
-         {}",
-        template_content
+         {template_content}"
     );
 
     // Print to stdout.
-    println!("{}", header_comment);
+    println!("{header_comment}");
     Ok(())
 }
 
@@ -455,7 +454,7 @@ impl Config {
             let prefix = if is_rule { "Rule: " } else { "" };
             let mut formatted_description = format!("\n# {}{}.\n", prefix, description.short);
             if let Some(extra) = description.extra {
-                formatted_description += &format!("# {}.\n", extra);
+                formatted_description += &format!("# {extra}.\n");
             }
             formatted_description
         }
@@ -466,7 +465,7 @@ impl Config {
                 if let Some(comment) = config_comments.get(key.trim()) {
                     toml_with_comments.push_str(comment);
                 }
-                toml_with_comments.push_str(&format!("{}={}\n", key, value));
+                toml_with_comments.push_str(&format!("{key}={value}\n"));
             }
         }
 
@@ -474,8 +473,7 @@ impl Config {
             "# git-sumi ~ configuration file\n\
             # Config: https://sumi.rs/docs/configuration\n\
             # Rules: https://sumi.rs/docs/rules\n\
-            {}",
-            toml_with_comments
+            {toml_with_comments}"
         );
 
         let current_dir = std::env::current_dir()?;

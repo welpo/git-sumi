@@ -297,7 +297,7 @@ fn success_imperative_verbs() {
 fn error_body_too_long_custom() {
     let mut cmd = run_isolated_git_sumi("");
     let long_body = "a".repeat(51);
-    let full_message = format!("stare into the void\n\n{}", long_body);
+    let full_message = format!("stare into the void\n\n{long_body}");
 
     cmd.arg("--max-body-length")
         .arg("50")
@@ -311,7 +311,7 @@ fn error_body_too_long_custom() {
 fn success_body_long_custom() {
     let mut cmd = run_isolated_git_sumi("");
     let long_body = "a".repeat(50);
-    let full_message = format!("style: nuance Yeat's vocal fry\n\n{}", long_body);
+    let full_message = format!("style: nuance Yeat's vocal fry\n\n{long_body}");
 
     cmd.arg("--max-body-length")
         .arg("50")
@@ -324,7 +324,7 @@ fn success_body_long_custom() {
 fn success_body_long_custom_title_long_custom() {
     let mut cmd = run_isolated_git_sumi("");
     let long_body = "a".repeat(50);
-    let full_message = format!("rehearse Kamasi Washington's scales\n\n{}", long_body);
+    let full_message = format!("rehearse Kamasi Washington's scales\n\n{long_body}");
 
     cmd.arg("--max-body-length")
         .arg("50")

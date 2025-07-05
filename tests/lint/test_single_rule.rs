@@ -455,3 +455,21 @@ fn error_when_using_unsupported_regex_feature() {
         .failure()
         .stderr(contains("Header regex pattern '(?!.*WIP)' is invalid"));
 }
+
+#[test]
+fn error_not_using_imperative_with_prefix() {
+    let test_cases = vec![
+        "Readded a feature",
+        "unfixing a bug",
+        "pre-implementing a cool thing",
+    ];
+
+    for commit_message in test_cases {
+        let mut cmd = run_isolated_git_sumi("");
+        cmd.arg("-I")
+            .arg(commit_message)
+            .assert()
+            .failure()
+            .stderr(contains("Description starts with a non-imperative verb"));
+    }
+}

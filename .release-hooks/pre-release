@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # Pre-release hook for the release script: https://github.com/welpo/release
 VERSION_TAG="$1"
+
+# Update version in Cargo.toml
+comment="# managed by release script"
+sed -E -e "s/^version = .* $comment$/version = \"${VERSION_TAG#v}\"  $comment/" Cargo.toml > Cargo.toml.tmp && mv Cargo.toml.tmp Cargo.toml
+cargo check
+
 VERSION="${VERSION_TAG#v}"  # Remove the 'v' prefix.
 WEBSITE_DOCS_PATH='website/docs/integration.md'
 

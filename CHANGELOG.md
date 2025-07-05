@@ -4,6 +4,55 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.1.0](https://github.com/welpo/git-sumi/compare/v0.0.9..v0.1.0) - 2025-07-05
+
+### ✨ Features
+
+- Detect non-imperatives w/ prefixes ([#269](https://github.com/welpo/git-sumi/issues/269)) by [@welpo](https://github.com/welpo)
+- Update gitmoji to v3.15 ([3e43dc5](https://github.com/welpo/git-sumi/commit/3e43dc5047374e8cee0562d3be03b546919610d1)) by [@welpo](https://github.com/welpo)
+- Add pre-commit hook config ([#199](https://github.com/welpo/git-sumi/issues/199)) by [@TribuneX](https://github.com/TribuneX) and [@welpo](https://github.com/welpo)
+- Support reading commit message from a file ([#198](https://github.com/welpo/git-sumi/issues/198)) by [@welpo](https://github.com/welpo)
+- Expand non-imperative verbs ([08a0429](https://github.com/welpo/git-sumi/commit/08a04298b7a0576d68537e19b97961416943ae11)) by [@welpo](https://github.com/welpo)
+
+### 🐛 Bug fixes
+
+- Remove `styling` from non-imperative verbs list ([d9b42d8](https://github.com/welpo/git-sumi/commit/d9b42d8b1bd65cb114e67dcc7635d49b6399c3bc)) by [@welpo](https://github.com/welpo)
+
+### 📝 Documentation
+
+- *(README)* Add quick start guide ([3eb3d8c](https://github.com/welpo/git-sumi/commit/3eb3d8ccdafc3a145d2622d299469983b724f52c)) by [@welpo](https://github.com/welpo)
+- *(website)* Make commit-msg handle first commit ([e982449](https://github.com/welpo/git-sumi/commit/e982449c3d58673df417164a0c16e0a13627959c)) by [@welpo](https://github.com/welpo)
+- Add uv to installation instructions ([cd3c460](https://github.com/welpo/git-sumi/commit/cd3c4604c7ce765169a61ac34692e0923aad5471)) by [@welpo](https://github.com/welpo)
+- Add Chocolatey as install option ([20bd2db](https://github.com/welpo/git-sumi/commit/20bd2db1fb683445fb452ff3a233e555556e8531)) by [@welpo](https://github.com/welpo)
+
+### ♻️ Refactor
+
+- Replace lazy_static with LazyLock ([1b164a7](https://github.com/welpo/git-sumi/commit/1b164a71e63e4959fbb0faa64ad84b8203a066f2)) by [@welpo](https://github.com/welpo)
+
+### 🔧 Miscellaneous tasks
+
+- *(CI)* Add concurrency control to GH action ([779172c](https://github.com/welpo/git-sumi/commit/779172c34ff7a380a068eedc3ffc7b10073ac51a)) by [@welpo](https://github.com/welpo)
+- *(CI)* Allow longer PR titles for dep updates ([3aafa53](https://github.com/welpo/git-sumi/commit/3aafa533107c424b35c9175437998952eefb15c5)) by [@welpo](https://github.com/welpo)
+- *(CI)* Allow longer PR titles for dep updates ([4c32b32](https://github.com/welpo/git-sumi/commit/4c32b32cee31ae0675bd1d630b30d3bd269b4b92)) by [@welpo](https://github.com/welpo)
+- *(CONTRIBUTING)* Add local web dev instructions ([d7d2c14](https://github.com/welpo/git-sumi/commit/d7d2c1414460fc933ef69a474bda7f8380916a66)) by [@welpo](https://github.com/welpo)
+- *(README)* Close <a> tag for GH release badge ([6a0c9da](https://github.com/welpo/git-sumi/commit/6a0c9da33120cddaa968f2c14744e8cdf1919954)) by [@welpo](https://github.com/welpo)
+- *(README)* Fix badges layout ([3d7a013](https://github.com/welpo/git-sumi/commit/3d7a01364f8ae0ee9f94ab2040ecbefb0a8f0d94)) by [@welpo](https://github.com/welpo)
+- *(README)* Add crates size badge ([9cb8181](https://github.com/welpo/git-sumi/commit/9cb8181fca1a0b2ade11e984aa6f416dafc92715)) by [@welpo](https://github.com/welpo)
+- *(README)* Add PyPI version badge ([3507852](https://github.com/welpo/git-sumi/commit/35078520cfa65a7237d2eb7f6f672c0ead02d076)) by [@welpo](https://github.com/welpo)
+- *(README)* Fix mismatched h3 tag ([ad7c8cb](https://github.com/welpo/git-sumi/commit/ad7c8cb01d20421dcef0005665e1c6f3556dc784)) by [@welpo](https://github.com/welpo)
+- *(deps)* Remove local release script ([cae59a1](https://github.com/welpo/git-sumi/commit/cae59a1d893197f6dc965e6ce624f95d8487b469)) by [@welpo](https://github.com/welpo)
+- *(deps)* Replace local release script w/ git submodule ([212321b](https://github.com/welpo/git-sumi/commit/212321b6bc045bc218678fcd0abc1c9006c6db1f)) by [@welpo](https://github.com/welpo)
+- *(release)* Auto-update Cargo.toml version ([648f2fd](https://github.com/welpo/git-sumi/commit/648f2fdfdc687eb8fc83fe67c4bbda0ba5d4fb5f)) by [@welpo](https://github.com/welpo)
+- *(release)* Improve script robustness ([708f907](https://github.com/welpo/git-sumi/commit/708f90738b7d478f0f7da3bd15b264b1f048423a)) by [@welpo](https://github.com/welpo)
+- Fix clippy warnings ([d4417a7](https://github.com/welpo/git-sumi/commit/d4417a73f88959984d140057aedc12a04a288013)) by [@welpo](https://github.com/welpo)
+- Fix clippy & fmt errors ([20d5cb2](https://github.com/welpo/git-sumi/commit/20d5cb24b7bfc59e5740bd6f4e08c820cee0d449)) by [@welpo](https://github.com/welpo)
+- Update git-cliff variables to `commit.remote` ([3c7b486](https://github.com/welpo/git-sumi/commit/3c7b48622f476a328d601fcbb5c6cdc80db8ee93)) by [@welpo](https://github.com/welpo)
+- Add funding information ([362fc3c](https://github.com/welpo/git-sumi/commit/362fc3cc71ce82cfb57ef848d59210ec81414e4f)) by [@welpo](https://github.com/welpo)
+
+### 👥 New contributors
+
+🫶 [@TribuneX](https://github.com/TribuneX) made their first contribution in [#199](https://github.com/welpo/git-sumi/pull/199)
+
 ## [0.0.9](https://github.com/welpo/git-sumi/compare/v0.0.8..v0.0.9) - 2024-05-06
 
 ### ✨ Features
@@ -179,5 +228,11 @@ We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.
 - *(README)* Add crates.io shield ([08197cb](https://github.com/welpo/git-sumi/commit/08197cba0fabdb0f5c3f9c7673d6214f67e20fbc)) by [@welpo](https://github.com/welpo)
 - *(release)* Display command to publish on cargo ([3f05aba](https://github.com/welpo/git-sumi/commit/3f05abadde7cd2bd6542b3ac1ca85ef60b3a7b6f)) by [@welpo](https://github.com/welpo)
 - *(renovate)* Move config file ([8d7f116](https://github.com/welpo/git-sumi/commit/8d7f116cd7bb8c3c62963f8e1c9f1ef2b1061702)) by [@welpo](https://github.com/welpo)
+
+### 👥 New contributors
+
+🫶 [@welpo](https://github.com/welpo) made their first contribution
+
+🫶 @renovate[bot] made their first contribution in [#3](https://github.com/welpo/git-sumi/pull/3)
 
 <!-- generated by git-cliff -->

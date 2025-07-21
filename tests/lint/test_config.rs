@@ -246,7 +246,7 @@ fn error_valid_config_file_imperative_overridden_by_cli() {
 }
 
 #[test]
-fn success_valid_config_file_title_len_overriden_to_zero() {
+fn success_valid_config_file_title_len_overridden_to_zero() {
     let mut cmd = Command::cargo_bin("git-sumi").unwrap();
     cmd.arg("--config")
         .arg("tests/resources/good_config_max_length_no_whitespace.toml")

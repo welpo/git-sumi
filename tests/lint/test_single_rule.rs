@@ -58,7 +58,7 @@ fn success_lowercase_description() {
 }
 
 #[test]
-fn error_catch_conventional_body_errror() {
+fn error_catch_conventional_body_error() {
     let mut cmd = run_isolated_git_sumi("");
     let commit_message = "feat: adds feature\nThis feature…";
 

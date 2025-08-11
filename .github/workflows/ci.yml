@@ -16,7 +16,7 @@ jobs:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Check
         uses: dtolnay/rust-toolchain@stable
       - run: cargo check --all-targets --locked
@@ -28,7 +28,7 @@ jobs:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Configure Git
         run: |
           git config --global user.email "test@example.com"
@@ -62,7 +62,7 @@ jobs:
         with:
           components: clippy
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Check the lints
         uses: dtolnay/rust-toolchain@stable
       - run: cargo clippy --tests -- -D warnings
@@ -76,7 +76,7 @@ jobs:
         with:
           components: rustfmt
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Check the formatting
         uses: dtolnay/rust-toolchain@stable
       - run: cargo fmt --all -- --check
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Check the links
         uses: lycheeverse/lychee-action@v2
         with:
@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run cargo-audit
         uses: taiki-e/install-action@cargo-deny
       - name: Scan for vulnerabilities

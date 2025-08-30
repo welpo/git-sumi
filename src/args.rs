@@ -224,4 +224,16 @@ pub struct Opt {
         help = config_descriptions::HEADER_PATTERN.short
     )]
     pub header_pattern: Option<String>,
+
+    /// Remove header pattern before running other validation rules.
+    #[arg(
+        long,
+        short = 'X',
+        env = "GIT_SUMI_STRIP_HEADER_PATTERN",
+        num_args = 0,
+        default_missing_value = "true",
+        help_heading = "Rules",
+        help = config_descriptions::STRIP_HEADER_PATTERN.short
+    )]
+    pub strip_header_pattern: Option<bool>,
 }

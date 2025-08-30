@@ -86,14 +86,12 @@ fn validate_whitespace_and_length(commit: String, config: &Config) -> Vec<SumiEr
     let mut errors = Vec::new();
     let mut lines = commit.lines();
     let header_line = lines.next().unwrap_or("");
-    errors.extend(validate_header_line(header_line, config));
-    errors.extend(validate_body_lines(lines, config));
-    errors
-}
-
-fn validate_header_line(header_line: &str, config: &Config) -> Vec<SumiError> {
-    let mut errors = Vec::new();
-    if let Err(err) = validate_whitespace(header_line, config) {
+    let validation_header = if should_strip_header_pattern(config) {
+        strip_header_pattern_from_line(header_line, &config.header_pattern)
+    } else {
+        header_line.to_string()
+    };
+    if let Err(err) = validate_whitespace(&validation_header, config) {
         errors.push(err);
     }
     if let Err(actual_length) = validate_line_length(header_line, config.max_header_length) {
@@ -103,7 +101,20 @@ fn validate_header_line(header_line: &str, config: &Config) -> Vec<SumiError> {
             max_length: config.max_header_length,
         });
     }
+    errors.extend(validate_body_lines(lines, config));
     errors
+}
+
+fn should_strip_header_pattern(config: &Config) -> bool {
+    config.strip_header_pattern && !config.header_pattern.is_empty()
+}
+
+fn strip_header_pattern_from_line(line: &str, pattern: &str) -> String {
+    if let Ok(regex) = Regex::new(pattern) {
+        regex.replace(line, "").to_string()
+    } else {
+        line.to_string()
+    }
 }
 
 fn validate_line_length(line: &str, max_length: usize) -> Result<(), usize> {
@@ -190,6 +201,11 @@ static WHITESPACE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
 
 fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Option<Vec<SumiError>> {
     let mut errors: Vec<SumiError> = Vec::new();
+    let validation_description = if should_strip_header_pattern(config) {
+        strip_header_pattern_from_line(&parsed_commit.description, &config.header_pattern)
+    } else {
+        parsed_commit.description.clone()
+    };
 
     if config.gitmoji {
         if let Err(err) = validate_gitmoji(&parsed_commit.gitmoji) {
@@ -197,12 +213,12 @@ fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Opti
         }
     }
 
-    if let Some(err) = validate_description_case(parsed_commit, config) {
+    if let Some(err) = validate_description_case_for_string(&validation_description, config) {
         errors.push(err);
     }
 
     if config.imperative {
-        if let Err(err) = is_imperative(&parsed_commit.description) {
+        if let Err(err) = is_imperative(&validation_description) {
             errors.push(err);
         }
     }
@@ -259,10 +275,10 @@ fn normalise_emoji(emoji: &str) -> String {
     emoji.replace('\u{fe0f}', "")
 }
 
-fn validate_description_case(parsed_commit: &ParsedCommit, config: &Config) -> Option<SumiError> {
+fn validate_description_case_for_string(description: &str, config: &Config) -> Option<SumiError> {
     match config.description_case {
-        DescriptionCase::Lower => validate_lowercase(&parsed_commit.description).err(),
-        DescriptionCase::Upper => validate_upper_case(&parsed_commit.description).err(),
+        DescriptionCase::Lower => validate_lowercase(description).err(),
+        DescriptionCase::Upper => validate_upper_case(description).err(),
         DescriptionCase::Any => None,
     }
 }

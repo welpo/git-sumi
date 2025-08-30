@@ -34,6 +34,7 @@ pub struct Config {
     pub scopes_allowed: Vec<String>,
     pub types_allowed: Vec<String>,
     pub header_pattern: String,
+    pub strip_header_pattern: bool,
 }
 
 pub trait Configurable {
@@ -193,6 +194,11 @@ fn rules_metadata<'a>() -> Vec<RuleMeta<'a>> {
             description: HEADER_PATTERN.short,
             current_value: Box::new(|c| c.header_pattern.clone()),
         },
+        RuleMeta {
+            is_modified: Box::new(|c, d| c.strip_header_pattern != d.strip_header_pattern),
+            description: STRIP_HEADER_PATTERN.short,
+            current_value: Box::new(|c| c.strip_header_pattern.to_string()),
+        },
     ]
 }
 
@@ -243,6 +249,7 @@ impl Configurable for Opt {
         update_field!(config.scopes_allowed, self.scopes_allowed, list);
         update_field!(config.types_allowed, self.types_allowed, list);
         update_field!(config.header_pattern, self.header_pattern, option);
+        update_field!(config.strip_header_pattern, self.strip_header_pattern);
     }
 }
 
@@ -443,6 +450,7 @@ impl Config {
             ("scopes_allowed", (&SCOPES_ALLOWED, true)),
             ("types_allowed", (&TYPES_ALLOWED, true)),
             ("header_pattern", (&HEADER_PATTERN, true)),
+            ("strip_header_pattern", (&STRIP_HEADER_PATTERN, true)),
         ];
 
         let config_comments: HashMap<&str, String> = config_keys_and_rules

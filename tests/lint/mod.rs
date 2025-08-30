@@ -5,6 +5,7 @@ mod test_conventional_commits;
 mod test_display;
 mod test_file_input;
 mod test_gitmoji;
+mod test_header_pattern_stripping;
 mod test_single_rule;
 
 use super::contains;

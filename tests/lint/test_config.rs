@@ -390,7 +390,10 @@ types_allowed = []
 
 # Rule: Header must match regex pattern.
 # Example: '^JIRA-\d+:'.
-header_pattern = """#
+header_pattern = ""
+
+# Rule: Remove header pattern before running other validation rules.
+strip_header_pattern = false"#
 }
 
 #[test]

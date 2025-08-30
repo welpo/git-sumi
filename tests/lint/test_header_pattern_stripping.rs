@@ -202,3 +202,26 @@ strip_header_pattern = true
         .assert()
         .success();
 }
+
+#[test]
+fn test_invalid_regex_pattern_graceful_fallback() {
+    // Test that invalid regex patterns don't crash and fall back to no stripping
+    let config = r#"
+header_pattern = "[invalid_regex("
+whitespace = true
+imperative = true
+strip_header_pattern = true
+"#;
+    let tmp_dir = tempdir().unwrap();
+    let config_path = tmp_dir.path().join("sumi.toml");
+    fs::write(&config_path, config).unwrap();
+    // With invalid regex, stripping should fail gracefully and validate the full message
+    // "  fixed the bug" should fail whitespace validation (leading space)
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("--config")
+        .arg(config_path)
+        .arg("  fixed the bug")
+        .assert()
+        .failure()
+        .stderr(contains("Leading space"));
+}

@@ -746,3 +746,12 @@ fn success_initialize_all_hooks() {
         "The prepare-commit-msg hook should be created."
     );
 }
+
+#[test]
+fn error_no_rules_enabled() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("test commit message")
+        .assert()
+        .failure()
+        .stderr(contains("No rules enabled"));
+}

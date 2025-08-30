@@ -55,3 +55,6 @@ types_allowed = ["feat", "fix", "docs", "refactor", "test", "chore", "misc"]
 # Rule: Header must match regex pattern.
 # Example: '^JIRA-\d+:'.
 header_pattern = '^([\p{Emoji_Presentation}\p{Extended_Pictographic}](?:\u{FE0F})?\u{200D}?) \w' # The first character must be an emoji.
+
+# Rule: Remove header pattern before running other validation rules.
+strip_header_pattern = false

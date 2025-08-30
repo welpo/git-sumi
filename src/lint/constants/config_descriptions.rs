@@ -89,3 +89,8 @@ pub const HEADER_PATTERN: RuleDescription = RuleDescription {
     short: "Header must match regex pattern",
     extra: Some("Example: '^JIRA-\\d+:'"),
 };
+
+pub const STRIP_HEADER_PATTERN: RuleDescription = RuleDescription {
+    short: "Remove header pattern before running other validation rules",
+    extra: None,
+};

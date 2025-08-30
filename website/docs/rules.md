@@ -250,3 +250,36 @@ header_pattern = '^JIRA-\d+:'
 :::tip
 It's a good practice to test your regular expressions using a [regex tester](https://regex101.com/) or a similar tool before enforcing them with git-**sumi**.
 :::
+
+## Strip header pattern
+
+- **Description**: When enabled, removes the matched header pattern before running content validation rules like `whitespace`, `imperative`, and `description_case`. Format validation rules like `max_header_length` and `no_period` still use the complete header.
+
+- **Why it matters**: Useful when using prefix patterns (like JIRA ticket numbers) where you want content validation to apply to the actual commit description rather than the full formatted header.
+
+- **`sumi.toml` identifier**: `strip_header_pattern`
+
+- **Command line usage**: Long option: `--strip-header-pattern`, Short option: `-X`
+
+- **Environment variable**: `GIT_SUMI_STRIP_HEADER_PATTERN`
+
+- **Type of value**: Boolean (e.g., `true`)
+
+- **Default value**: `false`
+
+- **Example**: Set `strip_header_pattern = true` in `sumi.toml`, or use `git sumi --strip-header-pattern` or `git sumi -X`.
+
+**Example usage:**
+
+```toml
+header_pattern = "^JIRA-\\d+ "
+imperative = true
+whitespace = true
+strip_header_pattern = true
+```
+
+With this configuration:
+
+- `"JIRA-123 fixed bug"` → fails imperative check (validates "fixed bug")
+- `"JIRA-123  fix bug"` → fails whitespace check (validates " fix bug")
+- `"JIRA-123 fix bug"` → passes all checks

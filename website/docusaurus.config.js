@@ -29,7 +29,6 @@ const config = {
   deploymentBranch: "gh-pages",
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -39,6 +38,14 @@ const config = {
     locales: ["en"],
   },
 
+  markdown: {
+    format: "mdx",
+    mdx1Compat: {},
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
+
   themes: [
     [
       require.resolve("@easyops-cn/docusaurus-search-local"),
@@ -46,6 +53,7 @@ const config = {
       ({
         // `hashed` is recommended as long-term-cache of index file is possible.
         hashed: true,
+        indexBlog: false,
       }),
     ],
   ],
@@ -61,6 +69,7 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/welpo/git-sumi/tree/main/website/",
         },
+        blog: false,
         theme: {
           customCss: "./src/css/custom.css",
         },

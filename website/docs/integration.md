@@ -16,6 +16,23 @@ repos:
       - id: git-sumi
 ```
 
+### Custom configuration
+
+:::caution
+When overriding `args`, you must include `--file` as the **last** argument.
+:::
+
+To use a custom configuration file or additional arguments, override the `args`:
+
+```yaml title=".pre-commit-config.yaml"
+repos:
+  - repo: https://github.com/welpo/git-sumi
+    rev: v0.2.0  # check latest version: https://github.com/welpo/git-sumi/tags
+    hooks:
+      - id: git-sumi
+        args: [--config, .config/sumi.toml, --file]
+```
+
 ## Local linting with Git hooks
 
 :::tip

@@ -2,7 +2,7 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
-use super::Command;
+use assert_cmd::cargo::cargo_bin_cmd;
 use predicates::prelude::*;
 use std::fs;
 use tempfile::tempdir;
@@ -31,7 +31,7 @@ fn test_none_ignores_standard_config_home() {
     let tmp_path = tmp_dir.path();
     fs::write(tmp_path.join("sumi.toml"), "gitmoji = true").unwrap();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.env("HOME", tmp_path)
         .arg("--config")
         .arg("none")
@@ -109,7 +109,7 @@ fn config_file_in_sumi_named_subdir_in_home() {
     fs::write(sumi_subdir.join("sumi.toml"), "gitmoji = true").unwrap();
 
     // Create and configure the command.
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.env("HOME", tmp_home_dir.path()) // Set HOME just for this Command.
         .current_dir(tmp_current_dir.path()) // Set the current directory to our empty temporary directory.
         .arg("-C")
@@ -134,7 +134,7 @@ fn error_non_existent_config_file() {
 
 #[test]
 fn error_config_is_dir() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources")
         .arg("twizzy")
@@ -149,7 +149,7 @@ fn error_config_is_dir() {
 // We don't use `run_isolated_git_sumi` here because we want to test the config file loading logic.
 #[test]
 fn error_fail_override_config_file_gitmoji() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_ciqf.toml")
         .arg("-GC")
@@ -161,7 +161,7 @@ fn error_fail_override_config_file_gitmoji() {
 
 #[test]
 fn success_override_quiet_with_env_var() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.env("GIT_SUMI_QUIET", "false") // Should override config.
         .arg("--config")
         .arg("tests/resources/good_config_ciqf.toml") // Sets quiet = true.
@@ -174,7 +174,7 @@ fn success_override_quiet_with_env_var() {
 
 #[test]
 fn success_override_gitmoji_with_env_var() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.env("GIT_SUMI_GITMOJI", "false") // Override gitmoji = true in config.
         .arg("--config")
         .arg("tests/resources/good_config_gitmoji.toml")
@@ -187,7 +187,7 @@ fn success_override_gitmoji_with_env_var() {
 
 #[test]
 fn error_valid_config_file_imperative() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_imperative.toml")
         .arg("Adds a new feature")
@@ -198,7 +198,7 @@ fn error_valid_config_file_imperative() {
 
 #[test]
 fn error_valid_config_file_gitmoji() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_gitmoji.toml")
         .arg("Add a new feature")
@@ -209,7 +209,7 @@ fn error_valid_config_file_gitmoji() {
 
 #[test]
 fn error_valid_config_file_gitmoji_overridden_by_cli() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_gitmoji_false.toml")
         .arg("--gitmoji")
@@ -221,7 +221,7 @@ fn error_valid_config_file_gitmoji_overridden_by_cli() {
 
 #[test]
 fn error_valid_config_file_conventional_overridden_by_cli() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_conventional_false.toml")
         .arg("-C")
@@ -233,7 +233,7 @@ fn error_valid_config_file_conventional_overridden_by_cli() {
 
 #[test]
 fn error_valid_config_file_imperative_overridden_by_cli() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_imperative_false.toml")
         .arg("--imperative")
@@ -247,7 +247,7 @@ fn error_valid_config_file_imperative_overridden_by_cli() {
 
 #[test]
 fn success_valid_config_file_title_len_overridden_to_zero() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_max_length_no_whitespace.toml")
         .arg("--max-header-length")
@@ -261,7 +261,7 @@ fn success_valid_config_file_title_len_overridden_to_zero() {
 
 #[test]
 fn error_types_enables_conventional() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_types.toml")
         .arg("creative: Add a new feature")
@@ -272,7 +272,7 @@ fn error_types_enables_conventional() {
 
 #[test]
 fn error_valid_config_file_short_title_length() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_max_length_no_whitespace.toml")
         .arg("title too long")
@@ -283,7 +283,7 @@ fn error_valid_config_file_short_title_length() {
 
 #[test]
 fn error_bad_config_file_gitmoji_duplicated() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/bad_config_duplicated_gitmoji.toml")
         .arg("duplicate gitmoji")
@@ -294,7 +294,7 @@ fn error_bad_config_file_gitmoji_duplicated() {
 
 #[test]
 fn error_bad_config_file_gitmoji_boolean_string() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/bad_config_gitmoji_boolean_string.toml")
         .arg("duplicate gitmoji")
@@ -305,7 +305,7 @@ fn error_bad_config_file_gitmoji_boolean_string() {
 
 #[test]
 fn success_format_from_config_and_cli_override() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_df_json.toml")
         .arg("Optimise frame rate in Blighttown")
@@ -318,7 +318,7 @@ fn success_format_from_config_and_cli_override() {
 
 #[test]
 fn success_override_format_from_cli() {
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.arg("--config")
         .arg("tests/resources/good_config_df_json.toml")
         .arg("--format")
@@ -402,7 +402,7 @@ fn success_init() {
     let tmp_dir = tempfile::tempdir().unwrap();
     let tmp_dir_path = tmp_dir.path();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .assert()
@@ -431,7 +431,7 @@ fn success_init_config() {
     let tmp_dir = tempfile::tempdir().unwrap();
     let tmp_dir_path = tmp_dir.path();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("config")
@@ -458,7 +458,7 @@ quiet = true
     std::fs::write(&config_path, initial_config_content).unwrap();
 
     // Attempt to initialize the default config, simulating 'no' to the overwrite prompt.
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .write_stdin("n\n")
@@ -485,7 +485,7 @@ quiet = true
     std::fs::write(&config_path, initial_config_content).unwrap();
 
     // Attempt to initialize the default config, simulating 'yes' to the overwrite prompt.
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .write_stdin("y\n")
@@ -523,7 +523,7 @@ fn init_tmp_git_repo() -> tempfile::TempDir {
 fn success_init_hook() {
     let tmp_dir = init_tmp_git_repo();
     let tmp_dir_path = tmp_dir.path();
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("commit-msg")
@@ -541,7 +541,7 @@ fn success_init_hook() {
 fn error_init_hook_in_non_git_repo() {
     let tmp_dir = tempfile::tempdir().unwrap();
     let tmp_dir_path = tmp_dir.path();
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("commit-msg")
@@ -559,7 +559,7 @@ fn success_init_hook_overwrite_yes() {
     let hook_path = hooks_dir.join("commit-msg");
     fs::write(&hook_path, "#!/bin/sh\necho \"Existing hook\"").unwrap(); // Create a dummy hook.
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("commit-msg")
@@ -585,7 +585,7 @@ fn success_init_hook_overwrite_no() {
     let hook_path = hooks_dir.join("commit-msg");
     fs::write(&hook_path, original_hook_content).unwrap(); // Create a dummy hook.
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("commit-msg")
@@ -623,7 +623,7 @@ fn success_prepare_commit_msg_hook_creation() {
     let tmp_dir = init_tmp_git_repo();
     let tmp_dir_path = tmp_dir.path();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("prepare-commit-msg")
@@ -675,7 +675,7 @@ fn success_prepare_commit_msg_hook_overwrite_yes() {
     fs::create_dir_all(hook_path.parent().unwrap()).unwrap();
     fs::write(&hook_path, initial_hook_content).unwrap();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("prepare-commit-msg")
@@ -704,7 +704,7 @@ fn success_prepare_commit_msg_hook_overwrite_no() {
     fs::create_dir_all(hook_path.parent().unwrap()).unwrap();
     fs::write(&hook_path, initial_hook_content).unwrap();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("prepare-commit-msg")
@@ -724,7 +724,7 @@ fn success_initialize_all_hooks() {
     let tmp_dir = init_tmp_git_repo();
     let tmp_dir_path = tmp_dir.path();
 
-    let mut cmd = Command::cargo_bin("git-sumi").unwrap();
+    let mut cmd = cargo_bin_cmd!();
     cmd.current_dir(tmp_dir_path)
         .arg("--init")
         .arg("hooks")

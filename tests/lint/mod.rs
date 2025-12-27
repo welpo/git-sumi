@@ -10,7 +10,6 @@ mod test_single_rule;
 
 use super::contains;
 use super::run_isolated_git_sumi;
-use super::Command;
 
 #[test]
 fn error_exits_no_commit() {

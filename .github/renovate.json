@@ -10,15 +10,15 @@
   },
   "packageRules": [
     {
-      "updateTypes": ["pin"],
+      "matchUpdateTypes": ["pin"],
       "commitMessagePrefix": "📌"
     },
     {
-      "updateTypes": ["major", "minor", "patch", "digest", "bump"],
+      "matchUpdateTypes": ["major", "minor", "patch", "digest", "bump"],
       "commitMessagePrefix": "⬆️"
     },
     {
-      "updateTypes": ["rollback"],
+      "matchUpdateTypes": ["rollback"],
       "commitMessagePrefix": "⬇️"
     },
     {

@@ -19,6 +19,7 @@ use env_logger::Builder;
 use lint::{run_lint, run_lint_on_each_line};
 use log::{error, info, LevelFilter};
 use parser::ParsedCommit;
+use std::borrow::Cow;
 use std::io::{self, Read, Write};
 
 pub fn run() -> Result<(), SumiError> {
@@ -89,11 +90,14 @@ fn get_commit_from_arg_or_stdin(
     commit: Option<String>,
     commit_file: Option<String>,
 ) -> Result<String, SumiError> {
-    match (commit, commit_file) {
-        (Some(message), _) => Ok(message),
-        (None, Some(path)) => get_commit_from_file(&path),
-        (None, None) => get_commit_from_stdin(),
-    }
+    let mut msg = match (commit, commit_file) {
+        (Some(message), _) => message,
+        (None, Some(path)) => get_commit_from_file(&path)?,
+        (None, None) => get_commit_from_stdin()?,
+    };
+
+    msg = remove_verbose_output(&msg)?.into_owned();
+    Ok(msg)
 }
 
 fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
@@ -108,6 +112,46 @@ fn get_commit_from_stdin() -> Result<String, SumiError> {
     let mut buffer = String::new();
     io::stdin().read_to_string(&mut buffer)?;
     Ok(buffer.trim().to_string())
+}
+
+fn remove_verbose_output(commit_message: &str) -> Result<Cow<'_, str>, SumiError> {
+    let commentchar = get_git_commentchar()?;
+    let cutline = format!(
+        "{} ------------------------ >8 ------------------------",
+        commentchar
+    );
+
+    let mut lines: Vec<&str> = commit_message.lines().collect();
+    let cutline_idx = lines.iter().position(|&line| line == cutline);
+    match cutline_idx {
+        Some(i) => {
+            lines.truncate(i);
+            let new_msg = lines.join("\n");
+            Ok(Cow::Owned(new_msg))
+        }
+        None => Ok(Cow::Borrowed(commit_message)),
+    }
+}
+
+fn get_git_commentchar() -> Result<String, std::io::Error> {
+    let output = std::process::Command::new("git")
+        .arg("config")
+        .arg("--get")
+        .arg("core.commentchar")
+        .output()?;
+
+    if output.status.success() {
+        let comment_char = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        Ok(comment_char)
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        if stderr.is_empty() {
+            // commentchar isn't set, so fallback to #
+            Ok("#".to_string())
+        } else {
+            Err(std::io::Error::other(stderr))
+        }
+    }
 }
 
 fn handle_commit_based_on_lint(

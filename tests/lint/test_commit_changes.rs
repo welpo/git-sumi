@@ -224,3 +224,51 @@ fn error_git_fails_no_message() {
     // Check if the stderr contains the expected message.
     assert!(stderr_output.contains("Commit failed. No additional error information available."));
 }
+
+#[test]
+fn test_verbose_git_commit() {
+    let tmp_dir = setup_git_repo();
+    let repo_dir = tmp_dir.path();
+
+    // Create a file and stage it.
+    let file_path = repo_dir.join("new_file.txt");
+    let mut file = File::create(file_path).expect("Failed to create a file");
+    writeln!(file, "New content").expect("Failed to write to a file");
+
+    Command::new("git")
+        .args(["add", "new_file.txt"])
+        .current_dir(repo_dir)
+        .assert()
+        .success();
+
+    let msg = r#"feat: Add new feature
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch verbose
+# Changes to be committed:
+#	new file:   new_file.txt
+#
+# Changes not staged for commit:
+#	modified:   src/lib.rs
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/new_file.txt b/new_file.txt
+new file mode 100644
+index 0000000..a11f211
+--- /dev/null
++++ b/new_file.txt
+@@ -0,0 +1 @@
++New content
+    "#;
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo_dir)
+        .arg("-C")
+        .arg("--commit")
+        .arg(msg)
+        .assert()
+        .success();
+}

@@ -71,8 +71,13 @@ uv tool install git-sumi
 pipx install git-sumi
 pip install git-sumi
 
+# From mise.
+mise use github:welpo/git-sumi
+
 # Chocolatey (Windows).
 choco install git-sumi
+
+# Pre-built binaries from https://github.com/welpo/git-sumi/releases
 ```
 
 Create a base `sumi.toml` configuration file in your repository:

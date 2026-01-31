@@ -42,6 +42,12 @@ pip install git-sumi
 ```
 </TabItem>
 
+<TabItem value="mise" label="mise">
+```bash
+mise use github:welpo/git-sumi
+```
+</TabItem>
+
 <TabItem value="chocolatey" label="chocolatey">
 ```powershell
 choco install git-sumi

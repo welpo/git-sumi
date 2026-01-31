@@ -19,7 +19,6 @@ use env_logger::Builder;
 use lint::{run_lint, run_lint_on_each_line};
 use log::{error, info, LevelFilter};
 use parser::ParsedCommit;
-use std::borrow::Cow;
 use std::io::{self, Read, Write};
 
 pub fn run() -> Result<(), SumiError> {
@@ -90,14 +89,13 @@ fn get_commit_from_arg_or_stdin(
     commit: Option<String>,
     commit_file: Option<String>,
 ) -> Result<String, SumiError> {
-    let mut msg = match (commit, commit_file) {
+    let msg = match (commit, commit_file) {
         (Some(message), _) => message,
         (None, Some(path)) => get_commit_from_file(&path)?,
         (None, None) => get_commit_from_stdin()?,
     };
 
-    msg = remove_verbose_output(&msg)?.into_owned();
-    Ok(msg)
+    remove_verbose_output(&msg)
 }
 
 fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
@@ -114,26 +112,23 @@ fn get_commit_from_stdin() -> Result<String, SumiError> {
     Ok(buffer.trim().to_string())
 }
 
-fn remove_verbose_output(commit_message: &str) -> Result<Cow<'_, str>, SumiError> {
+fn remove_verbose_output(commit_message: &str) -> Result<String, SumiError> {
     let commentchar = get_git_commentchar()?;
     let cutline = format!(
         "{} ------------------------ >8 ------------------------",
         commentchar
     );
 
-    let mut lines: Vec<&str> = commit_message.lines().collect();
-    let cutline_idx = lines.iter().position(|&line| line == cutline);
-    match cutline_idx {
+    match commit_message.lines().position(|line| line == cutline) {
         Some(i) => {
-            lines.truncate(i);
-            let new_msg = lines.join("\n");
-            Ok(Cow::Owned(new_msg))
+            let truncated: Vec<&str> = commit_message.lines().take(i).collect();
+            Ok(truncated.join("\n"))
         }
-        None => Ok(Cow::Borrowed(commit_message)),
+        None => Ok(commit_message.to_string()),
     }
 }
 
-fn get_git_commentchar() -> Result<String, std::io::Error> {
+fn get_git_commentchar() -> Result<String, SumiError> {
     let output = std::process::Command::new("git")
         .arg("config")
         .arg("--get")
@@ -141,15 +136,16 @@ fn get_git_commentchar() -> Result<String, std::io::Error> {
         .output()?;
 
     if output.status.success() {
-        let comment_char = String::from_utf8_lossy(&output.stdout).trim().to_string();
-        Ok(comment_char)
+        Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr);
         if stderr.is_empty() {
             // commentchar isn't set, so fallback to #
             Ok("#".to_string())
         } else {
-            Err(std::io::Error::other(stderr))
+            Err(SumiError::GeneralError {
+                details: format!("Failed to get git comment character: {}", stderr.trim()),
+            })
         }
     }
 }

@@ -89,11 +89,13 @@ fn get_commit_from_arg_or_stdin(
     commit: Option<String>,
     commit_file: Option<String>,
 ) -> Result<String, SumiError> {
-    match (commit, commit_file) {
-        (Some(message), _) => Ok(message),
-        (None, Some(path)) => get_commit_from_file(&path),
-        (None, None) => get_commit_from_stdin(),
-    }
+    let msg = match (commit, commit_file) {
+        (Some(message), _) => message,
+        (None, Some(path)) => get_commit_from_file(&path)?,
+        (None, None) => get_commit_from_stdin()?,
+    };
+
+    remove_verbose_output(&msg)
 }
 
 fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
@@ -108,6 +110,44 @@ fn get_commit_from_stdin() -> Result<String, SumiError> {
     let mut buffer = String::new();
     io::stdin().read_to_string(&mut buffer)?;
     Ok(buffer.trim().to_string())
+}
+
+fn remove_verbose_output(commit_message: &str) -> Result<String, SumiError> {
+    let commentchar = get_git_commentchar()?;
+    let cutline = format!(
+        "{} ------------------------ >8 ------------------------",
+        commentchar
+    );
+
+    match commit_message.lines().position(|line| line == cutline) {
+        Some(i) => {
+            let truncated: Vec<&str> = commit_message.lines().take(i).collect();
+            Ok(truncated.join("\n"))
+        }
+        None => Ok(commit_message.to_string()),
+    }
+}
+
+fn get_git_commentchar() -> Result<String, SumiError> {
+    let output = std::process::Command::new("git")
+        .arg("config")
+        .arg("--get")
+        .arg("core.commentchar")
+        .output()?;
+
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        if stderr.is_empty() {
+            // commentchar isn't set, so fallback to #
+            Ok("#".to_string())
+        } else {
+            Err(SumiError::GeneralError {
+                details: format!("Failed to get git comment character: {}", stderr.trim()),
+            })
+        }
+    }
 }
 
 fn handle_commit_based_on_lint(

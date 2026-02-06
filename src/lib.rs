@@ -183,8 +183,24 @@ fn commit_with_message(commit_message: &str) -> Result<(), SumiError> {
 }
 
 fn execute_git_commit(commit_message: &str) -> Result<std::process::Output, std::io::Error> {
+    use std::env;
+    use std::fs::File;
+    use std::io::Write;
+    use std::path::PathBuf;
+
+    // Create a temporary file to store the full commit message.
+    // Using `git commit -m` with multiline messages can lead to malformed commits
+    // or truncated bodies, so we use `-F` to pass the message via file instead.
+    let mut path: PathBuf = env::temp_dir();
+    path.push("sumi_commit_msg.txt");
+
+    let mut file = File::create(&path)?;
+    file.write_all(commit_message.as_bytes())?;
+
+    // Use `git commit -F` to ensure the full commit message (including body)
+    // is preserved exactly as provided.
     std::process::Command::new("git")
-        .args(["commit", "-m", commit_message])
+        .args(["commit", "-F", path.to_str().unwrap()])
         .output()
 }
 

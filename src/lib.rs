@@ -230,3 +230,80 @@ fn generate_shell_completion(shell: clap_complete::Shell) {
         &mut std::io::stdout(),
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::env;
+    use std::fs;
+    use std::process::Command;
+
+    #[test]
+    #[serial_test::serial]
+    fn multiline_commit_body_is_preserved() {
+        let original_dir = std::env::current_dir().unwrap();
+
+        // temp repo
+        let tmp = env::temp_dir().join("git_sumi_test_repo");
+        let _ = fs::remove_dir_all(&tmp);
+        fs::create_dir_all(&tmp).unwrap();
+
+        // init git repo
+        Command::new("git")
+            .arg("init")
+            .current_dir(&tmp)
+            .output()
+            .unwrap();
+
+        // required git identity (CI-safe)
+        Command::new("git")
+            .args(["config", "user.email", "test@example.com"])
+            .current_dir(&tmp)
+            .output()
+            .unwrap();
+
+        Command::new("git")
+            .args(["config", "user.name", "Test"])
+            .current_dir(&tmp)
+            .output()
+            .unwrap();
+
+        // create file
+        fs::write(tmp.join("file.txt"), "hello").unwrap();
+
+        Command::new("git")
+            .args(["add", "."])
+            .current_dir(&tmp)
+            .output()
+            .unwrap();
+
+        let msg = "feat: test\n\nbody line 1\nbody line 2\nfooter";
+
+        // switch into temp repo for commit
+        std::env::set_current_dir(&tmp).unwrap();
+
+        // ensure staged (CI-safe)
+        Command::new("git").args(["add", "."]).output().unwrap();
+
+        let commit = super::execute_git_commit(msg).unwrap();
+        assert!(commit.status.success(), "commit failed");
+
+        // read commit back
+        let log = Command::new("git")
+            .args(["log", "-1", "--pretty=%B"])
+            .current_dir(&tmp)
+            .output()
+            .unwrap();
+
+        let result = String::from_utf8_lossy(&log.stdout);
+
+        assert!(
+            result.contains("body line 1") && result.contains("body line 2"),
+            "multiline body was NOT preserved:\n{}",
+            result
+        );
+
+        // restore cwd so other tests don't break
+        std::env::set_current_dir(original_dir).unwrap();
+    }
+}

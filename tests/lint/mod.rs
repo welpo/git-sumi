@@ -1,5 +1,6 @@
 mod test_combined_rules;
 mod test_commit_changes;
+mod test_commit_range;
 mod test_config;
 mod test_conventional_commits;
 mod test_display;

@@ -31,7 +31,7 @@ clap = { version = "4.5.4", features = ["derive", "env"] }
 clap_complete = "4.5.2"
 dirs = "6.0.0"
 env_logger = "0.11.3"
-git-conventional = "0.12.6"
+git-conventional = "1.0.0"
 log = "0.4.21"
 prettytable-rs = "0.10"
 regex = "1.10.4"

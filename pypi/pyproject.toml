@@ -5,6 +5,7 @@ build-backend = "maturin"
 [project]
 name = "git-sumi"
 description = "The non-opinionated Rust-powered commit message linter"
+dynamic = ["readme"]
 requires-python = ">=3.7"
 keywords = ["git", "commit", "lint", "linter", "rust", "conventional commits"]
 classifiers = [

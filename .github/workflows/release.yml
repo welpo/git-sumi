@@ -303,6 +303,9 @@ jobs:
     # "host" however must run to completion, no skipping allowed!
     if: ${{ always() && needs.host.result == 'success' }}
     runs-on: "ubuntu-22.04"
+    permissions:
+      id-token: write # Required for trusted publishing to PyPI
+      contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -328,14 +331,11 @@ jobs:
         with:
           pattern: wheels-*
           merge-multiple: true
-          path: pypi/wheels
-      - name: Publish to PyPi
-        uses: PyO3/maturin-action@v1
-        env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.MATURIN_PYPI_TOKEN }}
+          path: dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          command: upload
-          args: --skip-existing pypi/wheels/*
+          skip-existing: true
 
       # Update git-sumi-action.
       - name: Configure GPG key

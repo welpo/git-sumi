@@ -4,11 +4,37 @@ Welcome to the changelog for git-sumi. This document aims to provide a comprehen
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [0.3.0](https://github.com/welpo/git-sumi/compare/v0.2.0..v0.3.0) - 2026-02-14
+
+### ✨ Features
+
+- Validate commit ranges ([#382](https://github.com/welpo/git-sumi/issues/382)) by [@welpo](https://github.com/welpo)
+
+### 🐛 Bug fixes
+
+- *(pre-commit)* Fix pre-commit hook ([#352](https://github.com/welpo/git-sumi/issues/352)) by [@npetzall](https://github.com/npetzall) and [@welpo](https://github.com/welpo)
+- Correctly handle verbose git commits ([#372](https://github.com/welpo/git-sumi/issues/372)) by [@marovira](https://github.com/marovira) and [@welpo](https://github.com/welpo)
+
+### 📝 Documentation
+
+- Add mise installation instructions ([9db5fa0](https://github.com/welpo/git-sumi/commit/9db5fa064a4ad4f56faecee93067f2be127b542f)) by [@welpo](https://github.com/welpo)
+
+### 🔧 Miscellaneous tasks
+
+- *(renovate)* Update config ([21e2415](https://github.com/welpo/git-sumi/commit/21e2415e17c389429b952dbe8ffb2cce1a56f977)) by [@welpo](https://github.com/welpo)
+- Fix renovate link ([d7215f0](https://github.com/welpo/git-sumi/commit/d7215f0d7f5b0464f2028a8f01c728c64c3667e5)) by [@welpo](https://github.com/welpo)
+
+### 👥 New contributors
+
+🫶 [@marovira](https://github.com/marovira) made their first contribution in [#372](https://github.com/welpo/git-sumi/pull/372)
+
+🫶 [@npetzall](https://github.com/npetzall) made their first contribution in [#352](https://github.com/welpo/git-sumi/pull/352)
+
 ## [0.2.0](https://github.com/welpo/git-sumi/compare/v0.1.0..v0.2.0) - 2025-08-30
 
 ### ✨ Features
 
-- Add option to remove header pattern before validation ([#305](ettps://github.com/welpo/git-sumi/issues/305)) by [@welpo](https://github.com/welpo)
+- Add option to remove header pattern before validation ([#305](https://github.com/welpo/git-sumi/issues/305)) by [@welpo](https://github.com/welpo)
 
 ### 🔧 Miscellaneous tasks
 

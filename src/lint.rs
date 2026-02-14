@@ -14,19 +14,59 @@ use log::{error, info};
 use regex::Regex;
 use std::sync::LazyLock;
 
+pub fn run_lint_on_commit_range(
+    commits: Vec<(String, String)>,
+    config: &Config,
+) -> Result<Vec<ParsedCommit>, SumiError> {
+    let total_commits = commits.len();
+    let mut parsed_commits = Vec::new();
+    let mut errors = Vec::new();
+
+    for (sha, message) in &commits {
+        let short_sha = &sha[..7.min(sha.len())];
+        let prefix = format!("[{short_sha}] ");
+        let result = if config.split_lines {
+            run_lint_on_each_line(message, config, Some(&prefix))
+        } else {
+            run_lint(message, config, Some(&prefix)).map(|pc| vec![pc])
+        };
+        match result {
+            Ok(pcs) => parsed_commits.extend(pcs),
+            Err(err) => {
+                error!("{prefix}{err}");
+                errors.push(err);
+            }
+        }
+    }
+
+    if errors.is_empty() {
+        Ok(parsed_commits)
+    } else {
+        let commits_with_errors = errors.len();
+        let commit_plural = pluralize(total_commits, "commit", "commits");
+        Err(SumiError::CommitRangeErrors {
+            commits_with_errors,
+            total_commits,
+            commit_or_commits: commit_plural.to_string(),
+        })
+    }
+}
+
 pub fn run_lint_on_each_line(
     commit_message: &str,
     config: &Config,
+    log_prefix: Option<&str>,
 ) -> Result<Vec<ParsedCommit>, SumiError> {
     let non_empty_lines = commit_message.lines().filter(|line| !line.is_empty());
+    let prefix = log_prefix.unwrap_or("");
     let mut parsed_commits = Vec::new();
     let mut errors = Vec::new();
 
     for line in non_empty_lines.clone() {
-        match run_lint(line, config) {
+        match run_lint(line, config, log_prefix) {
             Ok(parsed_commit) => parsed_commits.push(parsed_commit),
             Err(error) => {
-                error!("{error}");
+                error!("{prefix}{error}");
                 errors.push(error);
             }
         }
@@ -36,10 +76,11 @@ pub fn run_lint_on_each_line(
         Ok(parsed_commits)
     } else {
         let lines_with_errors = errors.len();
-        let line_plural_suffix = pluralize(lines_with_errors, "line", "lines");
+        let total_lines = non_empty_lines.count();
+        let line_plural_suffix = pluralize(total_lines, "line", "lines");
         Err(SumiError::SplitLinesErrors {
             lines_with_errors,
-            total_lines: non_empty_lines.count(),
+            total_lines,
             line_or_lines: line_plural_suffix.to_string(),
         })
     }
@@ -47,18 +88,24 @@ pub fn run_lint_on_each_line(
 
 /// Lints and parses the given commit message.
 /// Returns a `ParsedCommit` struct if the commit is valid, or an error message if it is not.
-pub fn run_lint(raw_commit: &str, config: &Config) -> Result<ParsedCommit, SumiError> {
+/// An optional `log_prefix` is prepended to all log output (e.g. "[sha] ").
+pub fn run_lint(
+    raw_commit: &str,
+    config: &Config,
+    log_prefix: Option<&str>,
+) -> Result<ParsedCommit, SumiError> {
+    let prefix = log_prefix.unwrap_or("");
     let commit = preprocess_commit_message(raw_commit);
-    info!("💬 Input: \"{commit}\"");
+    info!("{prefix}💬 Input: \"{commit}\"");
     let mut non_fatal_errors: Vec<SumiError> = Vec::new();
     let parsed_commit = handle_parsing(&commit, config, &mut non_fatal_errors)?;
     let errors = validate_commit(&commit, &parsed_commit, config);
     non_fatal_errors.extend(errors);
     if non_fatal_errors.is_empty() {
-        handle_success(&parsed_commit, config)?;
+        handle_success(&parsed_commit, config, prefix)?;
         return Ok(parsed_commit);
     }
-    handle_failure(&non_fatal_errors)
+    handle_failure(&non_fatal_errors, prefix)
 }
 
 fn preprocess_commit_message(commit: &str) -> String {
@@ -391,7 +438,11 @@ fn split_and_trim_list(list: &[String]) -> Vec<String> {
         .collect()
 }
 
-fn handle_success(parsed_commit: &ParsedCommit, config: &Config) -> Result<(), SumiError> {
+fn handle_success(
+    parsed_commit: &ParsedCommit,
+    config: &Config,
+    log_prefix: &str,
+) -> Result<(), SumiError> {
     if config.display {
         display_parsed_commit(parsed_commit, &config.format)?;
     }
@@ -399,7 +450,7 @@ fn handle_success(parsed_commit: &ParsedCommit, config: &Config) -> Result<(), S
         let active_rule_count = count_active_rules(config);
         if !config.quiet && active_rule_count > 0 {
             info!(
-                "✅ All {} {} passed.",
+                "{log_prefix}✅ All {} {} passed.",
                 active_rule_count,
                 pluralize(active_rule_count, "check", "checks")
             );
@@ -408,8 +459,8 @@ fn handle_success(parsed_commit: &ParsedCommit, config: &Config) -> Result<(), S
     Ok(())
 }
 
-fn handle_failure(errors: &[SumiError]) -> Result<ParsedCommit, SumiError> {
-    display_errors(errors);
+fn handle_failure(errors: &[SumiError], log_prefix: &str) -> Result<ParsedCommit, SumiError> {
+    display_errors(errors, log_prefix);
     Err(SumiError::GeneralError {
         details: format!(
             "Found {} linting {}",
@@ -419,8 +470,8 @@ fn handle_failure(errors: &[SumiError]) -> Result<ParsedCommit, SumiError> {
     })
 }
 
-fn display_errors(errors: &[SumiError]) {
+fn display_errors(errors: &[SumiError], log_prefix: &str) {
     for err in errors.iter() {
-        eprintln!("️❗ {err}");
+        eprintln!("{log_prefix}️❗ {err}");
     }
 }

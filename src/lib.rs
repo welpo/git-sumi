@@ -6,6 +6,7 @@ extern crate toml;
 mod args;
 mod config;
 mod errors;
+mod git;
 pub mod lint;
 mod parser;
 
@@ -16,7 +17,8 @@ use config::{
     assemble_config, count_active_rules, generate_commit_msg_hook_content, init_config, Config,
 };
 use env_logger::Builder;
-use lint::{run_lint, run_lint_on_each_line};
+use git::{execute_git_commit, remove_verbose_output};
+use lint::{run_lint, run_lint_on_commit_range, run_lint_on_each_line};
 use log::{error, info, LevelFilter};
 use parser::ParsedCommit;
 use std::io::{self, Read, Write};
@@ -47,12 +49,23 @@ pub fn run() -> Result<(), SumiError> {
         return Err(SumiError::NoRulesEnabled);
     }
 
+    // Commit range mode.
+    if let (Some(from), Some(to)) = (&args.from, &args.to) {
+        let commits = git::get_commits_in_range(from, to)?;
+        if commits.is_empty() {
+            info!("No commits found in range {from}..{to}");
+            return Ok(());
+        }
+        let result = run_lint_on_commit_range(commits, &config);
+        return result.map(|_| ());
+    }
+
     let commit_message = get_commit_from_arg_or_stdin(args.commit_message, args.commit_file)?;
 
     let lint_result = if config.split_lines {
-        run_lint_on_each_line(&commit_message, &config)
+        run_lint_on_each_line(&commit_message, &config, None)
     } else {
-        run_lint(&commit_message, &config).map(|pc| vec![pc])
+        run_lint(&commit_message, &config, None).map(|pc| vec![pc])
     };
 
     if args.commit {
@@ -112,44 +125,6 @@ fn get_commit_from_stdin() -> Result<String, SumiError> {
     Ok(buffer.trim().to_string())
 }
 
-fn remove_verbose_output(commit_message: &str) -> Result<String, SumiError> {
-    let commentchar = get_git_commentchar()?;
-    let cutline = format!(
-        "{} ------------------------ >8 ------------------------",
-        commentchar
-    );
-
-    match commit_message.lines().position(|line| line == cutline) {
-        Some(i) => {
-            let truncated: Vec<&str> = commit_message.lines().take(i).collect();
-            Ok(truncated.join("\n"))
-        }
-        None => Ok(commit_message.to_string()),
-    }
-}
-
-fn get_git_commentchar() -> Result<String, SumiError> {
-    let output = std::process::Command::new("git")
-        .arg("config")
-        .arg("--get")
-        .arg("core.commentchar")
-        .output()?;
-
-    if output.status.success() {
-        Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
-    } else {
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        if stderr.is_empty() {
-            // commentchar isn't set, so fallback to #
-            Ok("#".to_string())
-        } else {
-            Err(SumiError::GeneralError {
-                details: format!("Failed to get git comment character: {}", stderr.trim()),
-            })
-        }
-    }
-}
-
 fn handle_commit_based_on_lint(
     lint_result: Result<Vec<ParsedCommit>, SumiError>,
     commit_message: &str,
@@ -180,12 +155,6 @@ fn commit_with_message(commit_message: &str) -> Result<(), SumiError> {
     } else {
         Err(construct_commit_error(commit_result))
     }
-}
-
-fn execute_git_commit(commit_message: &str) -> Result<std::process::Output, std::io::Error> {
-    std::process::Command::new("git")
-        .args(["commit", "-m", commit_message])
-        .output()
 }
 
 fn construct_commit_error(commit_output: std::process::Output) -> SumiError {

@@ -15,6 +15,13 @@ pub enum SumiError {
         line_or_lines: String,
     },
 
+    #[error("{commits_with_errors} out of {total_commits} {commit_or_commits} failed linting. See the errors above")]
+    CommitRangeErrors {
+        commits_with_errors: usize,
+        total_commits: usize,
+        commit_or_commits: String,
+    },
+
     #[error("Failed to parse as a conventional commit: '{reason}'")]
     FailedConventionalParse { reason: String },
 

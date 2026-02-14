@@ -89,6 +89,28 @@ pub struct Opt {
     )]
     pub format: Option<ParsedCommitDisplayFormat>,
 
+    /// Lint all commits in a revision range (from..to).
+    #[arg(
+        long,
+        value_name = "REV",
+        requires = "to",
+        conflicts_with_all = ["commit_message", "commit_file", "commit", "force"],
+        value_parser = non_empty_string,
+        help = "Start of the revision range (exclusive)"
+    )]
+    pub from: Option<String>,
+
+    /// End of the revision range.
+    #[arg(
+        long,
+        value_name = "REV",
+        requires = "from",
+        conflicts_with_all = ["commit_message", "commit_file", "commit", "force"],
+        value_parser = non_empty_string,
+        help = "End of the revision range (inclusive)"
+    )]
+    pub to: Option<String>,
+
     /// Commit the message after successful linting.
     #[arg(short = 'c', long, help=config_descriptions::COMMIT)]
     pub commit: bool,
@@ -236,4 +258,12 @@ pub struct Opt {
         help = config_descriptions::STRIP_HEADER_PATTERN.short
     )]
     pub strip_header_pattern: Option<bool>,
+}
+
+fn non_empty_string(s: &str) -> Result<String, String> {
+    if s.trim().is_empty() {
+        Err("value must not be empty".to_string())
+    } else {
+        Ok(s.to_string())
+    }
 }

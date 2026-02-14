@@ -40,7 +40,37 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
         Sets display format: cli, json, table, toml [env: GIT_SUMI_FORMAT=]
     --file <FILE>
         Read commit message from file
+    --from <REV>
+        Start of the revision range, exclusive (use with --to)
+    --to <REV>
+        End of the revision range, inclusive (use with --from)
 ```
+
+#### Linting a commit range
+
+Use `--from` and `--to` to lint all commits in a Git revision range:
+
+```bash
+# Lint the last 5 commits
+git-sumi --from HEAD~5 --to HEAD
+
+# Lint commits between a tag and HEAD
+git-sumi --from v1.0.0 --to HEAD
+
+# Lint all commits on a feature branch (since it diverged from main)
+git-sumi --from main --to HEAD
+```
+
+Each commit is linted individually. Failures show the short SHA and specific errors, with a summary at the end:
+
+```plaintext
+[9d04cad] ️❗ Failed to parse as a conventional commit: 'Missing type in the commit summary, expected `type: description`'
+❌ Error: [9d04cad] Found 1 linting error
+[f4af66c] ✅ All 1 check passed.
+❌ Error: 1 out of 2 commits failed linting. See the errors above
+```
+
+`--from` and `--to` cannot be combined with a positional commit message or `--file`.
 
 ### Rules
 

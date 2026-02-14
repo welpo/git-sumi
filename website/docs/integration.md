@@ -74,6 +74,51 @@ The Bash hook (in `.git/hooks/prepare-commit-msg`) will prepend the enabled rule
 # with '#' will be ignored, and an empty message aborts the commit.
 ```
 
+## Linting a commit range
+
+Use `--from` and `--to` to lint all commits on a feature branch in CI or a pre-push hook. For example, to validate every commit since the branch diverged from `main`:
+
+```bash
+git-sumi --from main --to HEAD
+```
+
+This is equivalent to running git-**sumi** on each commit in `git log main..HEAD`.
+
+### CI example
+
+Use the [git-**sumi** action](https://github.com/welpo/git-sumi-action) to lint all commits in a pull request:
+
+```yaml title=".github/workflows/lint-commits.yml"
+name: Lint commits
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - ready_for_review
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: welpo/git-sumi-action@main
+        with:
+          mode: commits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+By default, this lints all commits between `origin/<PR base branch>` and `HEAD`. You can override the range with the `from` and `to` inputs. See the [action documentation](https://github.com/welpo/git-sumi-action) for details.
+
 ## Linting pull request titles
 
 If you're creating [squash-and-merge pull requests](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests), you can use git-**sumi** to lint the pull request title, which will be used as the merge commit message.

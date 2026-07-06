@@ -123,9 +123,7 @@ fn validate_commit(
     config: &Config,
 ) -> Vec<SumiError> {
     let mut errors = validate_whitespace_and_length(commit.to_string(), config);
-    if let Some(validation_errors) = validate_parsed_commit(parsed_commit, config) {
-        errors.extend(validation_errors);
-    }
+    errors.extend(validate_parsed_commit(parsed_commit, config));
     errors
 }
 
@@ -246,7 +244,7 @@ static WHITESPACE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(^\s+|\s+$|\s{2,})").unwrap()
 });
 
-fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Option<Vec<SumiError>> {
+fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Vec<SumiError> {
     let mut errors: Vec<SumiError> = Vec::new();
     let validation_description = if should_strip_header_pattern(config) {
         strip_header_pattern_from_line(&parsed_commit.description, &config.header_pattern)
@@ -288,11 +286,9 @@ fn validate_parsed_commit(parsed_commit: &ParsedCommit, config: &Config) -> Opti
         }
     }
 
-    Some(errors)
+    errors
 }
 
-/// Validates that the commit title contains exactly one gitmoji.
-/// Returns the gitmoji if it is valid, or an error message if it is not.
 /// Validates that the commit title contains exactly one gitmoji.
 /// Returns the normalised gitmoji if it is valid, or an error message if it is not.
 fn validate_gitmoji(emojis: &Option<Vec<String>>) -> Result<(), SumiError> {
@@ -451,7 +447,7 @@ fn handle_success(
     }
     if !config.quiet {
         let active_rule_count = count_active_rules(config);
-        if !config.quiet && active_rule_count > 0 {
+        if active_rule_count > 0 {
             info!(
                 "{log_prefix}✅ All {} {} passed.",
                 active_rule_count,

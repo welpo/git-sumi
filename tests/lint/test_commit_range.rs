@@ -59,6 +59,78 @@ fn create_commit(repo_dir: &Path, file_name: &str, message: &str) {
         .success();
 }
 
+fn create_commit_with_empty_message(repo_dir: &Path, file_name: &str) {
+    let file_path = repo_dir.join(file_name);
+    let mut file = File::create(file_path).expect("Failed to create a file");
+    writeln!(file, "content for {file_name}").expect("Failed to write to a file");
+    drop(file);
+
+    Command::new("git")
+        .args(["add", file_name])
+        .current_dir(repo_dir)
+        .assert()
+        .success();
+
+    Command::new("git")
+        .args(["commit", "--allow-empty-message", "-m", ""])
+        .current_dir(repo_dir)
+        .assert()
+        .success();
+}
+
+/// A commit with an empty message must fail linting, not be silently skipped.
+#[test]
+fn error_empty_commit_message_fails_linting() {
+    let tmp_dir = setup_git_repo();
+    let repo_dir = tmp_dir.path();
+
+    create_commit(repo_dir, "init.txt", "feat: init");
+    create_commit_with_empty_message(repo_dir, "a.txt");
+
+    let output = run_isolated_git_sumi("")
+        .current_dir(repo_dir)
+        .args(["--from", "HEAD~1", "--to", "HEAD", "-C"])
+        .output()
+        .unwrap();
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).unwrap();
+    assert!(
+        stderr.contains("1 out of 1 commit failed linting"),
+        "Expected the empty-message commit to fail linting, got stderr: {stderr}"
+    );
+}
+
+/// An empty commit message must not break record parsing:
+/// the commits that follow it must still be linted and counted.
+#[test]
+fn error_commits_after_empty_message_are_still_linted() {
+    let tmp_dir = setup_git_repo();
+    let repo_dir = tmp_dir.path();
+
+    create_commit(repo_dir, "init.txt", "feat: init");
+    create_commit_with_empty_message(repo_dir, "a.txt");
+    create_commit(repo_dir, "b.txt", "feat: add valid commit");
+    create_commit(repo_dir, "c.txt", "not conventional");
+
+    let output = run_isolated_git_sumi("")
+        .current_dir(repo_dir)
+        .args(["--from", "HEAD~3", "--to", "HEAD", "-C"])
+        .output()
+        .unwrap();
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8(output.stderr).unwrap();
+    assert!(
+        stderr.contains("Failed to parse as a conventional commit"),
+        "Expected the bad commit after the empty-message one to be linted, got stderr: {stderr}"
+    );
+    assert!(
+        stderr.contains("2 out of 3 commits failed linting"),
+        "Expected empty-message and non-conventional commits to fail, got stderr: {stderr}"
+    );
+}
+
 #[test]
 fn success_lint_range_all_valid() {
     let tmp_dir = setup_git_repo();

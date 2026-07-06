@@ -48,7 +48,7 @@ pub fn execute_git_commit(commit_message: &str) -> Result<std::process::Output, 
 pub fn get_commits_in_range(from: &str, to: &str) -> Result<Vec<(String, String)>, SumiError> {
     let range = format!("{from}..{to}");
     let output = std::process::Command::new("git")
-        .args(["log", "--reverse", "--format=%H%x00%B%x00%x00", &range])
+        .args(["log", "--reverse", "-z", "--format=%H%n%B", &range])
         .output()?;
 
     if !output.status.success() {
@@ -62,23 +62,15 @@ pub fn get_commits_in_range(from: &str, to: &str) -> Result<Vec<(String, String)
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    if stdout.trim().is_empty() {
-        return Ok(vec![]);
-    }
-
     let mut commits = Vec::new();
-    for chunk in stdout.split("\0\0") {
-        let chunk = chunk.trim();
-        if chunk.is_empty() {
+    // With `-z`, each record is "<sha>\n<message>", NUL-terminated.
+    // Empty messages are kept so they fail linting instead of being skipped.
+    for record in stdout.split('\0') {
+        if record.is_empty() {
             continue;
         }
-        if let Some((sha, message)) = chunk.split_once('\0') {
-            let sha = sha.trim().to_string();
-            let message = message.trim().to_string();
-            if !sha.is_empty() && !message.is_empty() {
-                commits.push((sha, message));
-            }
-        }
+        let (sha, message) = record.split_once('\n').unwrap_or((record, ""));
+        commits.push((sha.to_string(), message.trim().to_string()));
     }
 
     Ok(commits)

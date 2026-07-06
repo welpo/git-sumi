@@ -334,7 +334,7 @@ fn validate_lowercase(description: &str) -> Result<(), SumiError> {
     let first_char = description.chars().next();
     match first_char {
         Some(c) if c.is_uppercase() => {
-            let corrected_description = c.to_lowercase().to_string() + &description[1..];
+            let corrected_description = c.to_lowercase().to_string() + &description[c.len_utf8()..];
             Err(SumiError::DescriptionNotLowercase {
                 lowercase_header: corrected_description,
             })
@@ -345,14 +345,17 @@ fn validate_lowercase(description: &str) -> Result<(), SumiError> {
 }
 
 fn validate_upper_case(description: &str) -> Result<(), SumiError> {
-    let first_char = description.chars().next().unwrap();
-    if is_lowercase_letter(first_char) {
-        let capitalized_title = capitalize_title(first_char, &description[1..]);
-        return Err(SumiError::DescriptionNotTitleCase {
-            capitalized_description: capitalized_title,
-        });
+    let first_char = description.chars().next();
+    match first_char {
+        Some(c) if is_lowercase_letter(c) => {
+            let capitalized_title = capitalize_title(c, &description[c.len_utf8()..]);
+            Err(SumiError::DescriptionNotTitleCase {
+                capitalized_description: capitalized_title,
+            })
+        }
+        Some(_) => Ok(()),
+        None => Err(SumiError::EmptyCommitHeader),
     }
-    Ok(())
 }
 
 // This is a best-effort heuristic, and will not catch all non-imperative messages.

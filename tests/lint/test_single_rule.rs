@@ -27,6 +27,43 @@ fn error_capital_letter_non_conventional() {
 }
 
 #[test]
+fn error_lowercase_with_multibyte_first_char() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-E")
+        .arg("lower")
+        .arg("Árbol de decisión")
+        .assert()
+        .failure()
+        .stderr(contains(
+            "Description must start in lowercase. Try 'árbol de decisión'",
+        ));
+}
+
+#[test]
+fn error_uppercase_with_multibyte_first_char() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-E")
+        .arg("upper")
+        .arg("árbol de decisión")
+        .assert()
+        .failure()
+        .stderr(contains(
+            "Description must start with a capital letter. Try 'Árbol de decisión'",
+        ));
+}
+
+#[test]
+fn error_uppercase_with_empty_description() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-E")
+        .arg("upper")
+        .arg("\nfoo")
+        .assert()
+        .failure()
+        .stderr(contains("Header must not be empty"));
+}
+
+#[test]
 fn error_invalid_description_case() {
     let mut cmd = run_isolated_git_sumi("");
     cmd.arg("-E")

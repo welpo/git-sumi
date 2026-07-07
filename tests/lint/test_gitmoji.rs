@@ -117,6 +117,41 @@ fn error_invalid_emoji_string_2() {
 }
 
 #[test]
+fn success_mid_header_emoji_removal_keeps_words_separated() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-G")
+        .arg("-d")
+        .arg("-f")
+        .arg("json")
+        .arg("fix 🐛 the bug")
+        .assert()
+        .success()
+        .stdout(contains(r#""description": "fix the bug""#));
+}
+
+#[test]
+fn error_non_imperative_verb_before_mid_header_emoji() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-G")
+        .arg("-I")
+        .arg("fixed 🐛 the bug")
+        .assert()
+        .failure()
+        .stderr(contains("non-imperative verb: 'fixed'"));
+}
+
+#[test]
+fn success_trailing_header_emoji_keeps_body_separation() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-G")
+        .arg("-C")
+        .arg("fix: squash the bug 🐛\n\nExplanatory body.")
+        .assert()
+        .success()
+        .stdout(contains("All 2 checks passed"));
+}
+
+#[test]
 fn success_emoji_without_gitmoji_whitespace() {
     let mut cmd = run_isolated_git_sumi("");
     cmd.arg("-dW")

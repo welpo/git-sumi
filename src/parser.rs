@@ -134,8 +134,18 @@ fn remove_gitmoji(commit: &str, gitmojis: &[String]) -> String {
     let mut commit_sans_gitmoji = String::from(commit);
     for gitmoji in gitmojis {
         let full_gitmoji = format!("{}\\u{{fe0f}}?", regex::escape(gitmoji));
-        let re = Regex::new(&format!(r"\s?{full_gitmoji}\s?")).unwrap();
-        commit_sans_gitmoji = re.replace(&commit_sans_gitmoji, "").to_string();
+        // Only match spaces/tabs (not newlines) so the header-body separation is preserved.
+        let re = Regex::new(&format!(r"([ \t])?{full_gitmoji}([ \t])?")).unwrap();
+        commit_sans_gitmoji = re
+            .replace(&commit_sans_gitmoji, |caps: &regex::Captures| {
+                // Keep a single space if the emoji sat between two words.
+                if caps.get(1).is_some() && caps.get(2).is_some() {
+                    " "
+                } else {
+                    ""
+                }
+            })
+            .to_string();
     }
     commit_sans_gitmoji.trim().to_string()
 }

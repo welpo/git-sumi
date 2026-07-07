@@ -1,8 +1,3 @@
-extern crate git_conventional;
-extern crate prettytable;
-extern crate serde;
-extern crate toml;
-
 mod args;
 mod config;
 mod errors;

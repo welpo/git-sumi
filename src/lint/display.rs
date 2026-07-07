@@ -3,8 +3,8 @@ use crate::config::ParsedCommitDisplayFormat;
 use crate::parser::ParsedCommit;
 use serde_json::Value;
 use tabled::{
+    builder::Builder,
     settings::{object::Rows, Remove, Style},
-    Table, Tabled,
 };
 
 pub fn display_parsed_commit(
@@ -46,18 +46,10 @@ fn display_parsed_commit_as_json(commit: &ParsedCommit) -> Result<(), SumiError>
     Ok(())
 }
 
-#[derive(Tabled)]
-#[tabled(rename_all = "PascalCase")]
-struct CommitRow {
-    key: &'static str,
-    value: String,
-}
-
 fn display_parsed_commit_as_table(
     commit: &ParsedCommit,
     format: ParsedCommitDisplayFormat,
 ) -> Result<(), SumiError> {
-    let mut rows = Vec::new();
     let fields = [
         ("Gitmoji", commit.gitmoji.as_ref().map(|g| g.join(", "))),
         ("Commit type", commit.commit_type.clone()),
@@ -77,16 +69,15 @@ fn display_parsed_commit_as_table(
         ),
     ];
 
+    let mut builder = Builder::default();
+    builder.push_record(["Key", "Value"]);
     for (key, value) in fields.iter() {
         if let Some(val) = value {
-            rows.push(CommitRow {
-                key,
-                value: val.clone(),
-            });
+            builder.push_record([*key, val.as_str()]);
         }
     }
 
-    let mut table = Table::new(rows);
+    let mut table = builder.build();
     match format {
         ParsedCommitDisplayFormat::Cli => {
             // Cute table for terminal; no header.

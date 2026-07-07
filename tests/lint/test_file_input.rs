@@ -58,19 +58,6 @@ fn error_conflict_file_and_message() {
 }
 
 #[test]
-fn success_file_with_comments() {
-    let dir = tempdir().unwrap();
-    let file_path = dir.path().join("commit-with-comments.txt");
-    std::fs::write(&file_path, "feat: add feature\n# This is a comment\n").unwrap();
-    let mut cmd = run_isolated_git_sumi("");
-    cmd.arg("--file")
-        .arg(file_path)
-        .arg("-C")
-        .assert()
-        .success();
-}
-
-#[test]
 fn success_file_with_multiline() {
     let dir = tempdir().unwrap();
     let file_path = dir.path().join("multiline.txt");

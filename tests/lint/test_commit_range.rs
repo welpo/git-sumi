@@ -3,54 +3,12 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
+use super::{create_and_stage_file, setup_git_repo};
 use assert_cmd::Command;
-use std::fs::File;
-use std::io::Write;
 use std::path::Path;
-use tempfile::TempDir;
-
-fn setup_git_repo() -> TempDir {
-    let tmp_dir = TempDir::new().expect("Failed to create a temporary directory");
-    let repo_dir = tmp_dir.path();
-
-    Command::new("git")
-        .args(["init"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    Command::new("git")
-        .args(["config", "commit.gpgsign", "false"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    Command::new("git")
-        .args(["config", "user.name", "Test User"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    Command::new("git")
-        .args(["config", "user.email", "test@example.com"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    tmp_dir
-}
 
 fn create_commit(repo_dir: &Path, file_name: &str, message: &str) {
-    let file_path = repo_dir.join(file_name);
-    let mut file = File::create(file_path).expect("Failed to create a file");
-    writeln!(file, "content for {file_name}").expect("Failed to write to a file");
-    drop(file);
-
-    Command::new("git")
-        .args(["add", file_name])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
+    create_and_stage_file(repo_dir, file_name, &format!("content for {file_name}"));
 
     Command::new("git")
         .args(["commit", "-m", message])
@@ -60,16 +18,7 @@ fn create_commit(repo_dir: &Path, file_name: &str, message: &str) {
 }
 
 fn create_commit_with_empty_message(repo_dir: &Path, file_name: &str) {
-    let file_path = repo_dir.join(file_name);
-    let mut file = File::create(file_path).expect("Failed to create a file");
-    writeln!(file, "content for {file_name}").expect("Failed to write to a file");
-    drop(file);
-
-    Command::new("git")
-        .args(["add", file_name])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
+    create_and_stage_file(repo_dir, file_name, &format!("content for {file_name}"));
 
     Command::new("git")
         .args(["commit", "--allow-empty-message", "-m", ""])

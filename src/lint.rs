@@ -109,10 +109,12 @@ pub fn run_lint(
 }
 
 fn preprocess_commit_message(commit: &str) -> String {
-    // Remove comments.
+    // Remove comments the way git does: only lines starting with the
+    // configured comment character at column 0.
+    let commentchar = crate::git::commentchar();
     commit
         .lines()
-        .filter(|line| !line.trim_start().starts_with('#'))
+        .filter(|line| !line.starts_with(commentchar))
         .collect::<Vec<&str>>()
         .join("\n")
 }

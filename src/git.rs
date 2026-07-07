@@ -1,4 +1,17 @@
 use crate::errors::SumiError;
+use std::sync::OnceLock;
+
+static COMMENT_CHAR: OnceLock<String> = OnceLock::new();
+
+/// Comment character used to strip comment lines before linting.
+/// Cached for the process lifetime. Falls back to "#" when git is
+/// unavailable or `core.commentChar` is unset, empty, or "auto".
+pub fn commentchar() -> &'static str {
+    COMMENT_CHAR.get_or_init(|| match get_git_commentchar() {
+        Ok(c) if !c.is_empty() && c != "auto" => c,
+        _ => "#".to_string(),
+    })
+}
 
 pub fn get_git_commentchar() -> Result<String, SumiError> {
     let output = std::process::Command::new("git")

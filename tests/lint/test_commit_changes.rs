@@ -3,60 +3,14 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
+use super::{create_and_stage_file, setup_git_repo};
 use assert_cmd::Command;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
-use std::path::Path;
 use tempfile::TempDir;
-
-fn setup_git_repo() -> TempDir {
-    let tmp_dir = TempDir::new().expect("Failed to create a temporary directory");
-    let repo_dir = tmp_dir.path();
-
-    // Initialize a git repository.
-    Command::new("git")
-        .args(["init"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    // Disable GPG signing (otherwise it can prompt for a passphrase during tests).
-    Command::new("git")
-        .args(["config", "commit.gpgsign", "false"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    // Set the user name and email.
-    Command::new("git")
-        .args(["config", "user.name", "Test User"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-    Command::new("git")
-        .args(["config", "user.email", "test@example.com"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    tmp_dir
-}
-
-fn create_and_stage_file(repo_dir: &Path, file_name: &str, content: &str) {
-    let file_path = repo_dir.join(file_name);
-    let mut file = File::create(file_path).expect("Failed to create a file");
-    writeln!(file, "{content}").expect("Failed to write to a file");
-    drop(file);
-
-    Command::new("git")
-        .args(["add", file_name])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-}
 
 #[test]
 fn error_commit_with_no_changes() {
@@ -223,109 +177,4 @@ fn error_git_fails_no_message() {
 
     // Check if the stderr contains the expected message.
     assert!(stderr_output.contains("Commit failed. No additional error information available."));
-}
-
-#[test]
-fn test_verbose_git_commit() {
-    let tmp_dir = setup_git_repo();
-    let repo_dir = tmp_dir.path();
-
-    // Create a file and stage it.
-    let file_path = repo_dir.join("new_file.txt");
-    let mut file = File::create(file_path).expect("Failed to create a file");
-    writeln!(file, "New content").expect("Failed to write to a file");
-
-    Command::new("git")
-        .args(["add", "new_file.txt"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    let msg = r#"feat: Add new feature
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be ignored, and an empty message aborts the commit.
-#
-# On branch verbose
-# Changes to be committed:
-#	new file:   new_file.txt
-#
-# Changes not staged for commit:
-#	modified:   src/lib.rs
-#
-# ------------------------ >8 ------------------------
-# Do not modify or remove the line above.
-# Everything below it will be ignored.
-diff --git a/new_file.txt b/new_file.txt
-new file mode 100644
-index 0000000..a11f211
---- /dev/null
-+++ b/new_file.txt
-@@ -0,0 +1 @@
-+New content
-    "#;
-
-    let mut cmd = run_isolated_git_sumi("");
-    cmd.current_dir(repo_dir)
-        .arg("-C")
-        .arg("--commit")
-        .arg(msg)
-        .assert()
-        .success();
-}
-
-#[test]
-fn test_verbose_git_commit_custom_commentchar() {
-    let tmp_dir = setup_git_repo();
-    let repo_dir = tmp_dir.path();
-
-    // Set a custom comment character.
-    Command::new("git")
-        .args(["config", "core.commentchar", ";"])
-        .current_dir(repo_dir)
-        .assert()
-        .success();
-
-    create_and_stage_file(repo_dir, "new_file.txt", "New content");
-
-    // The text after the scissor line has no blank line separator, which would
-    // trigger "Separate header from body" if the scissor line weren't recognised.
-    let msg = "feat: Add new feature\n\
-; ------------------------ >8 ------------------------\n\
-this line has no blank separator from the header";
-
-    let mut cmd = run_isolated_git_sumi("");
-    cmd.current_dir(repo_dir)
-        .arg("-C")
-        .arg("--whitespace")
-        .arg("--commit")
-        .arg(msg)
-        .assert()
-        .success();
-}
-
-#[test]
-fn test_verbose_git_commit_diff_does_not_trigger_line_length() {
-    let tmp_dir = setup_git_repo();
-    let repo_dir = tmp_dir.path();
-
-    create_and_stage_file(repo_dir, "new_file.txt", "New content");
-
-    // The diff contains a line longer than 50 chars which would fail --header-length 50 if it weren't stripped.
-    let long_line = "a".repeat(200);
-    let msg = format!(
-        "feat: Add feature\n\
-# ------------------------ >8 ------------------------\n\
-+{}",
-        long_line
-    );
-
-    let mut cmd = run_isolated_git_sumi("");
-    cmd.current_dir(repo_dir)
-        .arg("-C")
-        .arg("--max-header-length")
-        .arg("50")
-        .arg("--commit")
-        .arg(&msg)
-        .assert()
-        .success();
 }

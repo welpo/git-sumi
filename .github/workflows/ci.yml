@@ -87,10 +87,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Check the links
+      - name: Check the links (root files)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: -v --max-concurrency 1 --exclude 'git-sumi/commit/' *.md website/docs/**/*.md
+          args: -v --max-concurrency 1 --exclude 'git-sumi/commit/' --root-dir "${{ github.workspace }}" *.md
+          fail: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check the links (website docs)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: -v --max-concurrency 1 --exclude 'git-sumi/commit/' --root-dir "${{ github.workspace }}/website" --fallback-extensions md website/docs/**/*.md
           fail: true
           token: ${{ secrets.GITHUB_TOKEN }}
 

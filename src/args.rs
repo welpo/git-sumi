@@ -20,6 +20,8 @@ pub struct Opt {
         num_args = 0..=1,
         required = false,
         default_missing_value = "config",
+        value_enum,
+        ignore_case = true,
         help = config_descriptions::INIT
     )]
     pub init: Option<InitOption>,
@@ -85,6 +87,8 @@ pub struct Opt {
     #[arg(short = 'f',
         long,
         env = "GIT_SUMI_FORMAT",
+        value_enum,
+        ignore_case = true,
         help = config_descriptions::FORMAT.short
     )]
     pub format: Option<ParsedCommitDisplayFormat>,
@@ -177,6 +181,8 @@ pub struct Opt {
         long,
         env = "GIT_SUMI_DESCRIPTION_CASE",
         value_name = "CASE",
+        value_enum,
+        ignore_case = true,
         help_heading = "Rules",
         help = config_descriptions::DESCRIPTION_CASE.short
     )]

@@ -71,7 +71,7 @@ fn error_invalid_description_case() {
         .arg("add gitignore")
         .assert()
         .failure()
-        .stderr(contains("Unknown case"));
+        .stderr(contains("possible values: any, lower, upper"));
 }
 
 #[test]
@@ -81,7 +81,7 @@ fn error_bad_output_format() {
         .arg("refactor(TheYellowArrow): Implement one-way journey")
         .assert()
         .failure()
-        .stderr(contains("Unknown format"));
+        .stderr(contains("possible values: cli, json, table, toml"));
 }
 
 #[test]

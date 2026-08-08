@@ -423,7 +423,9 @@ fn error_invalid_init_value() {
         .arg("everything")
         .assert()
         .failure()
-        .stderr(contains("Supported options: "));
+        .stderr(contains(
+            "possible values: commit-msg, config, hooks, prepare-commit-msg",
+        ));
 }
 
 #[test]

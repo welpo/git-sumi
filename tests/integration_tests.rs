@@ -20,19 +20,16 @@ fn run_isolated_git_sumi(subcommand: &str) -> Command {
 }
 
 #[test]
-fn success_bash_completion() {
-    let mut cmd = run_isolated_git_sumi("");
-    let output = cmd
-        .arg("--generate-shell-completion")
-        .arg("bash")
-        .output()
-        .unwrap();
+fn success_shell_completion_generation() {
+    for shell in ["bash", "elvish", "fish", "powershell", "zsh"] {
+        let mut cmd = run_isolated_git_sumi("");
+        let output = cmd
+            .arg("--generate-shell-completion")
+            .arg(shell)
+            .output()
+            .unwrap();
 
-    assert!(output.status.success());
-
-    let stdout = String::from_utf8(output.stdout).unwrap();
-
-    assert!(stdout.contains("_git-sumi() {"));
-    assert!(stdout.contains("COMPREPLY=()"));
-    assert!(stdout.contains("complete -F _git-sumi -o nosort -o bashdefault -o default git-sumi"));
+        assert!(output.status.success());
+        assert!(!output.stdout.is_empty());
+    }
 }

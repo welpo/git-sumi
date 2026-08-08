@@ -1,4 +1,5 @@
 use crate::lint::constants::config_descriptions::*;
+use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
@@ -7,9 +8,7 @@ use std::io::{self, BufReader, Read, Write};
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
-use std::str::FromStr;
-use strum::IntoEnumIterator;
-use strum_macros::{AsRefStr, EnumIter};
+use strum_macros::AsRefStr;
 
 use super::SumiError;
 use crate::args::Opt;
@@ -42,7 +41,7 @@ pub trait Configurable {
 }
 
 /// Display format for the parsed commit message.
-#[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, ValueEnum, Default)]
 #[serde(rename_all = "lowercase")]
 pub enum ParsedCommitDisplayFormat {
     #[default]
@@ -52,7 +51,7 @@ pub enum ParsedCommitDisplayFormat {
     Toml,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr, PartialEq, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, AsRefStr, ValueEnum, PartialEq, Default)]
 #[serde(rename_all = "lowercase")]
 #[strum(serialize_all = "lowercase")]
 pub enum DescriptionCase {
@@ -62,70 +61,13 @@ pub enum DescriptionCase {
     Upper,
 }
 
-impl FromStr for ParsedCommitDisplayFormat {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        ParsedCommitDisplayFormat::iter()
-            .find(|variant| s.eq_ignore_ascii_case(variant.as_ref()))
-            .ok_or_else(|| {
-                format!(
-                    "Unknown format '{}'. Supported formats: {}",
-                    s,
-                    ParsedCommitDisplayFormat::iter()
-                        .map(|v| v.as_ref().to_lowercase())
-                        .collect::<Vec<_>>()
-                        .join(", ")
-                )
-            })
-    }
-}
-
-impl FromStr for DescriptionCase {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        DescriptionCase::iter()
-            .find(|variant| s.eq_ignore_ascii_case(variant.as_ref()))
-            .ok_or_else(|| {
-                format!(
-                    "Unknown case '{}'. Supported cases: {}",
-                    s,
-                    DescriptionCase::iter()
-                        .map(|v| v.as_ref().to_lowercase())
-                        .collect::<Vec<_>>()
-                        .join(", ")
-                )
-            })
-    }
-}
-
 /// Options to initialise git-sumi config.
-#[derive(Debug, Clone, Serialize, Deserialize, EnumIter, AsRefStr)]
+#[derive(Debug, Clone, Serialize, Deserialize, ValueEnum)]
 pub enum InitOption {
-    #[strum(serialize = "commit-msg")]
     CommitMsg,
     Config,
     Hooks,
-    #[strum(serialize = "prepare-commit-msg")]
     PrepareCommitMsg,
-}
-
-impl FromStr for InitOption {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        InitOption::iter()
-            .find(|variant| s.eq_ignore_ascii_case(variant.as_ref()))
-            .ok_or_else(|| {
-                format!(
-                    "Unknown option '{}'. Supported options: {}",
-                    s,
-                    InitOption::iter()
-                        .map(|v| v.as_ref().to_lowercase())
-                        .collect::<Vec<_>>()
-                        .join(", ")
-                )
-            })
-    }
 }
 
 type IsModifiedFn<'a> = Box<dyn Fn(&Config, &Config) -> bool + 'a>;

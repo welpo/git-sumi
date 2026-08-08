@@ -1,7 +1,6 @@
 use super::errors::SumiError;
 use crate::config::ParsedCommitDisplayFormat;
 use crate::parser::ParsedCommit;
-use serde_json::Value;
 use tabled::{
     builder::Builder,
     settings::{object::Rows, Remove, Style},
@@ -25,22 +24,11 @@ pub fn display_parsed_commit(
 }
 
 fn display_parsed_commit_as_json(commit: &ParsedCommit) -> Result<(), SumiError> {
-    let mut commit_value =
-        serde_json::to_value(commit).map_err(|err| SumiError::SerializationError {
+    let serialized =
+        serde_json::to_string_pretty(commit).map_err(|err| SumiError::SerializationError {
             format: "JSON".to_string(),
             detail: err.to_string(),
         })?;
-
-    if let Value::Object(ref mut m) = commit_value {
-        m.retain(|_, v| !v.is_null());
-    }
-
-    let serialized = serde_json::to_string_pretty(&commit_value).map_err(|err| {
-        SumiError::SerializationError {
-            format: "JSON".to_string(),
-            detail: err.to_string(),
-        }
-    })?;
     println!("{serialized}");
 
     Ok(())

@@ -31,13 +31,13 @@ git-sumi [OPTIONS] [--] [COMMIT_MESSAGE]
 
 ```plaintext
     --init [<OPTION>]
-        Initialize the default configuration ('config'), commit-msg hook ('commit-msg'), prepare-commit-msg hook ('prepare-commit-msg') or both hooks ('hooks')
+        Initialize configuration or Git hooks; 'hooks' initializes both hooks [possible values: commit-msg, config, hooks, prepare-commit-msg]
     --generate-shell-completion <SHELL>
         Generate shell completion script for the specified shell [possible values: bash, elvish, fish, powershell, zsh]
     --config <CONFIG>
         Path to a TOML configuration file [env: GIT_SUMI_CONFIG=]
 -f, --format <FORMAT>
-        Sets display format: cli, json, table, toml [env: GIT_SUMI_FORMAT=]
+        Sets display format [env: GIT_SUMI_FORMAT=] [possible values: cli, json, table, toml]
     --file <FILE>
         Read commit message from file
     --from <REV>

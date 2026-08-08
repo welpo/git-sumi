@@ -121,14 +121,16 @@ fn config_file_in_sumi_named_subdir_in_home() {
 
 #[test]
 fn error_non_existent_config_file() {
-    let random_name = format!("nonexistent{}.toml", rand::random::<u64>());
+    let tmp_dir = tempdir().unwrap();
+    let nonexistent_path = tmp_dir.path().join("nonexistent.toml");
     let mut cmd = run_isolated_git_sumi("");
     cmd.arg("--config")
-        .arg(&random_name)
+        .arg(&nonexistent_path)
         .assert()
         .failure()
         .stderr(contains(format!(
-            "Configuration file '{random_name}' not found"
+            "Configuration file '{}' not found",
+            nonexistent_path.display()
         )));
 }
 
@@ -344,7 +346,8 @@ quiet = false
 # Displays parsed commit message.
 display = false
 
-# Sets display format: cli, json, table, toml.
+# Sets display format.
+# Options: 'cli', 'json', 'table', 'toml'.
 format = "cli"
 
 # Processes each non-empty line as an individual commit.
@@ -618,6 +621,19 @@ fn success_prepare_commit_message_stdout() {
         .success()
         .stdout(contains("# Header length limit: 42"))
         .stdout(contains("# Follow Conventional Commits format"));
+}
+
+#[test]
+fn success_prepare_commit_message_description_case_value() {
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.arg("-E")
+        .arg("lower")
+        .arg("--prepare-commit-message")
+        .assert()
+        .success()
+        .stdout(contains(
+            "# Description must start with the specified case: lower",
+        ));
 }
 
 #[test]

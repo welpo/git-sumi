@@ -3,12 +3,10 @@ use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
-use std::fs::File;
-use std::io::{self, BufReader, Read, Write};
+use std::io::{self, Write};
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
-use strum_macros::AsRefStr;
 
 use super::SumiError;
 use crate::args::Opt;
@@ -51,9 +49,8 @@ pub enum ParsedCommitDisplayFormat {
     Toml,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, AsRefStr, ValueEnum, PartialEq, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, ValueEnum, PartialEq, Default)]
 #[serde(rename_all = "lowercase")]
-#[strum(serialize_all = "lowercase")]
 pub enum DescriptionCase {
     #[default]
     Any,
@@ -109,7 +106,13 @@ fn rules_metadata<'a>() -> Vec<RuleMeta<'a>> {
         RuleMeta {
             is_modified: Box::new(|c, d| c.description_case != d.description_case),
             description: DESCRIPTION_CASE.short,
-            current_value: Box::new(|c| c.description_case.as_ref().to_string()),
+            current_value: Box::new(|c| {
+                c.description_case
+                    .to_possible_value()
+                    .unwrap()
+                    .get_name()
+                    .to_string()
+            }),
         },
         RuleMeta {
             is_modified: Box::new(|c, d| c.max_header_length != d.max_header_length),
@@ -236,7 +239,7 @@ fn init_commit_msg_hook() -> Result<(), SumiError> {
     let git_dir = Path::new(".git");
     ensure_git_repository(git_dir)?;
     let hooks_dir = git_dir.join("hooks");
-    create_directory_if_not_exists(&hooks_dir)?;
+    fs::create_dir_all(&hooks_dir)?;
     let hook_path = hooks_dir.join("commit-msg");
     write_commit_hook_if_needed(&hook_path, COMMIT_MSG_HOOK)?;
     #[cfg(unix)]
@@ -253,15 +256,6 @@ fn ensure_git_repository(git_dir: &Path) -> Result<(), SumiError> {
     Ok(())
 }
 
-fn create_directory_if_not_exists(dir: &Path) -> Result<(), SumiError> {
-    if !dir.exists() {
-        fs::create_dir_all(dir).map_err(|e| SumiError::GeneralError {
-            details: e.to_string(),
-        })?;
-    }
-    Ok(())
-}
-
 fn write_commit_hook_if_needed(hook_path: &Path, hook_content: &str) -> Result<(), SumiError> {
     if hook_path.exists() {
         let overwrite = prompt_overwrite(hook_path.to_str().unwrap())?;
@@ -269,9 +263,7 @@ fn write_commit_hook_if_needed(hook_path: &Path, hook_content: &str) -> Result<(
             return Ok(());
         }
     }
-    fs::write(hook_path, hook_content).map_err(|e| SumiError::GeneralError {
-        details: e.to_string(),
-    })?;
+    fs::write(hook_path, hook_content)?;
     Ok(())
 }
 
@@ -288,16 +280,10 @@ fn prompt_overwrite(filename: &str) -> Result<bool, SumiError> {
 }
 
 fn set_executable_permission(file_path: &Path) -> Result<(), SumiError> {
-    let mut permissions = fs::metadata(file_path)
-        .map_err(|e| SumiError::GeneralError {
-            details: e.to_string(),
-        })?
-        .permissions();
+    let mut permissions = fs::metadata(file_path)?.permissions();
     #[cfg(unix)]
     permissions.set_mode(0o755);
-    fs::set_permissions(file_path, permissions).map_err(|e| SumiError::GeneralError {
-        details: e.to_string(),
-    })?;
+    fs::set_permissions(file_path, permissions)?;
     Ok(())
 }
 
@@ -325,7 +311,7 @@ fn init_prepare_commit_msg_hook() -> Result<(), SumiError> {
     let git_dir = Path::new(".git");
     ensure_git_repository(git_dir)?;
     let hooks_dir = git_dir.join("hooks");
-    create_directory_if_not_exists(&hooks_dir)?;
+    fs::create_dir_all(&hooks_dir)?;
     let hook_path = hooks_dir.join("prepare-commit-msg");
     write_commit_hook_if_needed(&hook_path, PREPARE_COMMIT_MSG_HOOK)?;
     #[cfg(unix)]
@@ -523,7 +509,7 @@ fn find_in_dir(directory: PathBuf, filenames: &[&str]) -> Option<PathBuf> {
 /// Returns the parsed configuration or an error if the file cannot be found or parsed.
 fn load_config<P: AsRef<Path>>(file_path: P) -> Result<Config, SumiError> {
     validate_file_path(&file_path)?;
-    let file_contents_as_string = read_file_into_string(&file_path)?;
+    let file_contents_as_string = fs::read_to_string(&file_path)?;
     let parsed_configuration = toml::from_str(&file_contents_as_string)?;
     Ok(parsed_configuration)
 }
@@ -541,14 +527,6 @@ fn validate_file_path<P: AsRef<Path>>(path: P) -> Result<(), SumiError> {
         });
     }
     Ok(())
-}
-
-fn read_file_into_string<P: AsRef<Path>>(file_path: P) -> Result<String, std::io::Error> {
-    let file_handle = File::open(file_path)?;
-    let mut buffered_reader = BufReader::new(file_handle);
-    let mut file_contents = String::new();
-    buffered_reader.read_to_string(&mut file_contents)?;
-    Ok(file_contents)
 }
 
 fn adjust_config(config: &mut Config) {

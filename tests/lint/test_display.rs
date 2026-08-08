@@ -106,6 +106,34 @@ fn success_display_format_json() {
 }
 
 #[test]
+fn success_json_omits_absent_fields() {
+    let mut cmd = run_isolated_git_sumi("");
+    let output = cmd
+        .arg("-dqf")
+        .arg("json")
+        .arg("fix the bug")
+        .output()
+        .unwrap();
+
+    assert!(output.status.success());
+    let parsed: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(parsed["description"], "fix the bug");
+    let object = parsed.as_object().unwrap();
+    for field in [
+        "gitmoji",
+        "commit_type",
+        "scope",
+        "body",
+        "footers",
+        "is_breaking",
+        "breaking_description",
+        "references",
+    ] {
+        assert!(!object.contains_key(field));
+    }
+}
+
+#[test]
 fn success_contains_body() {
     let full_message = ("bought wards\n\nPlease commend.").to_string();
     let mut cmd = run_isolated_git_sumi("");

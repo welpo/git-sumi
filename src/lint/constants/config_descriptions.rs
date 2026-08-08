@@ -1,7 +1,6 @@
 // CLI-exclusive --help descriptions.
 pub const COMMIT_MESSAGE: &str = "Commit message to lint. Alternatively, read from STDIN";
-pub const INIT: &str =
-    "Initialize the default configuration ('config'), commit-msg hook ('commit-msg'), prepare-commit-msg hook ('prepare-commit-msg') or both hooks ('hooks')";
+pub const INIT: &str = "Initialize configuration or Git hooks; 'hooks' initializes both hooks";
 pub const GENERATE_SHELL_COMPLETION: &str =
     "Generate shell completion script for the specified shell";
 pub const CONFIG: &str = "Path to a TOML configuration file";
@@ -26,8 +25,8 @@ pub const DISPLAY: RuleDescription = RuleDescription {
     extra: None,
 };
 pub const FORMAT: RuleDescription = RuleDescription {
-    short: "Sets display format: cli, json, table, toml",
-    extra: None,
+    short: "Sets display format",
+    extra: Some("Options: 'cli', 'json', 'table', 'toml'"),
 };
 pub const SPLIT_LINES: RuleDescription = RuleDescription {
     short: "Processes each non-empty line as an individual commit",

@@ -3,14 +3,13 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
-use super::{create_and_stage_file, setup_git_repo};
-use assert_cmd::Command;
+use super::{create_and_stage_file, git_command, setup_git_repo};
 use std::path::Path;
 
 fn create_commit(repo_dir: &Path, file_name: &str, message: &str) {
     create_and_stage_file(repo_dir, file_name, &format!("content for {file_name}"));
 
-    Command::new("git")
+    git_command()
         .args(["commit", "-m", message])
         .current_dir(repo_dir)
         .assert()
@@ -20,7 +19,7 @@ fn create_commit(repo_dir: &Path, file_name: &str, message: &str) {
 fn create_commit_with_empty_message(repo_dir: &Path, file_name: &str) {
     create_and_stage_file(repo_dir, file_name, &format!("content for {file_name}"));
 
-    Command::new("git")
+    git_command()
         .args(["commit", "--allow-empty-message", "-m", ""])
         .current_dir(repo_dir)
         .assert()
@@ -356,6 +355,32 @@ fn error_whitespace_violations_in_range() {
         stderr.contains("2 out of 2 commits failed linting"),
         "Expected both commits to fail"
     );
+}
+
+#[test]
+fn error_range_preserves_leading_whitespace_for_linting() {
+    let tmp_dir = setup_git_repo();
+    let repo_dir = tmp_dir.path();
+
+    create_commit(repo_dir, "init.txt", "feat: init");
+    git_command()
+        .args([
+            "commit",
+            "--allow-empty",
+            "--cleanup=verbatim",
+            "--message",
+            " feat: leading space",
+        ])
+        .current_dir(repo_dir)
+        .assert()
+        .success();
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo_dir)
+        .args(["--from", "HEAD~1", "--to", "HEAD", "--whitespace"])
+        .assert()
+        .failure()
+        .stderr(contains("Leading space"));
 }
 
 /// Description case violation: uppercase required but lowercase given.

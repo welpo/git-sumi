@@ -1,3 +1,4 @@
+use super::{create_and_stage_file, prepare_git_commit_message, setup_git_repo};
 use crate::run_isolated_git_sumi;
 use predicates::str::contains;
 use tempfile::tempdir;
@@ -13,6 +14,22 @@ fn success_read_from_file() {
         .arg("-C")
         .assert()
         .success();
+}
+
+#[test]
+fn error_file_preserves_leading_whitespace_for_linting() {
+    let repo = setup_git_repo();
+    create_and_stage_file(repo.path(), "feature.txt", "new feature");
+    let file_path = prepare_git_commit_message(repo.path(), Some(" feat: add new feature"));
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo.path())
+        .arg("--file")
+        .arg(file_path)
+        .arg("--whitespace")
+        .assert()
+        .failure()
+        .stderr(contains("Leading space"));
 }
 
 #[test]

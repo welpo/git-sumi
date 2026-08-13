@@ -107,17 +107,15 @@ fn get_commit_from_arg_or_stdin(
 }
 
 fn get_commit_from_file(path: &str) -> Result<String, SumiError> {
-    std::fs::read_to_string(path)
-        .map(|content| content.trim().to_string())
-        .map_err(|e| SumiError::GeneralError {
-            details: format!("Could not read commit message from '{path}': {e}"),
-        })
+    std::fs::read_to_string(path).map_err(|e| SumiError::GeneralError {
+        details: format!("Could not read commit message from '{path}': {e}"),
+    })
 }
 
 fn get_commit_from_stdin() -> Result<String, SumiError> {
     let mut buffer = String::new();
     io::stdin().read_to_string(&mut buffer)?;
-    Ok(buffer.trim().to_string())
+    Ok(buffer)
 }
 
 fn handle_commit_based_on_lint(

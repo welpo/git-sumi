@@ -83,7 +83,7 @@ pub fn get_commits_in_range(from: &str, to: &str) -> Result<Vec<(String, String)
             continue;
         }
         let (sha, message) = record.split_once('\n').unwrap_or((record, ""));
-        commits.push((sha.to_string(), message.trim().to_string()));
+        commits.push((sha.to_string(), message.to_string()));
     }
 
     Ok(commits)

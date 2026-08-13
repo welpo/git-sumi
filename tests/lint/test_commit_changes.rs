@@ -3,8 +3,7 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
-use super::{create_and_stage_file, setup_git_repo};
-use assert_cmd::Command;
+use super::{create_and_stage_file, git_command, setup_git_repo};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -37,7 +36,7 @@ fn success_commit_with_staged_changes() {
     let mut file = File::create(file_path).expect("Failed to create a file");
     writeln!(file, "New content").expect("Failed to write to a file");
 
-    Command::new("git")
+    git_command()
         .args(["add", "new_file.txt"])
         .current_dir(repo_dir)
         .assert()
@@ -114,7 +113,7 @@ fn success_force_commit_with_incorrect_message() {
         .stderr(contains("Failed to parse as a conventional commit"));
 
     // Retrieve and inspect the git log.
-    let log_output = Command::new("git")
+    let log_output = git_command()
         .args(["log", "--oneline"])
         .current_dir(repo_dir)
         .output()

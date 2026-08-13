@@ -2,6 +2,7 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
+use super::{create_and_stage_file, prepare_git_commit_message, setup_git_repo};
 
 #[test]
 fn success_with_capital_letter_non_conventional() {
@@ -433,6 +434,22 @@ fn success_stdin_conventional() {
         .assert()
         .success()
         .stdout(contains("All 1 check passed"));
+}
+
+#[test]
+fn error_stdin_preserves_leading_whitespace_for_linting() {
+    let repo = setup_git_repo();
+    create_and_stage_file(repo.path(), "feature.txt", "new feature");
+    let message_path = prepare_git_commit_message(repo.path(), Some(" feat: add new feature"));
+    let message = std::fs::read(message_path).unwrap();
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo.path())
+        .write_stdin(message)
+        .arg("--whitespace")
+        .assert()
+        .failure()
+        .stderr(contains("Leading space"));
 }
 
 #[test]

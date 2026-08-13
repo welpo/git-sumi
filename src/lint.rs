@@ -57,12 +57,19 @@ pub fn run_lint_on_each_line(
     config: &Config,
     log_prefix: Option<&str>,
 ) -> Result<Vec<ParsedCommit>, SumiError> {
-    let non_empty_lines = commit_message.lines().filter(|line| !line.is_empty());
+    let non_empty_lines: Vec<&str> = commit_message
+        .lines()
+        .filter(|line| !line.is_empty())
+        .collect();
     let prefix = log_prefix.unwrap_or("");
     let mut parsed_commits = Vec::new();
     let mut errors = Vec::new();
 
-    for line in non_empty_lines.clone() {
+    if non_empty_lines.is_empty() {
+        return run_lint("", config, log_prefix).map(|parsed_commit| vec![parsed_commit]);
+    }
+
+    for line in &non_empty_lines {
         match run_lint(line, config, log_prefix) {
             Ok(parsed_commit) => parsed_commits.push(parsed_commit),
             Err(error) => {
@@ -76,7 +83,7 @@ pub fn run_lint_on_each_line(
         Ok(parsed_commits)
     } else {
         let lines_with_errors = errors.len();
-        let total_lines = non_empty_lines.count();
+        let total_lines = non_empty_lines.len();
         let line_plural_suffix = pluralize(total_lines, "line", "lines");
         Err(SumiError::SplitLinesErrors {
             lines_with_errors,

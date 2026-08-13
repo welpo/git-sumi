@@ -453,6 +453,23 @@ fn error_stdin_preserves_leading_whitespace_for_linting() {
 }
 
 #[test]
+fn error_empty_commit_with_split_lines() {
+    let repo = setup_git_repo();
+    create_and_stage_file(repo.path(), "feature.txt", "new feature");
+    let message_path = prepare_git_commit_message(repo.path(), None);
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo.path())
+        .arg("--split-lines")
+        .arg("--whitespace")
+        .arg("--file")
+        .arg(message_path)
+        .assert()
+        .failure()
+        .stderr(contains("Header must not be empty"));
+}
+
+#[test]
 fn error_custom_title_too_long() {
     let mut cmd = run_isolated_git_sumi("");
     cmd.arg("--max-header-length")

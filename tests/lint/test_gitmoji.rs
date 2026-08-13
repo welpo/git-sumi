@@ -1,5 +1,6 @@
 use super::contains;
 use super::run_isolated_git_sumi;
+use super::{create_and_stage_file, git_command, setup_git_repo};
 use git_sumi::lint::constants::gitmoji::{STRING_EMOJIS, UNICODE_EMOJIS};
 
 #[test]
@@ -149,6 +150,30 @@ fn success_trailing_header_emoji_keeps_body_separation() {
         .assert()
         .success()
         .stdout(contains("All 2 checks passed"));
+}
+
+#[test]
+fn error_gitmoji_only_header_with_body_stays_empty() {
+    let repo = setup_git_repo();
+    create_and_stage_file(repo.path(), "initial.txt", "initial");
+    git_command()
+        .args(["commit", "--message", "initial"])
+        .current_dir(repo.path())
+        .assert()
+        .success();
+    create_and_stage_file(repo.path(), "body.txt", "body");
+    git_command()
+        .args(["commit", "--message", "📝", "--message", "This is the body"])
+        .current_dir(repo.path())
+        .assert()
+        .success();
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo.path())
+        .args(["--gitmoji", "--from", "HEAD~1", "--to", "HEAD"])
+        .assert()
+        .failure()
+        .stdout(contains("Header must not be empty"));
 }
 
 #[test]

@@ -37,7 +37,11 @@ trait CommitParser {
     fn parse(&self, commit: &str, config: &Config) -> Result<ParsedCommit, SumiError>;
 
     fn get_commit_header(&self, commit: &str) -> Result<String, SumiError> {
-        let header = commit.lines().next().ok_or(SumiError::EmptyCommitHeader)?;
+        let header = commit
+            .lines()
+            .next()
+            .filter(|header| !header.is_empty())
+            .ok_or(SumiError::EmptyCommitHeader)?;
         Ok(header.to_string())
     }
 
@@ -131,13 +135,17 @@ fn handle_zwj(combined_emojis: &mut Vec<String>, emojis: &mut Peekable<IntoIter<
 }
 
 fn remove_gitmoji(commit: &str, gitmojis: &[String]) -> String {
-    let mut commit_sans_gitmoji = String::from(commit);
+    let (header, remainder) = commit
+        .split_once('\n')
+        .map_or((commit, None), |(header, remainder)| {
+            (header, Some(remainder))
+        });
+    let mut header_sans_gitmoji = String::from(header);
     for gitmoji in gitmojis {
         let full_gitmoji = format!("{}\\u{{fe0f}}?", regex::escape(gitmoji));
-        // Only match spaces/tabs (not newlines) so the header-body separation is preserved.
         let re = Regex::new(&format!(r"([ \t])?{full_gitmoji}([ \t])?")).unwrap();
-        commit_sans_gitmoji = re
-            .replace(&commit_sans_gitmoji, |caps: &regex::Captures| {
+        header_sans_gitmoji = re
+            .replace(&header_sans_gitmoji, |caps: &regex::Captures| {
                 // Keep a single space if the emoji sat between two words.
                 if caps.get(1).is_some() && caps.get(2).is_some() {
                     " "
@@ -147,5 +155,9 @@ fn remove_gitmoji(commit: &str, gitmojis: &[String]) -> String {
             })
             .to_string();
     }
-    commit_sans_gitmoji.trim().to_string()
+
+    match remainder {
+        Some(remainder) => format!("{header_sans_gitmoji}\n{remainder}"),
+        None => header_sans_gitmoji,
+    }
 }

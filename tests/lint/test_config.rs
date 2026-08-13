@@ -1,6 +1,7 @@
 extern crate tempfile;
 
 use super::contains;
+use super::git_command;
 use super::run_isolated_git_sumi;
 use assert_cmd::cargo::cargo_bin_cmd;
 use predicates::prelude::*;
@@ -513,7 +514,7 @@ fn init_tmp_git_repo() -> tempfile::TempDir {
     let tmp_dir_path = tmp_dir.path();
 
     // Initialise a git repository
-    let output = std::process::Command::new("git")
+    let output = git_command()
         .args(["init"])
         .current_dir(tmp_dir_path)
         .output()
@@ -540,6 +541,46 @@ fn success_init_hook() {
 
     let file_contents = std::fs::read_to_string(hook_path).unwrap();
     assert!(file_contents.contains("git-sumi"));
+}
+
+#[test]
+fn success_init_hook_in_linked_worktree() {
+    let primary = super::setup_git_repo();
+    git_command()
+        .args(["commit", "--allow-empty", "-m", "initial"])
+        .current_dir(primary.path())
+        .assert()
+        .success();
+
+    let worktree_parent = tempfile::tempdir().unwrap();
+    let worktree_dir = worktree_parent.path().join("linked");
+    git_command()
+        .args(["worktree", "add"])
+        .arg(&worktree_dir)
+        .current_dir(primary.path())
+        .assert()
+        .success();
+
+    let mut cmd = cargo_bin_cmd!();
+    cmd.current_dir(&worktree_dir)
+        .args(["--init", "commit-msg"])
+        .assert()
+        .success();
+
+    let hook_path = git_command()
+        .args(["rev-parse", "--git-path", "hooks/commit-msg"])
+        .current_dir(&worktree_dir)
+        .output()
+        .unwrap();
+    assert!(hook_path.status.success());
+    let hook_path = String::from_utf8(hook_path.stdout).unwrap();
+    let hook_path = std::path::PathBuf::from(hook_path.trim());
+    let hook_path = if hook_path.is_absolute() {
+        hook_path
+    } else {
+        worktree_dir.join(hook_path)
+    };
+    assert!(hook_path.exists());
 }
 
 #[test]
@@ -683,7 +724,7 @@ mv "${TEMP_FILE}" "${COMMIT_MSG_FILE}"
 
 #[test]
 fn success_prepare_commit_msg_hook_overwrite_yes() {
-    let tmp_dir = tempdir().unwrap();
+    let tmp_dir = init_tmp_git_repo();
     let tmp_dir_path = tmp_dir.path();
 
     let initial_hook_content = r#"#!/bin/bash
@@ -712,7 +753,7 @@ fn success_prepare_commit_msg_hook_overwrite_yes() {
 
 #[test]
 fn success_prepare_commit_msg_hook_overwrite_no() {
-    let tmp_dir = tempdir().unwrap();
+    let tmp_dir = init_tmp_git_repo();
     let tmp_dir_path = tmp_dir.path();
 
     let initial_hook_content = r#"#!/bin/bash

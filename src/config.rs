@@ -236,9 +236,7 @@ git-sumi -- "$(cat $1)"  # Exit with error if linting fails.
 "#;
 
 fn init_commit_msg_hook() -> Result<(), SumiError> {
-    let git_dir = Path::new(".git");
-    ensure_git_repository(git_dir)?;
-    let hooks_dir = git_dir.join("hooks");
+    let hooks_dir = get_git_hooks_dir()?;
     fs::create_dir_all(&hooks_dir)?;
     let hook_path = hooks_dir.join("commit-msg");
     write_commit_hook_if_needed(&hook_path, COMMIT_MSG_HOOK)?;
@@ -247,13 +245,23 @@ fn init_commit_msg_hook() -> Result<(), SumiError> {
     Ok(())
 }
 
-fn ensure_git_repository(git_dir: &Path) -> Result<(), SumiError> {
-    if !git_dir.exists() {
+fn get_git_hooks_dir() -> Result<PathBuf, SumiError> {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--git-path", "hooks"])
+        .output()?;
+    if !output.status.success() {
         return Err(SumiError::GeneralError {
             details: "No .git directory found. Are you in a Git repository?".to_string(),
         });
     }
-    Ok(())
+
+    let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if path.is_empty() {
+        return Err(SumiError::GeneralError {
+            details: "Could not determine the Git hooks directory".to_string(),
+        });
+    }
+    Ok(PathBuf::from(path))
 }
 
 fn write_commit_hook_if_needed(hook_path: &Path, hook_content: &str) -> Result<(), SumiError> {
@@ -308,9 +316,7 @@ mv "${TEMP_FILE}" "${COMMIT_MSG_FILE}"
 "#;
 
 fn init_prepare_commit_msg_hook() -> Result<(), SumiError> {
-    let git_dir = Path::new(".git");
-    ensure_git_repository(git_dir)?;
-    let hooks_dir = git_dir.join("hooks");
+    let hooks_dir = get_git_hooks_dir()?;
     fs::create_dir_all(&hooks_dir)?;
     let hook_path = hooks_dir.join("prepare-commit-msg");
     write_commit_hook_if_needed(&hook_path, PREPARE_COMMIT_MSG_HOOK)?;

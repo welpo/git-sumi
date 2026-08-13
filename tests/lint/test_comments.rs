@@ -6,13 +6,12 @@ extern crate tempfile;
 
 use super::contains;
 use super::run_isolated_git_sumi;
-use super::{create_and_stage_file, setup_git_repo};
-use assert_cmd::Command;
+use super::{create_and_stage_file, git_command, prepare_git_commit_message, setup_git_repo};
 use std::path::Path;
 use tempfile::tempdir;
 
 fn set_commentchar(repo_dir: &Path, commentchar: &str) {
-    Command::new("git")
+    git_command()
         .args(["config", "core.commentChar", commentchar])
         .current_dir(repo_dir)
         .assert()
@@ -25,6 +24,24 @@ fn success_ignore_comments() {
     cmd.arg("-W")
         // If the comment weren't ignored, git-sumi would complain about the adjacent spaces in the second line.
         .arg("feat: adds feature\n\n#       modified:   src/lib.rs")
+        .assert()
+        .success();
+}
+
+#[test]
+fn success_split_lines_ignores_comments() {
+    let repo = setup_git_repo();
+    create_and_stage_file(repo.path(), "feature.txt", "new feature");
+    let message_path = prepare_git_commit_message(repo.path(), Some("feat: add feature"));
+    let message = std::fs::read_to_string(&message_path).unwrap();
+    assert!(message.lines().count() > 1);
+
+    let mut cmd = run_isolated_git_sumi("");
+    cmd.current_dir(repo.path())
+        .arg("--split-lines")
+        .arg("--whitespace")
+        .arg("--file")
+        .arg(message_path)
         .assert()
         .success();
 }

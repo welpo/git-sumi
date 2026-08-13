@@ -57,10 +57,8 @@ pub fn run_lint_on_each_line(
     config: &Config,
     log_prefix: Option<&str>,
 ) -> Result<Vec<ParsedCommit>, SumiError> {
-    let non_empty_lines: Vec<&str> = commit_message
-        .lines()
-        .filter(|line| !line.is_empty())
-        .collect();
+    let commit = preprocess_commit_message(commit_message);
+    let non_empty_lines: Vec<&str> = commit.lines().filter(|line| !line.is_empty()).collect();
     let prefix = log_prefix.unwrap_or("");
     let mut parsed_commits = Vec::new();
     let mut errors = Vec::new();

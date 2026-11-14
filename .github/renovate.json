@@ -6,7 +6,6 @@
     ":disableDependencyDashboard",
     "security:minimumReleaseAgeCrate"
   ],
-  "minimumReleaseAgePackageManagerSync": true,
   "commitMessagePrefix": "⬆️",
   "commitMessageAction": "chore(deps): update",
   "commitMessageTopic": "{{{depName}}}",
